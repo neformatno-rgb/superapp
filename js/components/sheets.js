@@ -1,7 +1,24 @@
 'use strict';
 /* ---------- sheets ---------- */
 function sheet(html){document.getElementById('layer').innerHTML=`<div class="scrim" data-close><div class="sheet" role="dialog" aria-modal="true" tabindex="-1" style="outline:none"><div class="grab"></div>${html}</div></div>`;const sh=document.querySelector('.sheet');sh&&sh.focus({preventScroll:true})}
-function closeSheet(){document.getElementById('layer').innerHTML=''}
+function closeSheet(){const l=document.getElementById('layer'),sc=l.querySelector(':scope>.scrim');if(!sc){l.innerHTML='';return}sheetOut(sc,()=>{if(sc.parentNode===l)l.innerHTML=''})}
+/* slide a bottom sheet out and fade its scrim, then run done() */
+function sheetOut(sc,done){const sh=sc.querySelector('.sheet');if(!sh||matchMedia('(prefers-reduced-motion: reduce)').matches){done();return}
+ sc.style.pointerEvents='none';const desk=innerWidth>=960;
+ sh.style.transition='transform .22s cubic-bezier(.4,0,1,1), opacity .22s';sh.style.transform=desk?'translateY(16px)':'translateY(100%)';if(desk)sh.style.opacity='0';
+ sc.style.transition='opacity .22s';sc.style.opacity='0';setTimeout(done,230)}
+/* swipe down to dismiss bottom sheets (mobile) */
+let SD=null;
+document.addEventListener('touchstart',e=>{if(innerWidth>=960||e.touches.length>1)return;const sh=e.target.closest('.scrim>.sheet');if(!sh||e.target.closest('input,textarea,select'))return;
+ const scroller=e.target.closest('.city-list')||sh;if(scroller.scrollTop>0)return;
+ SD={sh,sc:sh.parentElement,scroller,y0:e.touches[0].clientY,t0:Date.now(),dy:0,on:false}},{passive:true});
+document.addEventListener('touchmove',e=>{if(!SD)return;const dy=e.touches[0].clientY-SD.y0;
+ if(!SD.on){if(dy<-4||SD.scroller.scrollTop>0){SD=null;return}if(dy<8)return;SD.on=true;SD.y0+=8;SD.sh.style.transition='none';SD.sc.style.transition='none'}
+ e.preventDefault();SD.dy=Math.max(0,e.touches[0].clientY-SD.y0);SD.sh.style.transform=`translateY(${SD.dy}px)`;SD.sc.style.opacity=String(Math.max(.35,1-SD.dy/(SD.sh.offsetHeight*1.4)))},{passive:false});
+function sdEnd(){if(!SD)return;const {sh,sc,dy,t0,on}=SD;SD=null;if(!on)return;const v=dy/Math.max(1,Date.now()-t0);
+ if(dy>sh.offsetHeight*.25||v>.6){if(sc.id==='cityLayer')closeCity();else closeSheet()}
+ else{sh.style.transition='transform .25s cubic-bezier(.2,.8,.2,1)';sc.style.transition='opacity .25s';sh.style.transform='';sc.style.opacity=''}}
+document.addEventListener('touchend',sdEnd);document.addEventListener('touchcancel',sdEnd);
 const nowDate=()=>new Date().toISOString().slice(0,10),nowTime=()=>new Date().toTimeString().slice(0,5);
 const SHEETS={
  arrive:id=>`<h3>Сообщить о прибытии</h3><p class="muted" style="margin:0;font-size:13px">Время должно совпадать с фактическим, указанным в документах на погрузке.</p>
