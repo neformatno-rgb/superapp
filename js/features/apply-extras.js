@@ -17,9 +17,9 @@ const COIN_IMG='assets/img/bonus-coin.webp';
 const bonusSheet=()=>`<h3>Списать бонусы</h3><div class="muted" style="font-size:13px;margin-top:-8px">Доступно ${BONUS_MAX.toLocaleString('ru-RU')} баллов, 1 балл = 1 ₽</div>
  <div class="field"><label for="bnIn">Сколько списать</label><input class="input" id="bnIn" inputmode="numeric" enterkeyhint="done" autocomplete="off" placeholder="От 1 до ${BONUS_MAX.toLocaleString('ru-RU')}"></div>
  <div class="dp-chips"><button type="button" class="dp-chip" data-bnall>Списать все</button></div>
- <button type="button" class="btn secondary block" data-bnapply>Закрыть</button>`;
+ <button type="button" class="btn primary block" data-bnapply>Закрыть</button>`;
 const bnVal=()=>{const i=document.getElementById('bnIn');return i?Math.min(BONUS_MAX,+(i.value.replace(/\D/g,''))||0):0};
-function bnRefresh(){const b=document.querySelector('[data-bnapply]');if(!b)return;const n=bnVal();b.textContent=n?'Применить':'Закрыть';b.className='btn block '+(n?'primary':'secondary')}
+function bnRefresh(){const b=document.querySelector('[data-bnapply]');if(!b)return;const n=bnVal();b.textContent=n?'Применить':'Закрыть'}
 function bnApply(){const n=bnVal();if(n){S.apply.bonus=true;S.apply.bonusAmt=n;save()}closeSheet();const y=window.scrollY;render();window.scrollTo(0,y)}
 document.addEventListener('input',e=>{if(e.target.id!=='bnIn')return;const n=bnVal();e.target.value=n?n.toLocaleString('ru-RU'):'';bnRefresh()});
 document.addEventListener('keydown',e=>{if(e.target.id==='bnIn'&&e.key==='Enter'){e.preventDefault();bnApply()}});
@@ -33,9 +33,9 @@ const fuelSheet=()=>`<h3>Топливо после погрузки</h3>
   <div class="muted" style="font-size:12px;line-height:16px">Договор, в рамках которого будет оказана услуга «Топливо после погрузки»</div></div>
  <div class="field"><label for="fuelIn">Сумма для «Топлива после погрузки», ₽</label><input class="input" id="fuelIn" inputmode="numeric" enterkeyhint="done" autocomplete="off">
   <div class="muted" style="font-size:12px;line-height:16px">Не более 60% — ${fuelMax().toLocaleString('ru-RU')}</div></div>
- <button type="button" class="btn secondary block" data-fuelapply>Закрыть</button>`;
+ <button type="button" class="btn primary block" data-fuelapply>Закрыть</button>`;
 const fuelVal=()=>{const i=document.getElementById('fuelIn');return i?Math.min(fuelMax(),+(i.value.replace(/\D/g,''))||0):0};
-function fuelRefresh(){const b=document.querySelector('[data-fuelapply]');if(!b)return;const w=document.getElementById('fuelDd'),ok=fuelVal()>0&&w&&w.dataset.val!=null;b.textContent=ok?'Применить':'Закрыть';b.className='btn block '+(ok?'primary':'secondary')}
+function fuelRefresh(){const b=document.querySelector('[data-fuelapply]');if(!b)return;const w=document.getElementById('fuelDd'),ok=fuelVal()>0&&w&&w.dataset.val!=null;b.textContent=ok?'Применить':'Закрыть'}
 function fuelApply(){const w=document.getElementById('fuelDd'),n=fuelVal();if(n&&w&&w.dataset.val!=null){S.apply.fuel=true;S.apply.fuelAmt=n;S.apply.fuelContract=+w.dataset.val;save()}else if(n){toast('Выберите договор');return}closeSheet();const y=window.scrollY;render();window.scrollTo(0,y)}
 document.addEventListener('input',e=>{if(e.target.id!=='fuelIn')return;const n=fuelVal();e.target.value=n?n.toLocaleString('ru-RU'):'';fuelRefresh()});
 document.addEventListener('keydown',e=>{if(e.target.id==='fuelIn'&&e.key==='Enter'){e.preventDefault();e.target.blur()}});
