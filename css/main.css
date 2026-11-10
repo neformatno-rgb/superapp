@@ -1,4 +1,4 @@
-/* Entry stylesheet: imports in cascade order (tokens → base → layout → components → views → responsive) */
+/* Entry stylesheet: imports in cascade order (tokens → base → layout → components → views) */
 @import url("tokens.css");
 @import url("base.css");
 @import url("layout.css");
@@ -22,4 +22,3 @@
 @import url("components/popmenu.css");
 @import url("views/home.css");
 @import url("views/success.css");
-@import url("responsive.css");

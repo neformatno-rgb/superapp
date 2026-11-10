@@ -33,19 +33,23 @@ document.addEventListener('click',e=>{
  if(d.toast){e.preventDefault();toast(d.toast);return}
  if('titlemenu' in d){t.getAttribute('aria-expanded')==='true'?closePop():openPop(t,true);return}
  if(d.go){closeSheet();go(d.go,d.p);return}
+ if(d.back==='order'){go('order');return}
  if(d.back){history.length>1?history.back():go(d.back);return}
  if(d.seg){S[d.seg]=d.val;save();render();return}
  if(d.sheet){sheet(SHEETS[d.sheet]());return}
  if(d.deal){const f=S.filters.deals,i=f.indexOf(d.deal);i<0?f.push(d.deal):f.splice(i,1);
   const ff=document.getElementById('filterForm');if(ff){S.filters.from=ff.querySelector('#fFrom').value;S.filters.to=ff.querySelector('#fTo').value;S.filters.dateFrom=ff.querySelector('#fDf').value;S.filters.dateTo=ff.querySelector('#fDt').value;S.filters.body=ff.querySelector('#fBody').value}
-  save();ALLN=50;const y=window.scrollY;render();window.scrollTo(0,y);return}
+  save();ALLN=50;const y=window.scrollY;render();window.scrollTo(0,y);document.querySelectorAll('#layer [data-deal]').forEach(b=>b.setAttribute('aria-pressed',String(f.includes(b.dataset.deal))));ffRefresh();return}
  if('swap' in d){const a=document.getElementById('fFrom'),b=document.getElementById('fTo'),x=a.value;setCity('from',b.value);setCity('to',x);return}
  if('chip' in d){t.setAttribute('aria-pressed',t.getAttribute('aria-pressed')!=='true');return}
  if(d.pay){S.apply.pay=d.pay;save();render();return}
+ if(d.sw==='bonus'&&!S.apply.bonus){sheet(bonusSheet());return}
+ if(d.sw==='fuel'&&!S.apply.fuel){sheet(fuelSheet());return}
  if(d.sw){S.apply[d.sw]=!S.apply[d.sw];save();render();return}
  if(d.check){const s=shipById(S.param);s.cargoCheck=d.check;save();render();toast('Груз отмечен: без замечаний');return}
  if('accept' in d){const s=shipById(S.param);if(s.cargoCheck==='pending')s.cargoCheck='ok';s.stage='docs';save();closeSheet();render();
    setTimeout(()=>{const x=shipById(s.id);if(x&&x.stage==='docs'){x.stage='loaded';save();if(current()==='trip')render();toast('Документы и QR готовы')}},2600);return}
+ if(d.confirmApply){const miss=[['contract','Выберите договор'],['truck','Выберите машину'],['trailer','Выберите прицеп'],['driver','Выберите водителя']].find(([k])=>S.apply[k]==null);if(miss){toast(miss[1]);const x=document.getElementById(miss[0]);x&&x.focus();return}}
  if(d.confirmApply){const id=d.confirmApply;let s=shipById(id);if(!s){S.shipments.unshift({id,status:'assigned',stage:'enroute',cargoCheck:'pending',remarks:null});}save();S.shipTab='active';sheet(successSheet());return}
  if('themeToggle' in d){setTheme(isDark()?'light':'dark');render();return}
  if('reset' in d){S=fresh();save();go('home');toast('Демо-данные сброшены');return}
@@ -55,7 +59,7 @@ document.addEventListener('keydown',e=>{
  if(e.key==='Enter'&&e.target.matches('article[data-open],article[data-trip]'))e.target.click();
 });
 document.addEventListener('change',e=>{
- if(e.target.dataset.applysel){S.apply[e.target.dataset.applysel]=+e.target.value;save()}
+ if(e.target.dataset.applysel){const k=e.target.dataset.applysel;S.apply[k]=+e.target.value;save();{const y=window.scrollY;render();window.scrollTo(0,y)}}
  if(e.target.id==='rF'){const n=e.target.files.length;document.getElementById('rFilesLbl').textContent=n>3?'Можно не более 3 файлов':n?`Выбрано файлов: ${n}`:'Выберите файлы · не более 3'}
 });
 document.addEventListener('submit',e=>{

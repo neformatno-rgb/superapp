@@ -14,7 +14,7 @@ V.trip=()=>{
   if(s.stage==='loaded'){alert=`<div class="alert ok">${ic('check')}<span>Документы и QR готовы</span></div>`;actions=`<button class="btn primary block" data-sheet="depart">Сообщить об убытии</button>`}
   if(s.stage==='departed') alert=`<div class="alert">${ic('truck')}<span>Следующий пункт — ${esc(c.to)}. Сообщите о прибытии, когда будете на месте.</span></div>`;
   const A=ADDR[c.from]||[c.from,''],B=ADDR[c.to]||[c.to,''];
-  const addr=x=>`<div><div class="muted">Адрес</div><div>${esc(x[0])}${x[1]?` (<a class="link num" href="#trip" data-fullmap="${c.id}">${x[1]}</a>)`:''}</div></div>`;
+  const addr=x=>`<div><div class="muted">Адрес</div><div>${esc(x[0])}${x[1]?`<br><a class="link num coords" href="#trip" data-copy="${x[1]}">${x[1]}</a>`:''}</div></div>`;
   const loadBody=`<div class="tl-card"><div class="row">${tag('Погрузка','green')}<span class="num" style="font-family:var(--font-ctl);font-size:14px;font-weight:500;color:var(--green)">${esc(c.fromWhen.split(' — ')[0])}</span></div>
     ${s.stage!=='enroute'?`<div class="row">${tag('Прибыл','gray')}<span class="muted num" style="font-family:var(--font-ctl);font-size:14px;font-weight:500">${esc(s.arrivedAt||'05 дек, 19:40 – …')}</span></div>`:''}${addr(A)}</div>
    <div class="tl-card"><div class="row between"><span class="muted">Груз</span>${s.stage!=='enroute'?tag(check[0],check[1]):''}</div>
@@ -36,13 +36,13 @@ V.trip=()=>{
   body=orderSections(c,s.status)+`<section class="card"><h2 class="h2">Подвижной состав</h2>
    <div class="tl-card"><div class="muted">Машина</div><div>${esc(ORDER.trucks[ap.truck||0])}</div></div>
    <div class="tl-card"><div class="muted">Прицеп</div><div>${esc(ORDER.trailers[ap.trailer||0])}</div></div>
-   <div class="tl-card"><div class="muted">Водитель</div><div>${ORDER.driver.name}</div>
-    <dl class="kv num"><dt>ВУ</dt><dd>${ORDER.driver.license}</dd><dt>Телефон</dt><dd>${ORDER.driver.phone}</dd><dt>Дата рождения</dt><dd>${ORDER.driver.birth}</dd><dt>Паспорт</dt><dd>${ORDER.driver.passport}</dd></dl></div></section>
+   <div class="tl-card"><div class="muted">Водитель</div><div>${ORDER.drivers[ap.driver||0].name}</div>
+    <dl class="kv num"><dt>ВУ</dt><dd>${ORDER.drivers[ap.driver||0].license}</dd><dt>Телефон</dt><dd>${ORDER.drivers[ap.driver||0].phone}</dd><dt>Дата рождения</dt><dd>${ORDER.drivers[ap.driver||0].birth}</dd><dt>Паспорт</dt><dd>${ORDER.drivers[ap.driver||0].passport}</dd></dl></div></section>
    <section class="card"><h2 class="h2">Условия заявки</h2><dl class="kv num"><dt>Договор</dt><dd>${esc(ORDER.contract[ap.contract||0])}</dd><dt>Способ оплаты</dt><dd>${pay.name}</dd><dt>К получению</dt><dd>${rub(applyTotal(c))}</dd></dl></section>`;
  } else {
   const ready=['loaded','departed'].includes(s.stage);
   body=`<section class="card"><h2 class="h2">Электронная ТН</h2>${ready?`<div class="alert ok">${ic('check')}<span>ЭТрН подписана грузоотправителем</span></div>`:`<p class="muted" style="margin:0">Транспортная накладная появится после погрузки.</p>`}
-   <dl class="kv"><dt>Товарная накладная</dt><dd>${ready?'2 шт':'—'}</dd><dt>ТТН (товарно-транспортная накладная)</dt><dd>${ready?'2 шт':'—'}</dd><dt>Документы на оплату перевозки</dt><dd>${s.stage==='departed'?'1 шт':'—'}</dd></dl></section>`;
+   ${docRows([['Товарная накладная','Товарная накладная',ready?2:0],['ТТН (товарно-транспортная накладная)','ТТН',ready?2:0],['Документы на оплату перевозки','Документы на оплату перевозки',s.stage==='departed'?1:0]])}</section>`;
  }
  return topBar('Заявка '+c.id,{back:'shipments',actions:`<button class="icon-btn" data-toast="Диспетчер: +7 (800) 555-35-35" aria-label="Ещё">${ic('more')}</button>`})+
  `<div class="page">${seg('tripTab',[['trip','В рейсе'],['about','О заявке'],['etn','ЭТрН']],S.tripTab)}${body}</div>`;

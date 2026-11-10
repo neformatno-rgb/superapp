@@ -28,6 +28,7 @@ const P={
  pin:'<path fill="currentColor" stroke="none" fill-rule="evenodd" d="M12 2a8 8 0 0 0-8 8c0 5.4 6.2 11.2 7.3 12.1a1 1 0 0 0 1.4 0C13.8 21.2 20 15.4 20 10a8 8 0 0 0-8-8Zm0 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z"/>',
  upload:'<path d="M7 17a4 4 0 0 1-.5-8A6 6 0 0 1 18 9a4 4 0 0 1-1 8"/><path d="M12 12v8M9 15l3-3 3 3"/>',
  info:'<circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/>',
+ infoI:'<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>',
  doc:'<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/>',
  qr:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM18 18h3v3M14 21h1"/>',
  eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',

@@ -9,7 +9,7 @@ function orderSections(c,status){return ` <section class="card"><div class="row 
   <b style="font-size:14px">Дополнительно</b><p style="margin:0;font-size:13px">Перевозчик обязуется обеспечивать водителей индивидуальными средствами защиты и незамедлительно уведомлять об изменениях в рейсе.</p></section>
  <section class="card"><h2 class="h2">Грузы</h2>${[1,2].map(n=>`<div style="display:flex;flex-direction:column;gap:16px"><b style="font-size:14px">Груз ${n}</b><dl class="kv num" style="margin:0"><dt>Категория груза</dt><dd>Сельхозсырьё</dd><dt>Тип груза</dt><dd>Апельсины</dd><dt>Упаковка</dt><dd>Палеты (5 шт.)</dd><dt>Габариты, м</dt><dd>1,2 × 0,8 × 1,6</dd><dt>Брутто / нетто, кг</dt><dd>1200 / 1000</dd><dt>Стоимость груза</dt><dd>100 000 ₽</dd></dl></div>`).join('<hr class="hr">')}</section>
  ${routeSection(c)}
- <section class="card"><h2 class="h2">Документы</h2><dl class="kv"><dt>Товарная накладная</dt><dd>2 шт</dd><dt>ТТН</dt><dd>2 шт</dd><dt>Документы на оплату перевозки</dt><dd>1 шт</dd></dl></section>`}
+ <section class="card"><h2 class="h2">Документы</h2>${docRows([['Товарная накладная','Товарная накладная',2],['ТТН','ТТН',2],['Документы на оплату перевозки','Документы на оплату перевозки',1]])}</section>`}
 V.order=()=>{
  const c=cargoById(S.param);
  return topBar('Просмотр заказа',{back:'search',actions:`<button class="icon-btn" data-share="${c.id}" aria-label="Поделиться">${ic('share')}</button><button class="icon-btn" data-fav="${c.id}" aria-pressed="${S.fav.includes(c.id)}" aria-label="${S.fav.includes(c.id)?'Убрать из избранного':'В избранное'}">${ic(S.fav.includes(c.id)?'bookmarkOn':'bookmark')}</button>`})+`<div class="page">

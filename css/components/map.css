@@ -12,5 +12,5 @@
 .zoom{position:absolute;right:max(12px,env(safe-area-inset-right,0px));top:12px;display:flex;flex-direction:column;gap:8px}
 .zoom button{width:40px;height:40px;border-radius:12px;border:0;background:var(--surface);box-shadow:var(--shadow);display:grid;place-items:center;font-size:20px;color:var(--fg)}
 .mapinfo{position:absolute;left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));background:var(--surface);border-radius:12px;padding:12px;box-shadow:var(--shadow);max-width:456px;margin:0 auto}
-.mapbox.strip{aspect-ratio:auto;height:128px;cursor:default}
-.mapbox .center{position:absolute;inset:0;margin:auto;width:max-content;height:max-content;border:0;background:var(--surface);color:var(--fg);border-radius:12px;padding:12px 24px;font-family:var(--font-ui);font-size:16px;font-weight:500;box-shadow:var(--shadow)}
+.mapbox.strip{aspect-ratio:auto;height:64px;cursor:default}
+.mapbox .center{position:absolute;inset:0;margin:auto;width:max-content;height:36px;border:0;background:var(--surface);color:var(--fg);border-radius:10px;padding:0 16px;display:inline-flex;align-items:center;font-family:var(--font-ui);font-size:14px;font-weight:500;box-shadow:var(--shadow)}

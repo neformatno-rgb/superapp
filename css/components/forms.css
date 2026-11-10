@@ -4,6 +4,14 @@
 .input{background:var(--surface-2);border:0;border-radius:12px;height:40px;padding:0 12px;width:100%;min-width:0;font-family:var(--font-ctl);font-size:14px}
 select.input{-webkit-appearance:none;-moz-appearance:none;appearance:none;padding-right:40px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238a9099' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:20px 20px;text-overflow:ellipsis;cursor:pointer}
 select.input::-ms-expand{display:none}
+select.input.ph{color:var(--muted)}
+.pay-sum{font-size:16px;line-height:20px;font-weight:700}
+.pay-sum.sm{font-size:13px;line-height:18px}
+.bn-big{width:56px;height:56px;display:block;object-fit:contain}
+.bn-title{font-size:16px;line-height:20px;font-weight:700}
+.bn-info{border:0;background:none;padding:0;width:22px;height:22px;display:grid;place-items:center;color:var(--faint)}
+.bn-info svg{width:20px;height:20px}
+.bn-text{margin:0;font-size:13px;line-height:18px;color:var(--muted)}
 /* calendar icon for date inputs */
 input[type="date"].input,.date-btn{position:relative;-webkit-appearance:none;appearance:none;text-align:left;padding-right:44px;background-repeat:no-repeat;background-position:right 12px center;background-size:20px 20px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill-rule='evenodd' fill='%23323232' d='M18 4V3C18 2.44772 17.5523 2 17 2C16.4477 2 16 2.44772 16 3V4H8V3C8 2.44772 7.55228 2 7 2C6.44772 2 6 2.44772 6 3L6 4C3.79086 4 2 5.79086 2 8V18C2 20.2091 3.79086 22 6 22H18C20.2091 22 22 20.2091 22 18V8C22 5.79086 20.2091 4 18 4ZM7 7C6.44772 7 6 6.55228 6 6C4.89543 6 4 6.89543 4 8V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V8C20 6.89543 19.1046 6 18 6C18 6.55228 17.5523 7 17 7C16.4477 7 16 6.55228 16 6H8C8 6.55228 7.55228 7 7 7ZM17 8H7C6.44771 8 6 8.44772 6 9C6 9.55228 6.44771 10 7 10H17C17.5523 10 18 9.55228 18 9C18 8.44772 17.5523 8 17 8ZM16 13C16 12.4477 16.4447 12 16.9934 12H17.0066C17.5553 12 18 12.4477 18 13C18 13.5523 17.5553 14 17.0066 14H16.9934C16.4447 14 16 13.5523 16 13ZM11.9934 12C11.4447 12 11 12.4477 11 13C11 13.5523 11.4447 14 11.9934 14H12.0066C12.5553 14 13 13.5523 13 13C13 12.4477 12.5553 12 12.0066 12H11.9934ZM6 13C6 12.4477 6.44475 12 6.99338 12H7.00662C7.55525 12 8 12.4477 8 13C8 13.5523 7.55525 14 7.00662 14H6.99338C6.44475 14 6 13.5523 6 13ZM16.9934 16C16.4447 16 16 16.4477 16 17C16 17.5523 16.4447 18 16.9934 18H17.0066C17.5553 18 18 17.5523 18 17C18 16.4477 17.5553 16 17.0066 16H16.9934ZM11 17C11 16.4477 11.4447 16 11.9934 16H12.0066C12.5553 16 13 16.4477 13 17C13 17.5523 12.5553 18 12.0066 18H11.9934C11.4447 18 11 17.5523 11 17ZM6.99338 16C6.44475 16 6 16.4477 6 17C6 17.5523 6.44475 18 6.99338 18H7.00662C7.55525 18 8 17.5523 8 17C8 16.4477 7.55525 16 7.00662 16H6.99338Z'/%3E%3C/svg%3E")}
 input[type="date"].input::-webkit-date-and-time-value{text-align:left;margin:0}
@@ -70,6 +78,28 @@ textarea.input{height:auto;min-height:84px;padding:10px 12px;resize:vertical}
 .bd-list li:last-child .bd-item{border-bottom:0}
 .bd-box{width:24px;height:24px;border-radius:6px;box-shadow:inset 0 0 0 2px var(--line);display:grid;place-items:center;flex:none}
 .bd-item[aria-checked="true"] .bd-box{background:var(--accent);box-shadow:none;color:var(--on-accent)}
+/* documents rows */
+.docs{display:flex;flex-direction:column;gap:8px}
+.doc-row{border-radius:12px;background:var(--surface-2)}
+.doc-row summary,.doc-sum{list-style:none;display:flex;align-items:center;gap:8px;padding:12px;cursor:pointer;font-size:14px;line-height:20px;font-weight:500}
+.doc-row summary::-webkit-details-marker{display:none}
+.doc-row summary>svg{flex:none;transition:transform .2s}
+.doc-row[open] summary>svg{transform:rotate(180deg)}
+.doc-row.off .doc-sum{cursor:default;color:var(--muted)}
+.doc-items{display:flex;flex-direction:column;padding:0 12px 8px}
+.doc-item{display:flex;align-items:center;gap:10px;border:0;background:none;padding:10px 0;text-align:left;font-family:var(--font-ctl);font-size:14px;color:var(--fg);border-top:1px solid var(--line)}
+.dd-wrap{position:relative}
+.dd-btn{display:flex;align-items:center;gap:8px;width:100%;text-align:left;border:0;cursor:pointer;font-family:var(--font-ctl);color:var(--fg)}
+.dd-btn>span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dd-btn>svg{flex:none;color:var(--muted);transition:transform .2s}
+.dd-wrap.open .dd-btn{box-shadow:inset 0 0 0 2px var(--accent)}
+.dd-wrap.open .dd-btn>svg{transform:rotate(180deg)}
+.dd-menu{display:none;position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:30;background:var(--surface);border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,.14),inset 0 0 0 1px var(--line);padding:4px;max-height:280px;overflow:auto}
+.dd-wrap.open .dd-menu{display:block}
+.dd-opt{display:flex;align-items:center;gap:8px;width:100%;border:0;background:none;padding:10px 12px;border-radius:8px;text-align:left;font-family:var(--font-ctl);font-size:14px;line-height:20px;color:var(--fg)}
+.dd-opt:hover{background:var(--surface-2)}
+.dd-opt[aria-selected="true"]{color:var(--accent);font-weight:500}
+.dd-opt>svg{flex:none}
 .city-empty{color:var(--muted);text-align:center;padding:24px 0}
 .pair .swap{position:absolute;right:8px;top:24px;width:32px;height:32px;border-radius:8px;border:0;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center}
 .opt{border:0;border-radius:8px;height:32px;background:var(--surface-2);font-family:var(--font-ctl);font-size:14px;font-weight:500}

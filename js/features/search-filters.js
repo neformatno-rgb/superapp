@@ -5,7 +5,7 @@ const CITY_CODE={'Москва':'MOW','Санкт-Петербург':'LED','К�
 function cityList(){const n={};CARGO.forEach(c=>{if(c.gen)return;n[c.from]=(n[c.from]||0)+1;n[c.to]=(n[c.to]||0)+1});return Object.keys(n).sort((a,b)=>n[b]-n[a]||a.localeCompare(b,'ru'))}
 const CITY_LBL={from:'Откуда',to:'Куда'};
 function cityField(k,v){const id=k==='from'?'fFrom':'fTo';return `<button type="button" class="input city-btn" data-city="${k}" aria-label="${CITY_LBL[k]}: ${esc(v||'любой город')}"><span class="${v?'':'muted'}">${esc(v||CITY_LBL[k])}</span>${v?`<span class="fld-x" role="button" aria-label="Очистить" data-cityclear="${k}">${ic('x','s')}</span>`:''}</button><input type="hidden" id="${id}" value="${esc(v||'')}">`}
-function setCity(k,v){const h=document.getElementById(k==='from'?'fFrom':'fTo');if(!h)return;h.value=v;const b=h.previousElementSibling;b.outerHTML=cityField(k,v).replace(/<input[^>]*>$/,'')}
+function setCity(k,v){const h=document.getElementById(k==='from'?'fFrom':'fTo');if(!h)return;h.value=v;const b=h.previousElementSibling;b.outerHTML=cityField(k,v).replace(/<input[^>]*>$/,'');ffRefresh()}
 function cityItems(k,q){q=(q||'').trim().toLowerCase();const cur=(document.getElementById(k==='from'?'fFrom':'fTo')||{}).value||'';
  const l=cityList().filter(c=>!q||c.toLowerCase().includes(q));
  const any=cur&&!q?`<li><button class="city-item" data-cityval=""><span class="city-pin">${ic('x')}</span><span class="grow"><div class="city-name">Любой город</div><div class="city-country">Сбросить выбор</div></span></button></li>`:'';
@@ -60,7 +60,7 @@ function openDate(k){closeDate();const f=document.getElementById('fDf').value,t=
  document.body.appendChild(el);dpPaint();el.querySelector('.sheet').focus({preventScroll:true});
  const sel=el.querySelector('.dp-day.sel');if(sel)el.querySelector('.dp-months').scrollTop=sel.closest('.dp-month').offsetTop-8}
 function closeDate(){const el=document.getElementById('dateLayer');DP=null;if(!el)return;el.id='';sheetOut(el,()=>el.remove())}
-function setDate(k,v){const h=document.getElementById(k==='from'?'fDf':'fDt');if(!h)return;h.value=v;h.parentElement.outerHTML=dateField(k,v)}
+function setDate(k,v){const h=document.getElementById(k==='from'?'fDf':'fDt');if(!h)return;h.value=v;h.parentElement.outerHTML=dateField(k,v);ffRefresh()}
 function dpPick(s){if(DP.act==='from'){DP.from=s;if(DP.to&&DP.to<s)DP.to='';DP.act='to'}else{if(DP.from&&s<DP.from){DP.to=DP.from;DP.from=s}else DP.to=s;if(!DP.from)DP.from=s}DP.flex=0}
 document.addEventListener('click',e=>{
  const dx=e.target.closest('[data-dateclear]');if(dx){e.preventDefault();e.stopPropagation();setDate(dx.dataset.dateclear,'');return}
@@ -89,7 +89,14 @@ function openBody(){closeBody();const h=document.getElementById('fBody');const s
  el.innerHTML=`<div class="dim"></div><div class="sheet" role="dialog" aria-modal="true" aria-label="Тип кузова" tabindex="-1" style="outline:none"><div class="grab"></div><div class="row between"><h3 style="margin:0">Тип кузова</h3><button type="button" class="linkbtn" data-bdreset style="font-size:14px">Сбросить</button></div><ul class="bd-list" role="list"></ul><button class="btn secondary block" type="button" data-bddone>Закрыть</button></div>`;
  document.body.appendChild(el);bdPaint();el.querySelector('.sheet').focus({preventScroll:true})}
 function closeBody(){const el=document.getElementById('bodyLayer');BD=null;if(!el)return;el.id='';sheetOut(el,()=>el.remove())}
-function setBody(v){const h=document.getElementById('fBody');if(!h)return;h.parentElement.outerHTML=bodyField(v)}
+function setBody(v){const h=document.getElementById('fBody');if(!h)return;h.parentElement.outerHTML=bodyField(v);ffRefresh()}
+/* «Сбросить» in the filters sheet: shown only while something is set */
+function ffAny(){const ff=document.getElementById('filterForm'),f=S.filters;if(!ff)return !!(f.from||f.to||f.dateFrom||f.dateTo||bodyList(f).length||f.deals.length);
+ return ['#fFrom','#fTo','#fDf','#fDt','#fBody'].some(q=>{const el=ff.querySelector(q);return el&&el.value})||S.filters.deals.length>0}
+function ffRefresh(){const r=document.querySelector('[data-ffreset]');if(r)r.style.visibility=ffAny()?'':'hidden'}
+document.addEventListener('click',e=>{if(!e.target.closest('[data-ffreset]'))return;e.preventDefault();e.stopPropagation();
+ setCity('from','');setCity('to','');setDate('from','');setDate('to','');setBody('');S.filters.deals=[];save();
+ document.querySelectorAll('#filterForm [data-deal]').forEach(b=>b.setAttribute('aria-pressed','false'));const y=window.scrollY;render();window.scrollTo(0,y);ffRefresh()},true);
 document.addEventListener('click',e=>{
  if(e.target.closest('[data-bodyclear]')){e.preventDefault();e.stopPropagation();setBody('');return}
  if(e.target.closest('[data-bodypick]')){e.preventDefault();e.stopPropagation();openBody();return}

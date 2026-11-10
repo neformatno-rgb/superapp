@@ -5,7 +5,7 @@ function closeSheet(){const l=document.getElementById('layer'),sc=l.querySelecto
 /* slide a bottom sheet out (it stays opaque) and fade the dimmed backdrop, then run done(); after a swipe the exit keeps the finger's speed */
 let SHEET_V=0;
 function sheetOut(sc,done){const sh=sc.querySelector('.sheet');if(!sh||matchMedia('(prefers-reduced-motion: reduce)').matches){done();return}
- sc.classList.add('out');sc.style.pointerEvents='none';const dim=sc.querySelector(':scope>.dim')||sc,desk=innerWidth>=960,v=SHEET_V;SHEET_V=0;
+ sc.classList.add('out');sc.style.pointerEvents='none';const dim=sc.querySelector(':scope>.dim')||sc,desk=false,v=SHEET_V;SHEET_V=0;
  const cur=new DOMMatrixReadOnly(getComputedStyle(sh).transform).m42||0,left=Math.max(0,sh.offsetHeight-cur);
  const ms=desk?200:Math.round(Math.min(280,Math.max(140,v>0?left/v:260)));
  sh.style.animation='none';sh.style.transition=`transform ${ms}ms cubic-bezier(${v>0?'.2,.6,.4,1':'.4,0,1,1'}), opacity ${ms}ms`;
@@ -14,7 +14,7 @@ function sheetOut(sc,done){const sh=sc.querySelector('.sheet');if(!sh||matchMedi
 /* swipe down to dismiss bottom sheets (mobile): follows the finger 1:1, springs back or flicks away */
 let SD=null,SD_RAF=0;
 const sdPaint=()=>{SD_RAF=0;if(!SD||!SD.on)return;SD.sh.style.transform=`translate3d(0,${SD.dy}px,0)`;SD.dim.style.opacity=String(Math.max(.25,1-SD.dy/(SD.h*1.2)))};
-document.addEventListener('touchstart',e=>{if(innerWidth>=960||e.touches.length>1){SD=null;return}const sh=e.target.closest('.scrim>.sheet');if(!sh)return;
+document.addEventListener('touchstart',e=>{if(e.touches.length>1){SD=null;return}const sh=e.target.closest('.scrim>.sheet');if(!sh)return;
  const y=e.touches[0].clientY,head=y-sh.getBoundingClientRect().top<56,scroller=e.target.closest('.city-list,.dp-months')||sh;
  if(!head&&scroller.scrollTop>0)return;
  SD={sh,sc:sh.parentElement,dim:sh.parentElement.querySelector(':scope>.dim')||sh.parentElement,scroller,head,y0:y,dy:0,on:false,h:sh.offsetHeight,pts:[[y,e.timeStamp]]}},{passive:true});
@@ -46,7 +46,7 @@ const SHEETS={
   <button class="btn primary block" type="submit">Сохранить</button></form>`,
  vat:()=>`<h3>Цены</h3><div role="radiogroup" aria-label="НДС в ценах" style="display:flex;flex-direction:column;gap:8px">${VATS.map(v=>`<button class="pay" role="radio" aria-checked="${(S.vat||0)===v}" data-vat="${v}" style="flex-direction:row;align-items:center;justify-content:space-between"><span>${vatText(v)}</span><span class="radio"></span></button>`).join('')}</div>`,
  sort:()=>`<h3>Сортировка</h3><div role="radiogroup" aria-label="Сортировка" style="display:flex;flex-direction:column;gap:8px">${[['date','По дате погрузки'],['price','Сначала дороже'],['rate','По ставке ₽/км'],['km','Сначала ближе']].map(([k,l])=>`<button class="pay" role="radio" aria-checked="${(S.sort||'date')===k}" data-sort="${k}" style="flex-direction:row;align-items:center;justify-content:space-between"><span>${l}</span><span class="radio"></span></button>`).join('')}</div>`,
- filters:()=>`<h3>Фильтры</h3>`+filterForm().replace('class="card"','class="sec"'),
+ filters:()=>`<div class="row between"><h3>Фильтры</h3><button type="button" class="linkbtn" data-ffreset style="font-size:14px${ffAny()?'':';visibility:hidden'}">Сбросить</button></div>`+filterForm().replace('class="card"','class="sec"'),
  qr:id=>`<h3>QR-код рейса</h3><p class="muted" style="margin:0;font-size:13px">Покажите на КПП. Код ведёт к ЭТрН по заявке ${esc(S.param)}.</p>${qrSvg(S.param)}`,
  docs:()=>`<h3>Документы</h3><dl class="kv"><dt>Товарная накладная №1847</dt><dd>${tag('Подписан','green')}</dd><dt>Товарная накладная №1848</dt><dd>${tag('Подписан','green')}</dd><dt>ЭТрН №0092-12</dt><dd>${tag('Подписан','green')}</dd></dl><button class="btn secondary block" data-close>Закрыть</button>`
 };

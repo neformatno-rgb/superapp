@@ -1,6 +1,5 @@
-/* Layout: phone-first app column; on wide screens the bottom bar becomes a left rail and sheets become centered dialogs. */
+/* Layout: phone app column, centered on wide screens; bottom nav and bottom sheets everywhere. */
 .shell{min-height:100%;display:flex}
-.rail{display:none}
 .main{flex:1;min-width:0;display:flex;justify-content:center}
 .col{width:100%;max-width:480px;padding-bottom:calc(88px + env(safe-area-inset-bottom,0px))}
 

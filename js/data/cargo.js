@@ -8,4 +8,4 @@ const CARGO=[
  {id:'СП085301',cap:10,vol:60,wt:9,client:'Сибирь Логистик',rating:4.5,body:'Тент',load:'Верхняя',items:'2 груза',pallets:'26 пл.',from:'Новосибирск',to:'Омск',fromWhen:'15 дек, 07:00 — 15 дек, 12:00',toWhen:'16 дек, 06:00 — 16 дек, 14:00',via:0,deal:'Аукцион',timer:4210,km:650,price:58900,bonus:120,fast:false,express:false,vat:false}
 ];
 const ORDER={contract:['06/02 №Д-6194.2022','11/05 №Д-7012.2023'],trucks:['А 778 РО 89 / Mercedes-Benz Actros','В 412 КК 78 / Volvo FH'],trailers:['ВТ 3341 78 / Schmitz S.KO','АО 1290 89 / Krone Cool Liner'],
- driver:{name:'Кусиков Михаил Сергеевич',license:'23 УК 2111344',phone:'+7 (920) 123-12-12',birth:'12 января 1988',passport:'7770 №203050'}};
+ drivers:[{name:'Кусиков Михаил Сергеевич',license:'23 УК 2111344',phone:'+7 (920) 123-12-12',birth:'12 января 1988',passport:'7770 №203050'},{name:'Орлов Денис Викторович',license:'78 ТВ 5530912',phone:'+7 (921) 402-77-15',birth:'3 марта 1985',passport:'4012 №518744'}]};
