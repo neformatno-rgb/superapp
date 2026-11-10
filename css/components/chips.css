@@ -1,5 +1,6 @@
 /* chips */
 .chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.sticky-chips{position:sticky;top:calc(56px + env(safe-area-inset-top,0px));z-index:15;background:var(--bg);margin:-8px -12px;padding:8px 12px}
 .chips::-webkit-scrollbar{display:none}
 .chip{border:0;background:var(--surface);border-radius:10px;padding:0 12px;height:36px;white-space:nowrap;font-family:var(--font-ctl);font-size:14px;display:inline-flex;align-items:center;gap:6px;flex:none}
 .chip[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent);font-weight:500}

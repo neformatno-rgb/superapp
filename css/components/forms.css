@@ -19,10 +19,10 @@ textarea.input{height:auto;min-height:84px;padding:10px 12px;resize:vertical}
 .pair::after{content:"";position:absolute;left:12px;right:52px;top:40px;height:1px;background:var(--line);pointer-events:none}
 .city-btn{display:flex;align-items:center;width:100%;text-align:left;border:0;cursor:pointer;font-family:var(--font-ctl)}
 .city-btn span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.city-sheet{height:calc(100vh - 24px - env(safe-area-inset-top,0px));height:calc(100dvh - 24px - env(safe-area-inset-top,0px));max-height:none;overflow:hidden;padding-bottom:0}
+.scrim>.city-sheet{height:calc(100vh - 24px - env(safe-area-inset-top,0px));height:calc(100dvh - 24px - env(safe-area-inset-top,0px));max-height:none;overflow:hidden;padding-bottom:0}
 .city-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .city-head h3{margin:0;font-size:20px;line-height:24px;font-weight:500}
-.city-list{list-style:none;margin:0 -12px;padding:4px 12px 8px;overflow:auto;flex:1;display:flex;flex-direction:column;gap:4px}
+.city-list{list-style:none;margin:0 -12px;padding:4px 12px calc(16px + env(safe-area-inset-bottom,0px));overflow:auto;flex:1;display:flex;flex-direction:column;gap:4px}
 .city-item{display:flex;align-items:center;gap:16px;width:100%;border:0;background:none;padding:6px 0;text-align:left;color:var(--fg);border-radius:12px}
 .city-item:hover{background:var(--surface-2)}
 .city-item[aria-current="true"] .city-name{color:var(--accent)}
