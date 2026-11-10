@@ -1,0 +1,7 @@
+/* success sheet after taking a cargo */
+.succ{display:flex;flex-direction:column;gap:24px;padding-top:8px}
+.succ-body{display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px}
+.succ-art{width:180px;height:180px;object-fit:contain;margin-bottom:8px}
+.succ-title{margin:0;font-size:22px;line-height:28px;font-weight:700;text-wrap:balance}
+.succ-text{margin:0;color:var(--muted);font-size:15px;line-height:22px;max-width:320px;text-wrap:pretty}
+.succ-actions{display:flex;flex-direction:column;gap:8px}

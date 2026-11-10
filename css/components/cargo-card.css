@@ -1,0 +1,23 @@
+/* cargo card */
+.cargo{cursor:pointer;text-align:left;border:0;width:100%;color:inherit;font:inherit}
+.cargo:hover{box-shadow:var(--shadow)}
+.rating{width:36px;height:36px;border-radius:10px;box-shadow:inset 0 0 0 1px var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;line-height:12px;flex:none}
+.rating svg{width:14px;height:14px;fill:var(--star);stroke:none}
+.strip{background:var(--surface-2);border-radius:8px;padding:5px 8px;display:flex;justify-content:space-between;gap:8px;font-size:13px;line-height:18px;font-family:var(--font-ctl)}
+.route{display:grid;grid-template-columns:16px 1fr;column-gap:8px;font-family:var(--font-ctl)}
+.route .dotc{width:12px;height:12px;border-radius:50%;margin:3px 2px 0;box-shadow:inset 0 0 0 3px var(--green);background:var(--surface)}
+.route .dotc.end{box-shadow:inset 0 0 0 3px var(--accent)}
+.route .dotc.mid{width:8px;height:8px;margin:5px 4px 0;box-shadow:inset 0 0 0 2px var(--line)}
+.route .line{width:1px;background:var(--line);margin:2px auto;min-height:10px}
+.route .city{font-size:14px;line-height:20px;font-weight:500}
+.route .when{font-size:13px;line-height:18px;color:var(--muted);padding-bottom:8px}
+.route .via{font-size:12px;color:var(--accent);line-height:16px;padding-bottom:8px}
+.coin{width:16px;height:16px;flex:none}
+.bonus-pill{display:inline-flex;align-items:center;gap:4px;height:22px;padding:0 8px 0 4px;border-radius:11px;background:var(--surface-2);font-family:var(--font-ctl);font-size:13px;line-height:1;color:var(--fg)}
+.price{font-size:20px;line-height:24px;font-weight:700;font-family:var(--font-ctl)}
+.hr{height:1px;background:var(--line);border:0;margin:0}
+.ghost-ic{width:36px;height:36px;border-radius:10px;border:0;background:var(--surface-2);display:grid;place-items:center;color:var(--muted)}
+.ghost-ic[data-watch]{color:var(--fg)}
+.ghost-ic[aria-pressed="true"]{color:var(--accent);background:var(--accent-soft)}
+.ghost-ic[aria-pressed="true"] svg{fill:currentColor}
+.ghost-ic[data-fav][aria-pressed="true"]{color:var(--muted);background:var(--surface-2)}

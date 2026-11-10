@@ -1,0 +1,7 @@
+/* tags */
+.tag{display:inline-flex;align-items:center;height:16px;padding:0 4px;border-radius:4px;font-family:var(--font-ctl);font-size:12px;font-weight:500;line-height:16px;letter-spacing:.2px;white-space:nowrap}
+.tag.green{background:var(--green-soft);color:var(--green)}
+.tag.blue{background:var(--accent-soft);color:var(--accent)}
+.tag.gray{background:var(--gray-tag);color:var(--muted)}
+.tag.orange{background:var(--orange-soft);color:var(--orange)}
+.tag.plain{background:var(--surface-2);color:var(--fg)}

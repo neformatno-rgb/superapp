@@ -1,0 +1,4 @@
+/* sticky / sliding call-to-action bars */
+.cta-bar{position:fixed;z-index:24;left:50%;width:min(456px,calc(100% - 24px));bottom:calc(72px + env(safe-area-inset-bottom,0px));transform:translate(-50%,calc(100% + 96px));transition:transform .25s ease;background:var(--surface);border-radius:12px;padding:12px;box-shadow:0 6px 20px rgba(0,0,0,.14),inset 0 0 0 1px var(--line);display:flex;align-items:center;gap:12px}
+.cta-bar.show{transform:translate(-50%,0)}
+.sticky-foot{position:sticky;bottom:calc(72px + env(safe-area-inset-bottom,0px));z-index:5;background:var(--surface);border-radius:12px;padding:12px;box-shadow:var(--shadow);display:flex;align-items:center;gap:12px}

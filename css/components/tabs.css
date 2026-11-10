@@ -1,0 +1,4 @@
+/* segmented tabs */
+.seg{display:flex;background:var(--surface);border-radius:12px;padding:4px;gap:0}
+.seg button{flex:1;min-width:0;border:0;background:none;border-radius:10px;padding:7px 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px;line-height:18px;color:var(--fg);min-height:32px}
+.seg button[aria-selected="true"]{background:var(--accent-soft);color:var(--accent);font-weight:500}
