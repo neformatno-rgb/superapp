@@ -4,7 +4,7 @@
 const CITY_CODE={'Москва':'MOW','Санкт-Петербург':'LED','Краснодар':'KRR','Новосибирск':'OVB','Казань':'KZN','Екатеринбург':'SVX','Омск':'OMS','Великий Новгород':'NVR','Вологда':'VGD','Киров':'KVX','Пермь':'PEE','Нижний Новгород':'GOJ','Самара':'KUF','Ростов-на-Дону':'ROV','Воронеж':'VOZ','Тюмень':'TJM','Челябинск':'CEK','Уфа':'UFA','Тверь':'KLD','Чебоксары':'CSY'};
 function cityList(){const n={};CARGO.forEach(c=>{if(c.gen)return;n[c.from]=(n[c.from]||0)+1;n[c.to]=(n[c.to]||0)+1});return Object.keys(n).sort((a,b)=>n[b]-n[a]||a.localeCompare(b,'ru'))}
 const CITY_LBL={from:'Откуда',to:'Куда'};
-function cityField(k,v){const id=k==='from'?'fFrom':'fTo';return `<button type="button" class="input city-btn" data-city="${k}" aria-label="${CITY_LBL[k]}: ${esc(v||'любой город')}"><span class="${v?'':'muted'}">${esc(v||CITY_LBL[k])}</span></button><input type="hidden" id="${id}" value="${esc(v||'')}">`}
+function cityField(k,v){const id=k==='from'?'fFrom':'fTo';return `<button type="button" class="input city-btn" data-city="${k}" aria-label="${CITY_LBL[k]}: ${esc(v||'любой город')}"><span class="${v?'':'muted'}">${esc(v||CITY_LBL[k])}</span>${v?`<span class="fld-x" role="button" aria-label="Очистить" data-cityclear="${k}">${ic('x','s')}</span>`:''}</button><input type="hidden" id="${id}" value="${esc(v||'')}">`}
 function setCity(k,v){const h=document.getElementById(k==='from'?'fFrom':'fTo');if(!h)return;h.value=v;const b=h.previousElementSibling;b.outerHTML=cityField(k,v).replace(/<input[^>]*>$/,'')}
 function cityItems(k,q){q=(q||'').trim().toLowerCase();const cur=(document.getElementById(k==='from'?'fFrom':'fTo')||{}).value||'';
  const l=cityList().filter(c=>!q||c.toLowerCase().includes(q));
@@ -18,6 +18,7 @@ function openCity(k){closeCity();CITYK=k;const el=document.createElement('div');
  document.body.appendChild(el);el.querySelector('.sheet').focus({preventScroll:true})}
 function closeCity(){const el=document.getElementById('cityLayer');CITYK=null;if(!el)return;el.id='';sheetOut(el,()=>el.remove())}
 document.addEventListener('click',e=>{
+ const cx=e.target.closest('[data-cityclear]');if(cx){e.preventDefault();e.stopPropagation();setCity(cx.dataset.cityclear,'');return}
  const b=e.target.closest('[data-city]');if(b){e.preventDefault();e.stopPropagation();openCity(b.dataset.city);return}
  const L=document.getElementById('cityLayer');if(!L||!L.contains(e.target))return;e.stopPropagation();
  if(e.target===L){closeCity();return}
@@ -32,7 +33,7 @@ const isoD=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${St
 const parseD=s=>{const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)};
 const addD=(s,n)=>{const d=parseD(s);d.setDate(d.getDate()+n);return isoD(d)};
 const fmtD=s=>s?parseD(s).toLocaleDateString('ru-RU',{day:'numeric',month:'long'}):'';
-function dateField(k,v){const id=k==='from'?'fDf':'fDt';return `<div class="field"><label>${DP_LBL[k]}</label><button type="button" class="input date-btn" data-date="${k}" aria-label="${DP_LBL[k]}: ${v?fmtD(v):'не выбрана'}"><span class="${v?'':'muted'}">${v?fmtD(v):'Любая'}</span></button><input type="hidden" id="${id}" value="${v||''}"></div>`}
+function dateField(k,v){const id=k==='from'?'fDf':'fDt';return `<div class="field"><label>${DP_LBL[k]}</label><button type="button" class="input date-btn${v?' has':''}" data-date="${k}" aria-label="${DP_LBL[k]}: ${v?fmtD(v):'не выбрана'}"><span class="${v?'':'muted'}">${v?fmtD(v):'Любая'}</span>${v?`<span class="fld-x" role="button" aria-label="Очистить" data-dateclear="${k}">${ic('x','s')}</span>`:''}</button><input type="hidden" id="${id}" value="${v||''}"></div>`}
 let DP=null;
 function dpMonths(){const t=isoD(new Date()),{from,to}=DP,now=new Date();let h='';
  for(let k=0;k<4;k++){const m=new Date(now.getFullYear(),now.getMonth()+k,1),pad=(m.getDay()+6)%7,days=new Date(m.getFullYear(),m.getMonth()+1,0).getDate();
@@ -62,6 +63,7 @@ function closeDate(){const el=document.getElementById('dateLayer');DP=null;if(!e
 function setDate(k,v){const h=document.getElementById(k==='from'?'fDf':'fDt');if(!h)return;h.value=v;h.parentElement.outerHTML=dateField(k,v)}
 function dpPick(s){if(DP.act==='from'){DP.from=s;if(DP.to&&DP.to<s)DP.to='';DP.act='to'}else{if(DP.from&&s<DP.from){DP.to=DP.from;DP.from=s}else DP.to=s;if(!DP.from)DP.from=s}DP.flex=0}
 document.addEventListener('click',e=>{
+ const dx=e.target.closest('[data-dateclear]');if(dx){e.preventDefault();e.stopPropagation();setDate(dx.dataset.dateclear,'');return}
  const b=e.target.closest('[data-date]');if(b){e.preventDefault();e.stopPropagation();openDate(b.dataset.date);return}
  const L=document.getElementById('dateLayer');if(!L||!L.contains(e.target))return;e.stopPropagation();
  if(e.target===L){closeDate();return}
@@ -73,20 +75,45 @@ document.addEventListener('click',e=>{
  const d=e.target.closest('[data-dpday]');if(d&&!d.disabled){dpPick(d.dataset.dpday);dpPaint()}
 },true);
 document.addEventListener('keydown',e=>{if(!document.getElementById('dateLayer'))return;if(e.key==='Escape'){e.stopPropagation();closeDate()}},true);
+/* ---------- body type multi-select (bottom sheet) ---------- */
+const BODIES=['Рефрижератор','Тент','Изотерм'],BODY_SHORT={'Рефрижератор':'Реф','Тент':'Тент','Изотерм':'Изотерм'};
+const bodyList=f=>!f.body||f.body==='Любой'?[]:f.body.split(',').filter(b=>BODIES.includes(b));
+function bodyField(v){const l=bodyList({body:v});return `<div class="field"><label>Тип кузова</label><div class="dp-wrap"><button type="button" class="input body-btn" data-bodypick aria-label="Тип кузова: ${l.length?l.join(', '):'любой'}"><span class="body-tags">${l.length?l.map(b=>`<span class="btag">${b}</span>`).join(''):'<span class="muted">Любой</span>'}</span>${l.length?'<span class="body-gap"></span>':ic('chevD','s')}</button>${l.length?`<button type="button" class="dp-clear" data-bodyclear aria-label="Сбросить тип кузова">${ic('x','s')}</button>`:''}</div><input type="hidden" id="fBody" value="${esc(l.join(','))}"></div>`}
+let BD=null;
+function bdPaint(){const L=document.getElementById('bodyLayer');if(!L)return;
+ L.querySelector('.bd-list').innerHTML=BODIES.map(b=>{const on=BD.sel.includes(b);return `<li><button type="button" class="bd-item" data-bdval="${b}" role="checkbox" aria-checked="${on}"><span class="grow">${b}</span><span class="bd-box">${on?ic('check','s'):''}</span></button></li>`}).join('');
+ L.querySelector('[data-bdreset]').style.visibility=BD.sel.length?'':'hidden';
+ const ch=BD.sel.slice().sort().join()!==BD.s0;const btn=L.querySelector('[data-bddone]');btn.textContent=ch?'Применить':'Закрыть';btn.className='btn block '+(ch?'primary':'secondary')}
+function openBody(){closeBody();const h=document.getElementById('fBody');const sel=bodyList({body:h?h.value:''});BD={sel,s0:sel.slice().sort().join()};
+ const el=document.createElement('div');el.className='scrim';el.id='bodyLayer';el.style.zIndex='50';
+ el.innerHTML=`<div class="dim"></div><div class="sheet" role="dialog" aria-modal="true" aria-label="Тип кузова" tabindex="-1" style="outline:none"><div class="grab"></div><div class="row between"><h3 style="margin:0">Тип кузова</h3><button type="button" class="linkbtn" data-bdreset style="font-size:14px">Сбросить</button></div><ul class="bd-list" role="list"></ul><button class="btn secondary block" type="button" data-bddone>Закрыть</button></div>`;
+ document.body.appendChild(el);bdPaint();el.querySelector('.sheet').focus({preventScroll:true})}
+function closeBody(){const el=document.getElementById('bodyLayer');BD=null;if(!el)return;el.id='';sheetOut(el,()=>el.remove())}
+function setBody(v){const h=document.getElementById('fBody');if(!h)return;h.parentElement.outerHTML=bodyField(v)}
+document.addEventListener('click',e=>{
+ if(e.target.closest('[data-bodyclear]')){e.preventDefault();e.stopPropagation();setBody('');return}
+ if(e.target.closest('[data-bodypick]')){e.preventDefault();e.stopPropagation();openBody();return}
+ const L=document.getElementById('bodyLayer');if(!L||!L.contains(e.target))return;e.stopPropagation();
+ if(e.target===L){closeBody();return}
+ if(e.target.closest('[data-bddone]')){if(BD.sel.slice().sort().join()!==BD.s0)setBody(BODIES.filter(b=>BD.sel.includes(b)).join(','));closeBody();return}
+ if(e.target.closest('[data-bdreset]')){BD.sel=[];bdPaint();return}
+ const it=e.target.closest('[data-bdval]');if(it){const v=it.dataset.bdval,i=BD.sel.indexOf(v);i<0?BD.sel.push(v):BD.sel.splice(i,1);bdPaint()}
+},true);
+document.addEventListener('keydown',e=>{if(document.getElementById('bodyLayer')&&e.key==='Escape'){e.stopPropagation();closeBody()}},true);
 function filterForm(){
  const f=S.filters;
  return `<form class="card" id="filterForm">
   <div class="pair">${cityField('from',f.from)}${cityField('to',f.to)}
    <button type="button" class="swap" data-swap aria-label="Поменять местами">${ic('swap','s')}</button></div>
   <div class="grid2">${dateField('from',f.dateFrom)}${dateField('to',f.dateTo)}</div>
-  <div class="field"><label for="fBody">Тип кузова</label><select class="input" id="fBody">${['Любой','Рефрижератор','Тент','Изотерм'].map(b=>`<option ${b===f.body?'selected':''}>${b}</option>`).join('')}</select></div>
+  ${bodyField(f.body)}
   <div class="grid3">${['Фикс','Аукцион','Встречное'].map(d=>`<button type="button" class="opt" data-deal="${d}" aria-pressed="${f.deals.includes(d)}">${d}</button>`).join('')}</div>
   <div class="row"><button class="btn primary grow" type="submit">Найти груз</button></div>
  </form>`;
 }
 const watchKey=f=>[f.from.trim().toLowerCase(),f.to.trim().toLowerCase(),f.body,[...f.deals].sort().join('+')].join('|');
-const watchLabel=f=>[f.from||'Любой город',f.to||'',f.body!=='Любой'?f.body.toLowerCase():''].filter(Boolean).join(' — ');
-const matches=f=>CARGO.filter(c=>(!f.from||c.from.toLowerCase().includes(f.from.toLowerCase().trim()))&&(!f.to||c.to.toLowerCase().includes(f.to.toLowerCase().trim()))&&(f.body==='Любой'||c.body===({'Рефрижератор':'Реф','Тент':'Тент','Изотерм':'Изотерм'})[f.body])&&(!f.deals.length||f.deals.includes(c.deal)));
+const watchLabel=f=>[f.from||'Любой город',f.to||'',bodyList(f).join(', ').toLowerCase()].filter(Boolean).join(' — ');
+const matches=f=>CARGO.filter(c=>(!f.from||c.from.toLowerCase().includes(f.from.toLowerCase().trim()))&&(!f.to||c.to.toLowerCase().includes(f.to.toLowerCase().trim()))&&(!bodyList(f).length||bodyList(f).some(b=>c.body===BODY_SHORT[b]))&&(!f.deals.length||f.deals.includes(c.deal)));
 const isWatched=()=>S.watch.some(w=>w.key===watchKey(S.filters));
 function watchCards(){return S.watch.map((w,i)=>{const n=matches(w.f).length;return `<article class="card"><div class="row">${ic('bellPlus')}<div class="grow"><b style="font-weight:500">${esc(w.label)}</b><div class="muted" style="font-size:13px">${plural(n,'груз подходит','груза подходят','грузов подходят')} · уведомим о новых</div></div></div><div class="row"><button class="btn sm primary grow" data-watchopen="${i}">Показать грузы</button><button class="btn sm secondary" data-unwatch="${i}">Не отслеживать</button></div></article>`}).join('')}
 const XF={cap:{title:'Грузоподъёмность',hint:'Сколько должна поднимать машина',opts:[['0-5','до 5 т'],['5-10','5–10 т'],['10-20','10–20 т'],['20-99','от 20 т']]},
@@ -106,7 +133,7 @@ const xfPass=(c,x)=>rgPass(c,x,'cap')&&rgPass(c,x,'vol')&&rgPass(c,x,'wt')&&(!x.
 const xfCount=x=>(rgOn(x,'cap')?1:0)+(rgOn(x,'vol')?1:0)+(rgOn(x,'wt')?1:0)+(x.fast?1:0);
 let XD=null;
 function xfSheet(){const n=matchList(XD).length;
- return `<div class="row between"><h3>Фильтры</h3><button type="button" class="linkbtn" data-xfreset style="font-size:14px">Сбросить</button></div>${['cap','vol','wt'].map(k=>`<div class="sec" style="gap:8px"><div><b style="font-weight:500">${RG[k]?RG[k].title:XF[k].title}</b><div class="muted" style="font-size:12px">${RG[k]?RG[k].hint:XF[k].hint}</div></div>${RG[k]?rgFields(XD,k):`<div class="chips" style="flex-wrap:wrap">${XF[k].opts.map(([v,l])=>`<button class="chip xopt" data-xf="${k}:${v}" aria-pressed="${XD[k].includes(v)}">${l}</button>`).join('')}</div>`}</div>`).join('')}
+ return `<div class="row between"><h3>Фильтры</h3><button type="button" class="linkbtn" data-xfreset style="font-size:14px${xfCount(XD)?'':';visibility:hidden'}">Сбросить</button></div>${['cap','vol','wt'].map(k=>`<div class="sec" style="gap:8px"><div><b style="font-weight:500">${RG[k]?RG[k].title:XF[k].title}</b><div class="muted" style="font-size:12px">${RG[k]?RG[k].hint:XF[k].hint}</div></div>${RG[k]?rgFields(XD,k):`<div class="chips" style="flex-wrap:wrap">${XF[k].opts.map(([v,l])=>`<button class="chip xopt" data-xf="${k}:${v}" aria-pressed="${XD[k].includes(v)}">${l}</button>`).join('')}</div>`}</div>`).join('')}
  <div class="row between" style="padding:4px 0"><span>Только с быстрой оплатой</span><button class="switch" role="switch" aria-checked="${XD.fast}" data-xffast aria-label="Только с быстрой оплатой"></button></div>
  <div class="row"><button class="btn primary grow" data-xfapply>${n?'Показать '+plural(n,'груз','груза','грузов'):'Нет подходящих грузов'}</button></div>`}
 function openXf(){XD=Object.assign(xfEmpty(),JSON.parse(JSON.stringify(S.extra||{})));XMODE='all';sheet(xfSheet())}
@@ -116,7 +143,7 @@ const rgBtnLbl=k=>rgOn(XD,k)?'Применить':'Закрыть';
 function rgSheet(k){return `<h3>${RG[k].title}</h3><div class="muted" style="font-size:13px;margin-top:-8px">${RG[k].hint}</div>${rgFields(XD,k)}
  <div class="row"><button class="btn primary grow" data-xfapply>${rgBtnLbl(k)}</button></div>`}
 function openRg(k){XD=Object.assign(xfEmpty(),JSON.parse(JSON.stringify(S.extra||{})));XMODE=k;sheet(rgSheet(k))}
-function refreshXf(){const sh=document.querySelector('.sheet');if(!sh)return;const b=sh.querySelector('[data-xfapply]');if(RG[XMODE]){if(b)b.textContent=rgBtnLbl(XMODE);return}const n=matchList(XD).length;if(b)b.textContent=n?'Показать '+plural(n,'груз','груза','грузов'):'Нет подходящих грузов'}
+function refreshXf(){const sh=document.querySelector('.sheet');if(!sh)return;const xr=sh.querySelector('[data-xfreset]');if(xr)xr.style.visibility=xfCount(XD)?'':'hidden';const b=sh.querySelector('[data-xfapply]');if(RG[XMODE]){if(b)b.textContent=rgBtnLbl(XMODE);return}const n=matchList(XD).length;if(b)b.textContent=n?'Показать '+plural(n,'груз','груза','грузов'):'Нет подходящих грузов'}
 const rgChip=(X,k)=>rgOn(X,k)?`<span class="chip has-x" aria-pressed="true"><button class="chip-lbl" data-rgopen="${k}" aria-label="${RG[k].title} ${rgLabel(X,k)}, изменить">${rgLabel(X,k)}</button><button class="chip-x" data-rgclear="${k}" aria-label="Очистить: ${RG[k].title}">${ic('x','s')}</button></span>`:`<button class="chip" data-rgopen="${k}" aria-pressed="false">${RG[k].title}</button>`;
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.dataset&&e.target.dataset.rgin){e.preventDefault();e.target.blur()}});
 document.addEventListener('input',e=>{const k=e.target.dataset&&e.target.dataset.rgin;if(!k||!XD)return;XD[k]=e.target.value;refreshXf()});
@@ -135,7 +162,7 @@ function genFor(f,x,need){
  for(let i=0;i<need;i++){
   const from=F||pick(known.filter(n=>n!==T)),to=T||pick(known.filter(n=>n!==from)),A=MAP.C[from],B=MAP.C[to];
   const km=Math.max(60,Math.round(Math.hypot(A[0]-B[0],A[1]-B[1])*4.6/10)*10+40);
-  const [body,load]=f.body!=='Любой'?bodyMap[f.body]:pick([['Реф','Задняя'],['Тент','Боковая'],['Тент','Верхняя'],['Изотерм','Задняя']]);
+  const [body,load]=bodyList(f).length?bodyMap[pick(bodyList(f))]:pick([['Реф','Задняя'],['Тент','Боковая'],['Тент','Верхняя'],['Изотерм','Задняя']]);
   const cap=rg('cap',0.2,20,1),vol=rg('vol',4,120,0),wt=rg('wt',0.2,24,1),deal=pick(deals);
   const d1=12+Math.floor(rnd()*6),h1=6+Math.floor(rnd()*12),hrs=Math.max(4,Math.round(km/60)),d2=d1+Math.floor((h1+hrs)/24),h2=(h1+hrs)%24;
   const price=Math.round(km*(body==='Реф'?95:78)*(0.85+rnd()*.4)/100)*100;
@@ -149,6 +176,6 @@ function genFor(f,x,need){
 function matchList(x){x=Object.assign(xfEmpty(),x||{});let l=filteredBase().filter(c=>xfPass(c,x));if(l.length<MINR){genFor(S.filters,x,MINR-l.length);l=filteredBase().filter(c=>xfPass(c,x))}return l}
 function filteredBase(){
  const f=S.filters,bodyMap={'Рефрижератор':'Реф','Тент':'Тент','Изотерм':'Изотерм'};
- return CARGO.filter(c=>(!f.from||c.from.toLowerCase().includes(f.from.toLowerCase().trim()))&&(!f.to||c.to.toLowerCase().includes(f.to.toLowerCase().trim()))&&(f.body==='Любой'||c.body===bodyMap[f.body])&&(!f.deals.length||f.deals.includes(c.deal)));
+ return CARGO.filter(c=>(!f.from||c.from.toLowerCase().includes(f.from.toLowerCase().trim()))&&(!f.to||c.to.toLowerCase().includes(f.to.toLowerCase().trim()))&&(!bodyList(f).length||bodyList(f).some(b=>c.body===bodyMap[b]))&&(!f.deals.length||f.deals.includes(c.deal)));
 }
 let ALLN=50;const FEED=()=>CARGO.filter(c=>!c.gen&&(!S.filters.deals.length||S.filters.deals.includes(c.deal)));

@@ -10,7 +10,7 @@ V.search=()=>{
 };
 V.results=()=>{
  const f=S.filters,SORTS={price:(a,b)=>b.price-a.price,rate:(a,b)=>b.price/b.km-a.price/a.km,km:(a,b)=>a.km-b.km,date:()=>0},list=filtered().slice().sort(SORTS[S.sort||'date']);
- const summary=[f.from||'Любой город',f.to,f.dateFrom?new Date(f.dateFrom).toLocaleDateString('ru-RU',{day:'numeric',month:'short'}):'',f.body!=='Любой'?f.body.toLowerCase().slice(0,3):''].filter(Boolean).join(' — ');
+ const summary=[f.from||'Любой город',f.to,f.dateFrom?new Date(f.dateFrom).toLocaleDateString('ru-RU',{day:'numeric',month:'short'}):'',bodyList(f).map(b=>b.toLowerCase().slice(0,3)).join(', ')].filter(Boolean).join(' — ');
  const wd=isWatched();
  return topBar('Поиск грузов',{back:'search',actions:`<button class="ghost-ic" data-watch aria-pressed="${wd}" aria-label="${wd?'Перестать отслеживать поиск':'Отслеживать этот поиск'}">${ic('bellPlus')}</button>`})+`<div class="page">
   <button class="card row" data-sheet="filters" style="border:0;text-align:left;flex-direction:row;align-items:center"><span class="grow">${esc(summary)}</span></button>

@@ -26,7 +26,7 @@ document.addEventListener('touchmove',e=>{if(!SD)return;const y=e.touches[0].cli
 function sdEnd(e){if(!SD)return;const s=SD;SD=null;if(SD_RAF){cancelAnimationFrame(SD_RAF);SD_RAF=0}if(!s.on)return;
  const p=s.pts,a=p[0],b=p[p.length-1],now=e&&e.timeStamp||b[1],v=now-b[1]>80?0:(b[0]-a[0])/Math.max(1,b[1]-a[1]);
  s.sh.style.transform=`translate3d(0,${s.dy}px,0)`;s.sh.style.willChange='';
- if(s.dy>s.h*.3||(v>.45&&s.dy>16)){SHEET_V=Math.max(v,1);if(s.sc.id==='cityLayer')closeCity();else if(s.sc.id==='dateLayer')closeDate();else closeSheet()}
+ if(s.dy>s.h*.3||(v>.45&&s.dy>16)){SHEET_V=Math.max(v,1);if(s.sc.id==='cityLayer')closeCity();else if(s.sc.id==='dateLayer')closeDate();else if(s.sc.id==='bodyLayer')closeBody();else closeSheet()}
  else{s.sh.style.transition='transform .32s cubic-bezier(.2,.9,.25,1.05)';s.dim.style.transition='opacity .32s';s.sh.style.transform='';s.dim.style.opacity=''}}
 document.addEventListener('touchend',sdEnd);document.addEventListener('touchcancel',sdEnd);
 const nowDate=()=>new Date().toISOString().slice(0,10),nowTime=()=>new Date().toTimeString().slice(0,5);

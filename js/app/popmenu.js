@@ -10,4 +10,4 @@ document.addEventListener('pointerdown',e=>{const a=e.target.closest('[data-long
 document.addEventListener('contextmenu',e=>{const a=e.target.closest('[data-longmenu]');if(a){e.preventDefault();if(!lpFired){lpFired=true;openPop(a)}}});
 document.addEventListener('click',e=>{if(e.target.closest('[data-longmenu]')&&lpFired){e.preventDefault();e.stopPropagation();lpFired=false;return}if(e.target.closest('.popmenu a'))setTimeout(closePop,0)},true);
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closePop()});
-window.addEventListener('hashchange',()=>{closePop();closeCity();closeDate()});
+window.addEventListener('hashchange',()=>{closePop();closeCity();closeDate();closeBody()});
