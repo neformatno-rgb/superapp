@@ -15,7 +15,7 @@ function sheetOut(sc,done){const sh=sc.querySelector('.sheet');if(!sh||matchMedi
 let SD=null,SD_RAF=0;
 const sdPaint=()=>{SD_RAF=0;if(!SD||!SD.on)return;SD.sh.style.transform=`translate3d(0,${SD.dy}px,0)`;SD.dim.style.opacity=String(Math.max(.25,1-SD.dy/(SD.h*1.2)))};
 document.addEventListener('touchstart',e=>{if(innerWidth>=960||e.touches.length>1){SD=null;return}const sh=e.target.closest('.scrim>.sheet');if(!sh)return;
- const y=e.touches[0].clientY,head=y-sh.getBoundingClientRect().top<56,scroller=e.target.closest('.city-list')||sh;
+ const y=e.touches[0].clientY,head=y-sh.getBoundingClientRect().top<56,scroller=e.target.closest('.city-list,.dp-months')||sh;
  if(!head&&scroller.scrollTop>0)return;
  SD={sh,sc:sh.parentElement,dim:sh.parentElement.querySelector(':scope>.dim')||sh.parentElement,scroller,head,y0:y,dy:0,on:false,h:sh.offsetHeight,pts:[[y,e.timeStamp]]}},{passive:true});
 document.addEventListener('touchmove',e=>{if(!SD)return;const y=e.touches[0].clientY,dy=y-SD.y0;
@@ -26,7 +26,7 @@ document.addEventListener('touchmove',e=>{if(!SD)return;const y=e.touches[0].cli
 function sdEnd(e){if(!SD)return;const s=SD;SD=null;if(SD_RAF){cancelAnimationFrame(SD_RAF);SD_RAF=0}if(!s.on)return;
  const p=s.pts,a=p[0],b=p[p.length-1],now=e&&e.timeStamp||b[1],v=now-b[1]>80?0:(b[0]-a[0])/Math.max(1,b[1]-a[1]);
  s.sh.style.transform=`translate3d(0,${s.dy}px,0)`;s.sh.style.willChange='';
- if(s.dy>s.h*.3||(v>.45&&s.dy>16)){SHEET_V=Math.max(v,1);if(s.sc.id==='cityLayer')closeCity();else closeSheet()}
+ if(s.dy>s.h*.3||(v>.45&&s.dy>16)){SHEET_V=Math.max(v,1);if(s.sc.id==='cityLayer')closeCity();else if(s.sc.id==='dateLayer')closeDate();else closeSheet()}
  else{s.sh.style.transition='transform .32s cubic-bezier(.2,.9,.25,1.05)';s.dim.style.transition='opacity .32s';s.sh.style.transform='';s.dim.style.opacity=''}}
 document.addEventListener('touchend',sdEnd);document.addEventListener('touchcancel',sdEnd);
 const nowDate=()=>new Date().toISOString().slice(0,10),nowTime=()=>new Date().toTimeString().slice(0,5);

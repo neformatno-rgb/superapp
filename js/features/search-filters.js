@@ -13,7 +13,7 @@ function cityItems(k,q){q=(q||'').trim().toLowerCase();const cur=(document.getEl
 let CITYK=null;
 function openCity(k){closeCity();CITYK=k;const el=document.createElement('div');el.className='scrim';el.id='cityLayer';el.style.zIndex='50';
  el.innerHTML=`<div class="dim"></div><div class="sheet city-sheet" role="dialog" aria-modal="true" aria-label="${CITY_LBL[k]}" tabindex="-1" style="outline:none"><div class="grab"></div><div class="city-head"><h3>${CITY_LBL[k]}</h3></div>
-  <div class="city-field"><label for="cityQ">${CITY_LBL[k]}</label><input id="cityQ" autocomplete="off" enterkeyhint="done" aria-controls="cityUl"></div>
+  <div class="field" style="flex:none"><label for="cityQ">Поиск города</label><input class="input" id="cityQ" type="search" placeholder="Например, Москва" autocomplete="off" enterkeyhint="done" aria-controls="cityUl"></div>
   <ul class="city-list" id="cityUl" role="list">${cityItems(k,'')}</ul>
   <div class="city-foot"><button class="btn secondary block" type="button" data-cityclose>Закрыть</button></div></div>`;
  document.body.appendChild(el);el.querySelector('.sheet').focus({preventScroll:true})}
@@ -26,12 +26,60 @@ document.addEventListener('click',e=>{
 },true);
 document.addEventListener('input',e=>{if(e.target.id==='cityQ'&&CITYK)document.getElementById('cityUl').innerHTML=cityItems(CITYK,e.target.value)});
 document.addEventListener('keydown',e=>{if(!document.getElementById('cityLayer'))return;if(e.key==='Escape'){e.stopPropagation();closeCity()}else if(e.key==='Enter'&&e.target.id==='cityQ'){e.preventDefault();e.target.blur()}},true);
+/* ---------- loading-date range picker (bottom sheet) ---------- */
+const DP_LBL={from:'Дата погрузки с',to:'Дата погрузки по'};
+const MONTHS=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+const isoD=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const parseD=s=>{const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)};
+const addD=(s,n)=>{const d=parseD(s);d.setDate(d.getDate()+n);return isoD(d)};
+const fmtD=s=>s?parseD(s).toLocaleDateString('ru-RU',{day:'numeric',month:'long'}):'';
+function dateField(k,v){const id=k==='from'?'fDf':'fDt';return `<div class="field"><label>${DP_LBL[k]}</label><button type="button" class="input date-btn" data-date="${k}" aria-label="${DP_LBL[k]}: ${v?fmtD(v):'не выбрана'}"><span class="${v?'':'muted'}">${v?fmtD(v):'Любая'}</span></button><input type="hidden" id="${id}" value="${v||''}"></div>`}
+let DP=null;
+function dpMonths(){const t=isoD(new Date()),{from,to}=DP,now=new Date();let h='';
+ for(let k=0;k<4;k++){const m=new Date(now.getFullYear(),now.getMonth()+k,1),pad=(m.getDay()+6)%7,days=new Date(m.getFullYear(),m.getMonth()+1,0).getDate();
+  let c='';for(let i=0;i<pad;i++)c+='<span></span>';
+  for(let d=1;d<=days;d++){const s=isoD(new Date(m.getFullYear(),m.getMonth(),d)),past=s<t,end=s===from||s===to,mid=from&&to&&s>from&&s<to;
+   const cls=['dp-day',end?'sel':'',mid?'mid':'',from&&to&&from!==to&&s===from?'start':'',from&&to&&from!==to&&s===to?'end':'',s===t?'today':''].filter(Boolean).join(' ');
+   c+=`<button type="button" class="${cls}" data-dpday="${s}" ${past?'disabled':''} aria-label="${fmtD(s)}" ${end?'aria-pressed="true"':''}><span>${d}</span></button>`}
+  h+=`<section class="dp-month"><h4>${MONTHS[m.getMonth()]}${m.getFullYear()!==now.getFullYear()?' '+m.getFullYear():''}</h4><div class="dp-grid">${c}</div></section>`}
+ return h}
+function dpTop(){const {from,to,act,flex}=DP;
+ const fld=k=>{const v=DP[k];return `<div class="field"><label>${DP_LBL[k]}</label><div class="dp-wrap"><button type="button" class="input date-btn${act===k?' on':''}${v?' has':''}" data-dpact="${k}" aria-pressed="${act===k}"><span class="${v?'':'muted'}">${v?fmtD(v):'Любая'}</span></button>${v?`<button type="button" class="dp-clear" data-dpclear="${k}" aria-label="Очистить">${ic('x','s')}</button>`:''}</div></div>`};
+ return `<div class="grid2">${fld('from')}${fld('to')}</div>
+  <div class="dp-chips">${[1,3,15].map(n=>`<button type="button" class="dp-chip" data-dpflex="${n}" aria-pressed="${flex===n}">± ${n} ${n===1?'день':n===3?'дня':'дней'}</button>`).join('')}</div>`}
+function dpPaint(){const L=document.getElementById('dateLayer');if(!L)return;L.querySelector('.dp-ctl').innerHTML=dpTop();
+ const g=L.querySelector('.dp-months'),st=g.scrollTop;g.innerHTML=dpMonths();g.scrollTop=st;
+ const ch=DP.from!==DP.f0||DP.to!==DP.t0;L.querySelector('[data-dpdone]').textContent=ch?'Применить':'Закрыть';L.querySelector('[data-dpdone]').className='btn block '+(ch?'primary':'secondary')}
+function openDate(k){closeDate();const f=document.getElementById('fDf').value,t=document.getElementById('fDt').value;
+ DP={from:f,to:t,f0:f,t0:t,act:k,flex:0};const el=document.createElement('div');el.className='scrim';el.id='dateLayer';el.style.zIndex='50';
+ el.innerHTML=`<div class="dim"></div><div class="sheet dp-sheet" role="dialog" aria-modal="true" aria-label="Дата погрузки" tabindex="-1" style="outline:none">
+  <div class="dp-top"><div class="grab"></div><h3>Дата погрузки</h3><div class="dp-ctl"></div></div>
+  <div class="dp-week">${['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].map(w=>`<span>${w}</span>`).join('')}</div>
+  <div class="dp-months"></div>
+  <div class="city-foot"><button class="btn secondary block" type="button" data-dpdone>Закрыть</button></div></div>`;
+ document.body.appendChild(el);dpPaint();el.querySelector('.sheet').focus({preventScroll:true});
+ const sel=el.querySelector('.dp-day.sel');if(sel)el.querySelector('.dp-months').scrollTop=sel.closest('.dp-month').offsetTop-8}
+function closeDate(){const el=document.getElementById('dateLayer');DP=null;if(!el)return;el.id='';sheetOut(el,()=>el.remove())}
+function setDate(k,v){const h=document.getElementById(k==='from'?'fDf':'fDt');if(!h)return;h.value=v;h.parentElement.outerHTML=dateField(k,v)}
+function dpPick(s){if(DP.act==='from'){DP.from=s;if(DP.to&&DP.to<s)DP.to='';DP.act='to'}else{if(DP.from&&s<DP.from){DP.to=DP.from;DP.from=s}else DP.to=s;if(!DP.from)DP.from=s}DP.flex=0}
+document.addEventListener('click',e=>{
+ const b=e.target.closest('[data-date]');if(b){e.preventDefault();e.stopPropagation();openDate(b.dataset.date);return}
+ const L=document.getElementById('dateLayer');if(!L||!L.contains(e.target))return;e.stopPropagation();
+ if(e.target===L){closeDate();return}
+ if(e.target.closest('[data-dpdone]')){if(DP.from!==DP.f0||DP.to!==DP.t0){const {from,to}=DP;setDate('from',from);setDate('to',to)}closeDate();return}
+ const c=e.target.closest('[data-dpclear]');if(c){DP[c.dataset.dpclear]='';DP.act=c.dataset.dpclear;DP.flex=0;dpPaint();return}
+ const a=e.target.closest('[data-dpact]');if(a){DP.act=a.dataset.dpact;dpPaint();return}
+ const x=e.target.closest('[data-dpflex]');if(x){const n=+x.dataset.dpflex,t=isoD(new Date());if(DP.flex===n){DP.flex=0;dpPaint();return}
+  const base=DP.from||t;DP.from=addD(base,-n)<t?t:addD(base,-n);DP.to=addD(base,n);DP.flex=n;dpPaint();return}
+ const d=e.target.closest('[data-dpday]');if(d&&!d.disabled){dpPick(d.dataset.dpday);dpPaint()}
+},true);
+document.addEventListener('keydown',e=>{if(!document.getElementById('dateLayer'))return;if(e.key==='Escape'){e.stopPropagation();closeDate()}},true);
 function filterForm(){
  const f=S.filters;
  return `<form class="card" id="filterForm">
   <div class="pair">${cityField('from',f.from)}${cityField('to',f.to)}
    <button type="button" class="swap" data-swap aria-label="Поменять местами">${ic('swap','s')}</button></div>
-  <div class="grid2"><div class="field"><label for="fDf">Дата с</label><input class="input" type="date" id="fDf" value="${f.dateFrom}"></div><div class="field"><label for="fDt">Дата по</label><input class="input" type="date" id="fDt" value="${f.dateTo}"></div></div>
+  <div class="grid2">${dateField('from',f.dateFrom)}${dateField('to',f.dateTo)}</div>
   <div class="field"><label for="fBody">Тип кузова</label><select class="input" id="fBody">${['Любой','Рефрижератор','Тент','Изотерм'].map(b=>`<option ${b===f.body?'selected':''}>${b}</option>`).join('')}</select></div>
   <div class="grid3">${['Фикс','Аукцион','Встречное'].map(d=>`<button type="button" class="opt" data-deal="${d}" aria-pressed="${f.deals.includes(d)}">${d}</button>`).join('')}</div>
   <div class="row"><button class="btn primary grow" type="submit">Найти груз</button></div>
@@ -59,9 +107,9 @@ const xfPass=(c,x)=>rgPass(c,x,'cap')&&rgPass(c,x,'vol')&&rgPass(c,x,'wt')&&(!x.
 const xfCount=x=>(rgOn(x,'cap')?1:0)+(rgOn(x,'vol')?1:0)+(rgOn(x,'wt')?1:0)+(x.fast?1:0);
 let XD=null;
 function xfSheet(){const n=matchList(XD).length;
- return `<h3>Фильтры</h3>${['cap','vol','wt'].map(k=>`<div class="sec" style="gap:8px"><div><b style="font-weight:500">${RG[k]?RG[k].title:XF[k].title}</b><div class="muted" style="font-size:12px">${RG[k]?RG[k].hint:XF[k].hint}</div></div>${RG[k]?rgFields(XD,k):`<div class="chips" style="flex-wrap:wrap">${XF[k].opts.map(([v,l])=>`<button class="chip xopt" data-xf="${k}:${v}" aria-pressed="${XD[k].includes(v)}">${l}</button>`).join('')}</div>`}</div>`).join('')}
+ return `<div class="row between"><h3>Фильтры</h3><button type="button" class="linkbtn" data-xfreset style="font-size:14px">Сбросить</button></div>${['cap','vol','wt'].map(k=>`<div class="sec" style="gap:8px"><div><b style="font-weight:500">${RG[k]?RG[k].title:XF[k].title}</b><div class="muted" style="font-size:12px">${RG[k]?RG[k].hint:XF[k].hint}</div></div>${RG[k]?rgFields(XD,k):`<div class="chips" style="flex-wrap:wrap">${XF[k].opts.map(([v,l])=>`<button class="chip xopt" data-xf="${k}:${v}" aria-pressed="${XD[k].includes(v)}">${l}</button>`).join('')}</div>`}</div>`).join('')}
  <div class="row between" style="padding:4px 0"><span>Только с быстрой оплатой</span><button class="switch" role="switch" aria-checked="${XD.fast}" data-xffast aria-label="Только с быстрой оплатой"></button></div>
- <div class="row"><button class="btn secondary" data-xfreset>Сбросить</button><button class="btn primary grow" data-xfapply>${n?'Показать '+plural(n,'груз','груза','грузов'):'Нет подходящих грузов'}</button></div>`}
+ <div class="row"><button class="btn primary grow" data-xfapply>${n?'Показать '+plural(n,'груз','груза','грузов'):'Нет подходящих грузов'}</button></div>`}
 function openXf(){XD=Object.assign(xfEmpty(),JSON.parse(JSON.stringify(S.extra||{})));XMODE='all';sheet(xfSheet())}
 let XMODE='all';
 function filtered(){return matchList(S.extra||xfEmpty())}
