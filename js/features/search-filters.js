@@ -14,13 +14,14 @@ let CITYK=null;
 function openCity(k){closeCity();CITYK=k;const el=document.createElement('div');el.className='scrim';el.id='cityLayer';el.style.zIndex='50';
  el.innerHTML=`<div class="sheet city-sheet" role="dialog" aria-modal="true" aria-label="${CITY_LBL[k]}" tabindex="-1" style="outline:none"><div class="grab"></div><div class="city-head"><h3>${CITY_LBL[k]}</h3></div>
   <div class="city-field"><label for="cityQ">${CITY_LBL[k]}</label><input id="cityQ" autocomplete="off" enterkeyhint="done" aria-controls="cityUl"></div>
-  <ul class="city-list" id="cityUl" role="list">${cityItems(k,'')}</ul></div>`;
+  <ul class="city-list" id="cityUl" role="list">${cityItems(k,'')}</ul>
+  <div class="city-foot"><button class="btn secondary block" type="button" data-cityclose>Закрыть</button></div></div>`;
  document.body.appendChild(el);el.querySelector('.sheet').focus({preventScroll:true})}
 function closeCity(){const el=document.getElementById('cityLayer');CITYK=null;if(!el)return;el.id='';sheetOut(el,()=>el.remove())}
 document.addEventListener('click',e=>{
  const b=e.target.closest('[data-city]');if(b){e.preventDefault();e.stopPropagation();openCity(b.dataset.city);return}
  const L=document.getElementById('cityLayer');if(!L||!L.contains(e.target))return;e.stopPropagation();
- if(e.target===L){closeCity();return}
+ if(e.target===L||e.target.closest('[data-cityclose]')){closeCity();return}
  const it=e.target.closest('[data-cityval]');if(it){setCity(CITYK,it.dataset.cityval);closeCity()}
 },true);
 document.addEventListener('input',e=>{if(e.target.id==='cityQ'&&CITYK)document.getElementById('cityUl').innerHTML=cityItems(CITYK,e.target.value)});
