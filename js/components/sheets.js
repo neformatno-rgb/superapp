@@ -1,23 +1,33 @@
 'use strict';
 /* ---------- sheets ---------- */
-function sheet(html){document.getElementById('layer').innerHTML=`<div class="scrim" data-close><div class="sheet" role="dialog" aria-modal="true" tabindex="-1" style="outline:none"><div class="grab"></div>${html}</div></div>`;const sh=document.querySelector('.sheet');sh&&sh.focus({preventScroll:true})}
+function sheet(html){const l=document.getElementById('layer'),re=!!l.querySelector(':scope>.scrim:not([style*="opacity: 0"])');l.innerHTML=`<div class="scrim${re?' noanim':''}" data-close><div class="sheet" role="dialog" aria-modal="true" tabindex="-1" style="outline:none"><div class="grab"></div>${html}</div></div>`;const sh=document.querySelector('.sheet');sh&&sh.focus({preventScroll:true})}
 function closeSheet(){const l=document.getElementById('layer'),sc=l.querySelector(':scope>.scrim');if(!sc){l.innerHTML='';return}sheetOut(sc,()=>{if(sc.parentNode===l)l.innerHTML=''})}
-/* slide a bottom sheet out and fade its scrim, then run done() */
+/* slide a bottom sheet out and fade its scrim, then run done(); after a swipe the exit keeps the finger's speed */
+let SHEET_V=0;
 function sheetOut(sc,done){const sh=sc.querySelector('.sheet');if(!sh||matchMedia('(prefers-reduced-motion: reduce)').matches){done();return}
- sc.style.pointerEvents='none';const desk=innerWidth>=960;
- sh.style.transition='transform .22s cubic-bezier(.4,0,1,1), opacity .22s';sh.style.transform=desk?'translateY(16px)':'translateY(100%)';if(desk)sh.style.opacity='0';
- sc.style.transition='opacity .22s';sc.style.opacity='0';setTimeout(done,230)}
-/* swipe down to dismiss bottom sheets (mobile) */
-let SD=null;
-document.addEventListener('touchstart',e=>{if(innerWidth>=960||e.touches.length>1)return;const sh=e.target.closest('.scrim>.sheet');if(!sh||e.target.closest('input,textarea,select'))return;
- const scroller=e.target.closest('.city-list')||sh;if(scroller.scrollTop>0)return;
- SD={sh,sc:sh.parentElement,scroller,y0:e.touches[0].clientY,t0:Date.now(),dy:0,on:false}},{passive:true});
-document.addEventListener('touchmove',e=>{if(!SD)return;const dy=e.touches[0].clientY-SD.y0;
- if(!SD.on){if(dy<-4||SD.scroller.scrollTop>0){SD=null;return}if(dy<8)return;SD.on=true;SD.y0+=8;SD.sh.style.transition='none';SD.sc.style.transition='none'}
- e.preventDefault();SD.dy=Math.max(0,e.touches[0].clientY-SD.y0);SD.sh.style.transform=`translateY(${SD.dy}px)`;SD.sc.style.opacity=String(Math.max(.35,1-SD.dy/(SD.sh.offsetHeight*1.4)))},{passive:false});
-function sdEnd(){if(!SD)return;const {sh,sc,dy,t0,on}=SD;SD=null;if(!on)return;const v=dy/Math.max(1,Date.now()-t0);
- if(dy>sh.offsetHeight*.25||v>.6){if(sc.id==='cityLayer')closeCity();else closeSheet()}
- else{sh.style.transition='transform .25s cubic-bezier(.2,.8,.2,1)';sc.style.transition='opacity .25s';sh.style.transform='';sc.style.opacity=''}}
+ sc.style.pointerEvents='none';const desk=innerWidth>=960,v=SHEET_V;SHEET_V=0;
+ const cur=new DOMMatrixReadOnly(getComputedStyle(sh).transform).m42||0,left=Math.max(0,sh.offsetHeight-cur);
+ const ms=desk?200:Math.round(Math.min(280,Math.max(140,v>0?left/v:260)));
+ sh.style.animation='none';sh.style.transition=`transform ${ms}ms cubic-bezier(${v>0?'.2,.6,.4,1':'.4,0,1,1'}), opacity ${ms}ms`;
+ sh.style.transform=desk?'translateY(16px)':'translateY(100%)';if(desk)sh.style.opacity='0';
+ sc.style.animation='none';sc.style.transition=`opacity ${ms}ms`;sc.style.opacity='0';setTimeout(done,ms+20)}
+/* swipe down to dismiss bottom sheets (mobile): follows the finger 1:1, springs back or flicks away */
+let SD=null,SD_RAF=0;
+const sdPaint=()=>{SD_RAF=0;if(!SD||!SD.on)return;SD.sh.style.transform=`translate3d(0,${SD.dy}px,0)`;SD.sc.style.opacity=String(Math.max(.25,1-SD.dy/(SD.h*1.2)))};
+document.addEventListener('touchstart',e=>{if(innerWidth>=960||e.touches.length>1){SD=null;return}const sh=e.target.closest('.scrim>.sheet');if(!sh)return;
+ const y=e.touches[0].clientY,head=y-sh.getBoundingClientRect().top<56,scroller=e.target.closest('.city-list')||sh;
+ if(!head&&scroller.scrollTop>0)return;
+ SD={sh,sc:sh.parentElement,scroller,head,y0:y,dy:0,on:false,h:sh.offsetHeight,pts:[[y,e.timeStamp]]}},{passive:true});
+document.addEventListener('touchmove',e=>{if(!SD)return;const y=e.touches[0].clientY,dy=y-SD.y0;
+ if(!SD.on){if(dy<0||(!SD.head&&SD.scroller.scrollTop>0)){SD=null;return}e.preventDefault();if(dy<6)return;
+  SD.on=true;SD.y0=y;SD.sh.style.animation='none';SD.sh.style.transition='none';SD.sc.style.animation='none';SD.sc.style.transition='none';SD.sh.style.willChange='transform';
+  const a=document.activeElement;if(a&&SD.sh.contains(a)&&a.matches('input,textarea'))a.blur()}
+ e.preventDefault();SD.dy=Math.max(0,y-SD.y0);SD.pts.push([y,e.timeStamp]);if(SD.pts.length>6)SD.pts.shift();if(!SD_RAF)SD_RAF=requestAnimationFrame(sdPaint)},{passive:false});
+function sdEnd(e){if(!SD)return;const s=SD;SD=null;if(SD_RAF){cancelAnimationFrame(SD_RAF);SD_RAF=0}if(!s.on)return;
+ const p=s.pts,a=p[0],b=p[p.length-1],now=e&&e.timeStamp||b[1],v=now-b[1]>80?0:(b[0]-a[0])/Math.max(1,b[1]-a[1]);
+ s.sh.style.transform=`translate3d(0,${s.dy}px,0)`;s.sh.style.willChange='';
+ if(s.dy>s.h*.3||(v>.45&&s.dy>16)){SHEET_V=Math.max(v,1);if(s.sc.id==='cityLayer')closeCity();else closeSheet()}
+ else{s.sh.style.transition='transform .32s cubic-bezier(.2,.9,.25,1.05)';s.sc.style.transition='opacity .32s';s.sh.style.transform='';s.sc.style.opacity=''}}
 document.addEventListener('touchend',sdEnd);document.addEventListener('touchcancel',sdEnd);
 const nowDate=()=>new Date().toISOString().slice(0,10),nowTime=()=>new Date().toTimeString().slice(0,5);
 const SHEETS={

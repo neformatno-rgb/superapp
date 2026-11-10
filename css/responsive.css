@@ -10,6 +10,7 @@
   .cta-bar{bottom:16px;left:calc(50% + 116px);width:576px}
   .scrim{align-items:center}
   .sheet{border-radius:16px;max-height:80vh;padding:16px 20px 24px}
+  .sheet{animation:pop .2s ease-out}
   .grab{display:none}
   .toast{bottom:24px}
   .fab{bottom:24px;left:calc(50% + 116px)}
