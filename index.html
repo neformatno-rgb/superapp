@@ -53,6 +53,7 @@ svg.i.s{width:16px;height:16px}
 .icon-btn{width:36px;height:36px;border-radius:12px;border:0;background:var(--surface-2);display:grid;place-items:center;color:var(--fg);flex:none;position:relative}
 .icon-btn .dot{position:absolute;top:7px;right:8px;width:7px;height:7px;border-radius:50%;background:var(--red);box-shadow:0 0 0 2px var(--surface-2)}
 .avatar{width:36px;height:36px;border-radius:12px;background:var(--faint);color:#fff;display:grid;place-items:center;font-weight:500;flex:none}
+.title-btn svg{transition:transform .15s}.title-btn[aria-expanded="true"] svg{transform:rotate(180deg)}
 .title-btn{display:flex;align-items:center;gap:6px;border:0;background:none;padding:0;font-size:20px;font-weight:700;line-height:24px;min-width:0}
 
 .page{display:flex;flex-direction:column;gap:12px;padding-block:12px;padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px))}
@@ -341,11 +342,12 @@ const PAYS=[{id:'std',name:'Стандартная оплата',days:'5 дне�
 
 const KEY='perevozchik-demo-v1';
 const fresh=()=>({fav:['СП085204'],watch:[],homeTabA:'active',homeTabB:'fav',searchTab:'all',
- filters:{from:'Санкт-Петербург',to:'',dateFrom:'',dateTo:'',body:'Рефрижератор',deals:['Фикс','Аукцион','Встречное']},searched:false,
+ filters:{from:'Санкт-Петербург',to:'',dateFrom:'',dateTo:'',body:'Рефрижератор',deals:[]},searched:false,
  shipTab:'active',shipments:[{id:'СП085159',status:'loading',stage:'enroute',cargoCheck:'pending',remarks:null,done:[]}],
  apply:{pay:'fast',bonus:true,fuel:true,insure:true,contract:0,truck:0,trailer:0},tripTab:'trip',pointsTab:'next'});
 let S; try{S=JSON.parse(localStorage.getItem(KEY))||fresh()}catch(e){S=fresh()}
 if(!Array.isArray(S.watch))S.watch=[];
+if(S.filters&&Array.isArray(S.filters.deals)&&S.filters.deals.length===3)S.filters.deals=[];
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
 const cargoById=id=>CARGO.find(c=>c.id===id)||CARGO[0];
 const shipById=id=>S.shipments.find(s=>s.id===id);
@@ -493,7 +495,7 @@ function shipCard(s,withAction){
 }
 function top(title,{back,actions='',titleBtn}={}){
  return `<header class="top">${back?`<button class="icon-btn" data-back="${back}" aria-label="Назад">${ic('back')}</button>`:''}
-  ${titleBtn?`<button class="title-btn" data-go="${titleBtn}" aria-label="${esc(title)}, переключить раздел"><span>${esc(title)}</span>${ic('chevD','s')}</button><span class="grow"></span>`:`<h1 class="${back?'m':''}">${esc(title)}</h1>`}${actions}</header>`;
+  ${titleBtn?`<button class="title-btn" data-titlemenu aria-haspopup="menu" aria-expanded="false" aria-label="${esc(title)}, выбрать раздел"><span>${esc(title)}</span>${ic('chevD','s')}</button><span class="grow"></span>`:`<h1 class="${back?'m':''}">${esc(title)}</h1>`}${actions}</header>`;
 }
 const seg=(name,items,val)=>`<div class="seg" role="tablist">${items.map(([v,l])=>`<button role="tab" aria-selected="${v===val}" data-seg="${name}" data-val="${v}">${l}</button>`).join('')}</div>`;
 
@@ -565,7 +567,7 @@ function filtered(){return matchList(S.extra||xfEmpty())}
 const rgBtnLbl=k=>rgOn(XD,k)?'Применить':'Закрыть';
 function rgSheet(k){return `<h3>${RG[k].title}</h3><div class="muted" style="font-size:13px;margin-top:-8px">${RG[k].hint}</div>${rgFields(XD,k)}
  <div class="row"><button class="btn primary grow" data-xfapply>${rgBtnLbl(k)}</button></div>`}
-function openRg(k){XD=Object.assign(xfEmpty(),JSON.parse(JSON.stringify(S.extra||{})));XMODE=k;sheet(rgSheet(k));const i=document.getElementById(k+'From');i&&i.focus()}
+function openRg(k){XD=Object.assign(xfEmpty(),JSON.parse(JSON.stringify(S.extra||{})));XMODE=k;sheet(rgSheet(k))}
 function refreshXf(){const sh=document.querySelector('.sheet');if(!sh)return;const b=sh.querySelector('[data-xfapply]');if(RG[XMODE]){if(b)b.textContent=rgBtnLbl(XMODE);return}const n=matchList(XD).length;if(b)b.textContent=n?'Показать '+plural(n,'груз','груза','грузов'):'Нет подходящих грузов'}
 const rgChip=(X,k)=>rgOn(X,k)?`<span class="chip has-x" aria-pressed="true"><button class="chip-lbl" data-rgopen="${k}" aria-label="${RG[k].title} ${rgLabel(X,k)}, изменить">${rgLabel(X,k)}</button><button class="chip-x" data-rgclear="${k}" aria-label="Очистить: ${RG[k].title}">${ic('x','s')}</button></span>`:`<button class="chip" data-rgopen="${k}" aria-pressed="false">${RG[k].title}</button>`;
 document.addEventListener('input',e=>{const k=e.target.dataset&&e.target.dataset.rgin;if(!k||!XD)return;XD[k]=e.target.value;refreshXf()});
@@ -600,7 +602,7 @@ function filteredBase(){
  const f=S.filters,bodyMap={'Рефрижератор':'Реф','Тент':'Тент','Изотерм':'Изотерм'};
  return CARGO.filter(c=>(!f.from||c.from.toLowerCase().includes(f.from.toLowerCase().trim()))&&(!f.to||c.to.toLowerCase().includes(f.to.toLowerCase().trim()))&&(f.body==='Любой'||c.body===bodyMap[f.body])&&(!f.deals.length||f.deals.includes(c.deal)));
 }
-let ALLN=50;const FEED=()=>CARGO.filter(c=>!c.gen);
+let ALLN=50;const FEED=()=>CARGO.filter(c=>!c.gen&&(!S.filters.deals.length||S.filters.deals.includes(c.deal)));
 V.search=()=>{
  let body;
  if(S.searchTab==='all') body=filterForm()+`<div class="row between"><b style="font-size:16px">Всего ${plural(FEED().length,'груз','груза','грузов')}</b>${vatBtn()}</div>`+FEED().slice(0,ALLN).map(c=>cargoCard(c)).join('')+(ALLN<FEED().length?`<button class="btn secondary" data-more>Показать ещё</button>`:'');
@@ -729,7 +731,7 @@ V.menu=()=>top('Меню')+`<div class="page"><section class="card" style="gap:0
  <p class="demo-note">Кабинет перевозчика · демо по макетам Android</p></div>`;
 
 /* ---------- sheets ---------- */
-function sheet(html){document.getElementById('layer').innerHTML=`<div class="scrim" data-close><div class="sheet" role="dialog" aria-modal="true"><div class="grab"></div>${html}</div></div>`;const f=document.querySelector('.sheet input,.sheet button:not([data-close])');f&&f.focus()}
+function sheet(html){document.getElementById('layer').innerHTML=`<div class="scrim" data-close><div class="sheet" role="dialog" aria-modal="true" tabindex="-1" style="outline:none"><div class="grab"></div>${html}</div></div>`;const sh=document.querySelector('.sheet');sh&&sh.focus({preventScroll:true})}
 function closeSheet(){document.getElementById('layer').innerHTML=''}
 const nowDate=()=>new Date().toISOString().slice(0,10),nowTime=()=>new Date().toTimeString().slice(0,5);
 const SHEETS={
@@ -768,7 +770,7 @@ function render(){
  document.getElementById('view').innerHTML=V[v]();
  const navHtml=NAV.map(([k,i,l])=>`<a href="#${k}" ${k==='search'?'data-longmenu aria-haspopup="menu" title="Долгое нажатие — выбор раздела"':''} ${NAVOF[v]===k?'aria-current="page"':''}>${ic(i)}<span>${l}</span></a>`).join('');
  document.getElementById('nav').innerHTML=navHtml;
- document.querySelector('.rail').innerHTML=`<div class="brand"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true" style="flex:none"><path d="M16.0029 0C19.2579 0 22.4288 .29821 25.478 .812841C28.4042 1.30671 30.6905 3.5928 31.1851 6.51885C31.7008 9.57018 32 12.7434 32 16.001C32 19.2571 31.7011 22.4289 31.1858 25.479C30.6915 28.4051 28.4051 30.6914 25.4789 31.1858C22.4295 31.701 19.2584 32 16.0029 32C12.7449 32 9.57123 31.7008 6.51952 31.1851C3.59363 30.6905 1.30766 28.4044 .813572 25.4784C.298558 22.4285 0 19.2569 0 16.001C0 12.744 .298468 9.57129 .813593 6.52043C1.30761 3.59456 3.59355 1.3085 6.51939 .814265C9.57115 .298759 12.7449 0 16.0029 0Z" fill="#0098FE"/><path d="M6 20.3115L12 24V12H6V20.3115Z" fill="#fff"/><path d="M26 20.5626L20 24V8H26V20.5626Z" fill="#fff"/><path d="M19.8594 13.1533V13.226L19.8957 13.1897L19.8594 13.1533Z" fill="#fff"/><path d="M15.0723 8L20.001 13.1045V13.1807L16.501 16.8057L15 15.251V8H15.0723ZM14.999 15.251L12.9766 13.1562L8 8H14.999V15.251Z" fill="#fff"/></svg>Перевозчик</div>`+NAV.map(([k,i,l])=>`<a href="#${k}" ${NAVOF[v]===k?'aria-current="page"':''}>${ic(i)}<span>${l}</span></a>`).join('')+`<a href="#shipments" ${v==='shipments'||v==='trip'?'aria-current="page"':''}>${ic('route')}<span>Мои перевозки</span></a>`;
+ document.querySelector('.rail').innerHTML=`<div class="brand"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true" style="flex:none"><path d="M16.0029 0C19.2579 0 22.4288 .29821 25.478 .812841C28.4042 1.30671 30.6905 3.5928 31.1851 6.51885C31.7008 9.57018 32 12.7434 32 16.001C32 19.2571 31.7011 22.4289 31.1858 25.479C30.6915 28.4051 28.4051 30.6914 25.4789 31.1858C22.4295 31.701 19.2584 32 16.0029 32C12.7449 32 9.57123 31.7008 6.51952 31.1851C3.59363 30.6905 1.30766 28.4044 .813572 25.4784C.298558 22.4285 0 19.2569 0 16.001C0 12.744 .298468 9.57129 .813593 6.52043C1.30761 3.59456 3.59355 1.3085 6.51939 .814265C9.57115 .298759 12.7449 0 16.0029 0Z" fill="#0098FE"/><path d="M6 20.3115L12 24V12H6V20.3115Z" fill="#fff"/><path d="M26 20.5626L20 24V8H26V20.5626Z" fill="#fff"/><path d="M19.8594 13.1533V13.226L19.8957 13.1897L19.8594 13.1533Z" fill="#fff"/><path d="M15.0723 8L20.001 13.1045V13.1807L16.501 16.8057L15 15.251V8H15.0723ZM14.999 15.251L12.9766 13.1562L8 8H14.999V15.251Z" fill="#fff"/></svg>Перевозчик</div>`+NAV.map(([k,i,l])=>`<a href="#${k}" ${NAVOF[v]===k&&!(k==='search'&&(v==='shipments'||v==='trip'))?'aria-current="page"':''}>${ic(i)}<span>${l}</span></a>`).join('')+`<a href="#shipments" ${v==='shipments'||v==='trip'?'aria-current="page"':''}>${ic('route')}<span>Мои перевозки</span></a>`;
  const showFab=v==='results'||(v==='search'&&S.searchTab==='all');
  document.body.classList.toggle('has-fab',showFab);
  const w=showFab&&isWatched();
@@ -809,11 +811,14 @@ document.addEventListener('click',e=>{
  if(d.trip){e.stopPropagation();S.tripTab='trip';go('trip',d.trip);return}
  if(d.open){go('order',d.open);return}
  if(d.toast){e.preventDefault();toast(d.toast);return}
+ if('titlemenu' in d){t.getAttribute('aria-expanded')==='true'?closePop():openPop(t,true);return}
  if(d.go){go(d.go,d.p);return}
  if(d.back){history.length>1?history.back():go(d.back);return}
  if(d.seg){S[d.seg]=d.val;save();render();return}
  if(d.sheet){sheet(SHEETS[d.sheet]());return}
- if(d.deal){const f=S.filters.deals,i=f.indexOf(d.deal);i<0?f.push(d.deal):f.splice(i,1);save();t.setAttribute('aria-pressed',i<0);return}
+ if(d.deal){const f=S.filters.deals,i=f.indexOf(d.deal);i<0?f.push(d.deal):f.splice(i,1);
+  const ff=document.getElementById('filterForm');if(ff){S.filters.from=ff.querySelector('#fFrom').value;S.filters.to=ff.querySelector('#fTo').value;S.filters.dateFrom=ff.querySelector('#fDf').value;S.filters.dateTo=ff.querySelector('#fDt').value;S.filters.body=ff.querySelector('#fBody').value}
+  save();ALLN=50;const y=window.scrollY;render();window.scrollTo(0,y);return}
  if('swap' in d){const a=document.getElementById('fFrom'),b=document.getElementById('fTo');[a.value,b.value]=[b.value,a.value];return}
  if('chip' in d){t.setAttribute('aria-pressed',t.getAttribute('aria-pressed')!=='true');return}
  if(d.pay){S.apply.pay=d.pay;save();render();return}
@@ -857,11 +862,11 @@ function setupCta(){if(ctaObs){ctaObs.disconnect();ctaObs=null}const sec=documen
  ctaObs=new IntersectionObserver(([e])=>set(!e.isIntersecting&&e.boundingClientRect.top<0),{threshold:0});ctaObs.observe(sec)}
 /* long-press menu on «Грузы» */
 let lpTimer=null,lpFired=false;
-function closePop(){const m=document.querySelector('.popmenu');m&&m.remove()}
-function openPop(a){closePop();const r=a.getBoundingClientRect(),v=current();const m=document.createElement('div');m.className='popmenu';m.setAttribute('role','menu');
+function closePop(){const m=document.querySelector('.popmenu');m&&m.remove();document.querySelectorAll('[data-titlemenu]').forEach(b=>b.setAttribute('aria-expanded','false'))}
+function openPop(a,below){closePop();const r=a.getBoundingClientRect(),v=current();const m=document.createElement('div');m.className='popmenu';m.setAttribute('role','menu');
  m.innerHTML=[['search','box','Поиск грузов'],['shipments','route','Мои перевозки']].map(([k,i,l])=>`<a role="menuitem" href="#${k}" ${(k==='search'?['search','results','order','apply']:['shipments','trip']).includes(v)?'aria-current="page"':''}>${ic(i)}<span>${l}</span></a>`).join('');
- document.body.appendChild(m);const w=m.offsetWidth,h=m.offsetHeight;m.style.left=Math.max(12,Math.min(window.innerWidth-w-12,r.left+r.width/2-w/2))+'px';m.style.top=Math.max(12,r.top-h-8)+'px';m.querySelector('a').focus()}
-document.addEventListener('pointerdown',e=>{const a=e.target.closest('[data-longmenu]');if(!e.target.closest('.popmenu'))closePop();if(!a)return;lpFired=false;clearTimeout(lpTimer);lpTimer=setTimeout(()=>{lpFired=true;openPop(a)},450)});
+ document.body.appendChild(m);const w=m.offsetWidth,h=m.offsetHeight;if(below){m.style.left=Math.max(12,Math.min(window.innerWidth-w-12,r.left))+'px';m.style.top=(r.bottom+8)+'px';a.setAttribute('aria-expanded','true')}else{m.style.left=Math.max(12,Math.min(window.innerWidth-w-12,r.left+r.width/2-w/2))+'px';m.style.top=Math.max(12,r.top-h-8)+'px';m.querySelector('a').focus({preventScroll:true})}}
+document.addEventListener('pointerdown',e=>{const a=e.target.closest('[data-longmenu]');if(!e.target.closest('.popmenu')&&!e.target.closest('[data-titlemenu]'))closePop();if(!a)return;lpFired=false;clearTimeout(lpTimer);lpTimer=setTimeout(()=>{lpFired=true;openPop(a)},450)});
 ['pointerup','pointercancel','pointerleave'].forEach(t=>document.addEventListener(t,()=>clearTimeout(lpTimer)));
 document.addEventListener('contextmenu',e=>{const a=e.target.closest('[data-longmenu]');if(a){e.preventDefault();if(!lpFired){lpFired=true;openPop(a)}}});
 document.addEventListener('click',e=>{if(e.target.closest('[data-longmenu]')&&lpFired){e.preventDefault();e.stopPropagation();lpFired=false;return}if(e.target.closest('.popmenu a'))setTimeout(closePop,0)},true);
