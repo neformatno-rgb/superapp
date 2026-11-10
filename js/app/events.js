@@ -47,6 +47,7 @@ document.addEventListener('click',e=>{
  if('accept' in d){const s=shipById(S.param);if(s.cargoCheck==='pending')s.cargoCheck='ok';s.stage='docs';save();closeSheet();render();
    setTimeout(()=>{const x=shipById(s.id);if(x&&x.stage==='docs'){x.stage='loaded';save();if(current()==='trip')render();toast('Документы и QR готовы')}},2600);return}
  if(d.confirmApply){const id=d.confirmApply;let s=shipById(id);if(!s){S.shipments.unshift({id,status:'assigned',stage:'enroute',cargoCheck:'pending',remarks:null});}save();S.shipTab='active';sheet(successSheet());return}
+ if('themeToggle' in d){setTheme(isDark()?'light':'dark');render();return}
  if('reset' in d){S=fresh();save();go('home');toast('Демо-данные сброшены');return}
 });
 document.addEventListener('keydown',e=>{
