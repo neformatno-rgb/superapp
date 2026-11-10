@@ -563,7 +563,7 @@ const num=v=>{const n=parseFloat(String(v||'').replace(',','.'));return isFinite
 const rgOn=(x,k)=>num(x[k+'From'])!==null||num(x[k+'To'])!==null;
 const rgPass=(c,x,k)=>{let a=num(x[k+'From']),b=num(x[k+'To']);if(a!==null&&b!==null&&a>b)[a,b]=[b,a];return (a===null||c[k]>=a)&&(b===null||c[k]<=b)};
 const rgLabel=(x,k)=>{const a=num(x[k+'From']),b=num(x[k+'To']),u=RG[k].unit,f=n=>String(n).replace('.',',');return a!==null&&b!==null?`от ${f(a)} ${u} — до ${f(b)} ${u}`:a!==null?`от ${f(a)} ${u}`:`до ${f(b)} ${u}`};
-const rgFields=(x,k)=>`<div class="grid2"><div class="field"><label for="${k}From">От</label><input class="input" id="${k}From" data-rgin="${k}From" inputmode="decimal" placeholder="${RG[k].ph[0]}" value="${esc(x[k+'From']||'')}"></div><div class="field"><label for="${k}To">До</label><input class="input" id="${k}To" data-rgin="${k}To" inputmode="decimal" placeholder="${RG[k].ph[1]}" value="${esc(x[k+'To']||'')}"></div></div>`;
+const rgFields=(x,k)=>`<div class="grid2"><div class="field"><label for="${k}From">От</label><input class="input" id="${k}From" data-rgin="${k}From" inputmode="decimal" enterkeyhint="done" placeholder="${RG[k].ph[0]}" value="${esc(x[k+'From']||'')}"></div><div class="field"><label for="${k}To">До</label><input class="input" id="${k}To" data-rgin="${k}To" inputmode="decimal" enterkeyhint="done" placeholder="${RG[k].ph[1]}" value="${esc(x[k+'To']||'')}"></div></div>`;
 const inRange=(v,r)=>{const [a,b]=r.split('-').map(Number);return v>a&&v<=b||(a===0&&v===0)};
 const xfPass=(c,x)=>rgPass(c,x,'cap')&&rgPass(c,x,'vol')&&rgPass(c,x,'wt')&&(!x.fast||c.fast);
 const xfCount=x=>(rgOn(x,'cap')?1:0)+(rgOn(x,'vol')?1:0)+(rgOn(x,'wt')?1:0)+(x.fast?1:0);
@@ -581,6 +581,7 @@ function rgSheet(k){return `<h3>${RG[k].title}</h3><div class="muted" style="fon
 function openRg(k){XD=Object.assign(xfEmpty(),JSON.parse(JSON.stringify(S.extra||{})));XMODE=k;sheet(rgSheet(k))}
 function refreshXf(){const sh=document.querySelector('.sheet');if(!sh)return;const b=sh.querySelector('[data-xfapply]');if(RG[XMODE]){if(b)b.textContent=rgBtnLbl(XMODE);return}const n=matchList(XD).length;if(b)b.textContent=n?'Показать '+plural(n,'груз','груза','грузов'):'Нет подходящих грузов'}
 const rgChip=(X,k)=>rgOn(X,k)?`<span class="chip has-x" aria-pressed="true"><button class="chip-lbl" data-rgopen="${k}" aria-label="${RG[k].title} ${rgLabel(X,k)}, изменить">${rgLabel(X,k)}</button><button class="chip-x" data-rgclear="${k}" aria-label="Очистить: ${RG[k].title}">${ic('x','s')}</button></span>`:`<button class="chip" data-rgopen="${k}" aria-pressed="false">${RG[k].title}</button>`;
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.dataset&&e.target.dataset.rgin){e.preventDefault();e.target.blur()}});
 document.addEventListener('input',e=>{const k=e.target.dataset&&e.target.dataset.rgin;if(!k||!XD)return;XD[k]=e.target.value;refreshXf()});
 /* results are never empty: top up with deterministic cargos that match the current query */
 const MINR=12,GENK=new Set();
