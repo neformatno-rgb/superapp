@@ -16,6 +16,24 @@ textarea.input{height:auto;min-height:84px;padding:10px 12px;resize:vertical}
 .pair{position:relative;background:var(--surface-2);border-radius:12px}
 .pair .input{background:transparent;padding-right:52px}
 .pair::after{content:"";position:absolute;left:12px;right:52px;top:40px;height:1px;background:var(--line);pointer-events:none}
+.city-btn{display:flex;align-items:center;width:100%;text-align:left;border:0;cursor:pointer;font-family:var(--font-ctl)}
+.city-btn span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.city-sheet{height:92vh;max-height:92vh;overflow:hidden;padding-bottom:0}
+.city-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:4px}
+.city-head h3{margin:0;font-size:20px;line-height:24px;font-weight:500}
+.city-close{width:40px;height:40px;border-radius:50%;border:0;background:var(--surface-2);display:grid;place-items:center;color:var(--fg)}
+.city-field{position:relative;border-radius:12px;box-shadow:inset 0 0 0 2px var(--fg);padding:8px 14px 6px;display:flex;flex-direction:column;flex:none}
+.city-field label{font-size:12px;line-height:16px;color:var(--muted);font-family:var(--font-ctl)}
+.city-field input{border:0;background:none;padding:2px 0;font-size:16px;line-height:24px;outline:none;font-family:var(--font-ctl);min-width:0}
+.city-list{list-style:none;margin:0 -12px;padding:4px 12px calc(16px + env(safe-area-inset-bottom,0px));overflow:auto;flex:1;display:flex;flex-direction:column;gap:4px}
+.city-item{display:flex;align-items:center;gap:16px;width:100%;border:0;background:none;padding:6px 0;text-align:left;color:var(--fg);border-radius:12px}
+.city-item:hover{background:var(--surface-2)}
+.city-item[aria-current="true"] .city-name{color:var(--accent)}
+.city-pin{width:48px;height:48px;border-radius:12px;background:var(--surface-2);display:grid;place-items:center;color:var(--muted);flex:none}
+.city-name{font-size:16px;line-height:22px;font-weight:500}
+.city-country{font-size:14px;line-height:20px;color:var(--muted)}
+.city-code{font-family:var(--font-ctl);font-size:16px;color:var(--muted);letter-spacing:.3px}
+.city-empty{color:var(--muted);text-align:center;padding:24px 0}
 .pair .swap{position:absolute;right:8px;top:24px;width:32px;height:32px;border-radius:8px;border:0;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center}
 .opt{border:0;border-radius:8px;height:32px;background:var(--surface-2);font-family:var(--font-ctl);font-size:14px;font-weight:500}
 .opt[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent)}

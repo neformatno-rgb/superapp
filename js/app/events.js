@@ -39,7 +39,7 @@ document.addEventListener('click',e=>{
  if(d.deal){const f=S.filters.deals,i=f.indexOf(d.deal);i<0?f.push(d.deal):f.splice(i,1);
   const ff=document.getElementById('filterForm');if(ff){S.filters.from=ff.querySelector('#fFrom').value;S.filters.to=ff.querySelector('#fTo').value;S.filters.dateFrom=ff.querySelector('#fDf').value;S.filters.dateTo=ff.querySelector('#fDt').value;S.filters.body=ff.querySelector('#fBody').value}
   save();ALLN=50;const y=window.scrollY;render();window.scrollTo(0,y);return}
- if('swap' in d){const a=document.getElementById('fFrom'),b=document.getElementById('fTo');[a.value,b.value]=[b.value,a.value];return}
+ if('swap' in d){const a=document.getElementById('fFrom'),b=document.getElementById('fTo'),x=a.value;setCity('from',b.value);setCity('to',x);return}
  if('chip' in d){t.setAttribute('aria-pressed',t.getAttribute('aria-pressed')!=='true');return}
  if(d.pay){S.apply.pay=d.pay;save();render();return}
  if(d.sw){S.apply[d.sw]=!S.apply[d.sw];save();render();return}

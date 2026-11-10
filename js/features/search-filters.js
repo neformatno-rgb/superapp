@@ -1,9 +1,34 @@
 'use strict';
 /* ---------- search form, saved searches, range filters ---------- */
+/* ---------- city picker (bottom sheet over everything) ---------- */
+const CITY_CODE={'Москва':'MOW','Санкт-Петербург':'LED','Краснодар':'KRR','Новосибирск':'OVB','Казань':'KZN','Екатеринбург':'SVX','Омск':'OMS','Великий Новгород':'NVR','Вологда':'VGD','Киров':'KVX','Пермь':'PEE','Нижний Новгород':'GOJ','Самара':'KUF','Ростов-на-Дону':'ROV','Воронеж':'VOZ','Тюмень':'TJM','Челябинск':'CEK','Уфа':'UFA','Тверь':'KLD','Чебоксары':'CSY'};
+function cityList(){const n={};CARGO.forEach(c=>{if(c.gen)return;n[c.from]=(n[c.from]||0)+1;n[c.to]=(n[c.to]||0)+1});return Object.keys(n).sort((a,b)=>n[b]-n[a]||a.localeCompare(b,'ru'))}
+const CITY_LBL={from:'Откуда',to:'Куда'};
+function cityField(k,v){const id=k==='from'?'fFrom':'fTo';return `<button type="button" class="input city-btn" data-city="${k}" aria-label="${CITY_LBL[k]}: ${esc(v||'любой город')}"><span class="${v?'':'muted'}">${esc(v||CITY_LBL[k])}</span></button><input type="hidden" id="${id}" value="${esc(v||'')}">`}
+function setCity(k,v){const h=document.getElementById(k==='from'?'fFrom':'fTo');if(!h)return;h.value=v;const b=h.previousElementSibling;b.outerHTML=cityField(k,v).replace(/<input[^>]*>$/,'')}
+function cityItems(k,q){q=(q||'').trim().toLowerCase();const cur=(document.getElementById(k==='from'?'fFrom':'fTo')||{}).value||'';
+ const l=cityList().filter(c=>!q||c.toLowerCase().includes(q));
+ const any=cur&&!q?`<li><button class="city-item" data-cityval=""><span class="city-pin">${ic('x')}</span><span class="grow"><div class="city-name">Любой город</div><div class="city-country">Сбросить выбор</div></span></button></li>`:'';
+ return any+(l.length?l.map(c=>`<li><button class="city-item" data-cityval="${esc(c)}" ${c===cur?'aria-current="true"':''}><span class="city-pin">${ic('pin')}</span><span class="grow"><div class="city-name">${esc(c)}</div><div class="city-country">Россия</div></span><span class="city-code">${CITY_CODE[c]||''}</span></button></li>`).join(''):`<li class="city-empty">Нет городов по запросу «${esc(q)}»</li>`)}
+let CITYK=null;
+function openCity(k){closeCity();CITYK=k;const el=document.createElement('div');el.className='scrim';el.id='cityLayer';el.style.zIndex='50';
+ el.innerHTML=`<div class="sheet city-sheet" role="dialog" aria-modal="true" aria-label="${CITY_LBL[k]}" tabindex="-1" style="outline:none"><div class="city-head"><h3>${CITY_LBL[k]}</h3><button class="city-close" data-cityclose aria-label="Закрыть">${ic('x')}</button></div>
+  <div class="city-field"><label for="cityQ">${CITY_LBL[k]}</label><input id="cityQ" autocomplete="off" enterkeyhint="done" aria-controls="cityUl"></div>
+  <ul class="city-list" id="cityUl" role="list">${cityItems(k,'')}</ul></div>`;
+ document.body.appendChild(el);el.querySelector('.sheet').focus({preventScroll:true})}
+function closeCity(){const el=document.getElementById('cityLayer');el&&el.remove();CITYK=null}
+document.addEventListener('click',e=>{
+ const b=e.target.closest('[data-city]');if(b){e.preventDefault();e.stopPropagation();openCity(b.dataset.city);return}
+ const L=document.getElementById('cityLayer');if(!L||!L.contains(e.target))return;e.stopPropagation();
+ if(e.target===L||e.target.closest('[data-cityclose]')){closeCity();return}
+ const it=e.target.closest('[data-cityval]');if(it){setCity(CITYK,it.dataset.cityval);closeCity()}
+},true);
+document.addEventListener('input',e=>{if(e.target.id==='cityQ'&&CITYK)document.getElementById('cityUl').innerHTML=cityItems(CITYK,e.target.value)});
+document.addEventListener('keydown',e=>{if(!document.getElementById('cityLayer'))return;if(e.key==='Escape'){e.stopPropagation();closeCity()}else if(e.key==='Enter'&&e.target.id==='cityQ'){e.preventDefault();e.target.blur()}},true);
 function filterForm(){
  const f=S.filters;
  return `<form class="card" id="filterForm">
-  <div class="pair"><input class="input" id="fFrom" aria-label="Откуда" placeholder="Откуда" value="${esc(f.from)}"><input class="input" id="fTo" aria-label="Куда" placeholder="Куда" value="${esc(f.to)}">
+  <div class="pair">${cityField('from',f.from)}${cityField('to',f.to)}
    <button type="button" class="swap" data-swap aria-label="Поменять местами">${ic('swap','s')}</button></div>
   <div class="grid2"><div class="field"><label for="fDf">Дата с</label><input class="input" type="date" id="fDf" value="${f.dateFrom}"></div><div class="field"><label for="fDt">Дата по</label><input class="input" type="date" id="fDt" value="${f.dateTo}"></div></div>
   <div class="field"><label for="fBody">Тип кузова</label><select class="input" id="fBody">${['Любой','Рефрижератор','Тент','Изотерм'].map(b=>`<option ${b===f.body?'selected':''}>${b}</option>`).join('')}</select></div>
