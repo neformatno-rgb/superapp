@@ -20,7 +20,7 @@ V.apply=()=>{
    <div class="row between num" style="font-family:var(--font-ctl);font-size:13px"><span class="muted">${a.bonus?'Будет списано':'Доступно'}</span><span class="pay-sum">${(a.bonus?(a.bonusAmt||0):BONUS_MAX).toLocaleString('ru-RU')}</span></div></div>
   <div class="pay bn-card" style="cursor:default"><img class="bn-big" src="${FUEL_IMG}" alt="">
    <div class="row between"><span class="row" style="gap:6px"><b class="bn-title">Топливо после погрузки</b><button type="button" class="bn-info" data-toast="Сумму на топливо переведём на Моносчет сразу после погрузки и удержим из оплаты за рейс" aria-label="Что такое топливо после погрузки">${ic('infoI')}</button></span><button class="switch" role="switch" aria-checked="${a.fuel}" data-sw="fuel" aria-label="Топливо после погрузки"></button></div>
-   <p class="bn-text">До 90% от стоимости от заявки — сразу на Моносчет</p>
+   <p class="bn-text">До 60% от стоимости заявки — сразу на Моносчет</p>
    ${a.fuel?`<div class="row between num" style="font-family:var(--font-ctl);font-size:13px"><span class="muted">Сумма операции</span><span class="pay-sum">${rub(a.fuelAmt||0)}</span></div>`:''}</div>
   <div class="pay bn-card" style="cursor:default"><img class="bn-big" src="${INS_IMG}" alt="">
    <div class="row between"><span class="row" style="gap:6px"><b class="bn-title">Страхование</b><button type="button" class="bn-info" data-toast="Страхуем груз на время рейса. Премия удерживается из оплаты за рейс" aria-label="Что такое страхование">${ic('infoI')}</button></span><button class="switch" role="switch" aria-checked="${a.insure}" data-sw="insure" aria-label="Застраховать рейс"></button></div>
