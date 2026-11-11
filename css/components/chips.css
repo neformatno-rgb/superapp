@@ -8,5 +8,7 @@
 .chip.has-x .chip-lbl{border:0;background:none;color:inherit;font:inherit;height:100%;padding:0 4px 0 12px;white-space:nowrap}
 .chip.has-x .chip-x{border:0;background:none;color:inherit;width:28px;height:28px;border-radius:8px;display:grid;place-items:center}
 .chip.xopt{background:var(--surface-2)}
+.chip-x{display:inline-grid;place-items:center;width:20px;height:20px;margin-right:-4px;border-radius:50%}
+.chip.xopt[aria-pressed="true"]{background:var(--accent-soft)}
 .chip.ic-chip{width:36px;padding:0;justify-content:center}
 .chip.ic-chip svg{width:20px;height:20px}

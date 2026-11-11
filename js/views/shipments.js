@@ -1,9 +1,8 @@
 'use strict';
 V.shipments=()=>{
- const map={active:s=>!['canceled','rejected'].includes(s.status),canceled:s=>s.status==='canceled',rejected:s=>s.status==='rejected'};
- const l=S.shipments.filter(map[S.shipTab]);
- return topBar('Мои перевозки',{titleBtn:'search'})+`<div class="page">${seg('shipTab',[['active','Активные'],['canceled','Отменённые'],['rejected','Отклонённые']],S.shipTab)}
-  <div class="chips">${['Статус','Откуда','Куда','Менеджер'].map(c=>`<button class="chip" data-chip aria-pressed="false">${c} ${ic('chevD','s')}</button>`).join('')}</div>
+ const F=shfF(),l=S.shipments.filter(SHIP_TAB[S.shipTab]).filter(s=>Object.keys(SHF_LBL).every(k=>!F[k].length||F[k].includes(shfVal[k](s))));
+ return topBar('Мои перевозки',{titleBtn:'search'})+`<div class="page">${seg('shipTab',[['active','Активные'],['canceled','Отмененные'],['rejected','Отклоненные']],S.shipTab)}
+  <div class="chips"><button class="chip ic-chip" data-shall aria-haspopup="dialog" aria-label="Все фильтры" aria-pressed="${shaAny(F)}">${ic('filter')}</button>${Object.keys(SHF_LBL).map(shfChip).join('')}</div>
   <div class="row between"><b style="font-size:16px">${plural(l.length,'перевозка','перевозки','перевозок')}</b>${vatBtn()}</div>
-  ${l.length?l.map(s=>shipCard(s,true)).join(''):`<div class="card empty"><span class="muted">Здесь пока пусто.</span></div>`}</div>`;
+  ${l.length?l.map(s=>shipCard(s,true)).join(''):`<div class="card empty"><span class="muted">${Object.values(F).some(a=>a.length)?'Нет перевозок по выбранным фильтрам.':'Здесь пока пусто.'}</span></div>`}</div>`;
 };

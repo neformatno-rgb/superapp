@@ -9,7 +9,7 @@ V.trip=()=>{
   const arrivedRow=s.stage!=='enroute'?`<div class="row">${tag('Прибыл','gray')}<span class="muted num" style="font-size:12px">${esc(s.arrivedAt||'05 дек, 19:40')}</span></div>`:'';
   let alert='',actions='';
   if(s.stage==='enroute') actions=`<button class="btn primary block" data-arrive="${s.id}">Сообщить о прибытии</button>`;
-  if(s.stage==='arrived'){alert=`<div class="alert">${ic('info')}<span>Отметьте статус каждого груза перед отправкой на согласование</span></div>`;actions=`<button class="btn primary block" data-sheet="confirm" ${s.cargoCheck==='pending'?'':''}>${s.cargoCheck==='pending'?'Подтвердить всё без замечаний':'Отправить на согласование'}</button>`}
+  if(s.stage==='arrived'){alert=`<div class="alert">${ic('info')}<span>Отметьте статус каждого груза перед отправкой на согласование</span></div>`;actions=`<button class="btn primary block" data-sheet="confirm" ${s.cargoCheck==='pending'?'':''}>${s.cargoCheck==='pending'?'Подтвердить все без замечаний':'Отправить на согласование'}</button>`}
   if(s.stage==='docs') alert=`<div class="alert warn"><span class="spinner" aria-hidden="true"></span><span><b style="font-weight:500">Формируем транспортную накладную</b><br><span class="muted" style="font-size:12px">Обычно это занимает пару секунд</span></span></div>`;
   if(s.stage==='loaded'){alert=`<div class="alert ok">${ic('check')}<span>Документы и QR готовы</span></div>`;actions=`<button class="btn primary block" data-sheet="depart">Сообщить об убытии</button>`}
   if(s.stage==='departed') alert=`<div class="alert">${ic('truck')}<span>Следующий пункт — ${esc(c.to)}. Сообщите о прибытии, когда будете на месте.</span></div>`;
@@ -44,6 +44,6 @@ V.trip=()=>{
   body=`<section class="card"><h2 class="h2">Электронная ТН</h2>${ready?`<div class="alert ok">${ic('check')}<span>ЭТрН подписана грузоотправителем</span></div>`:`<p class="muted" style="margin:0">Транспортная накладная появится после погрузки.</p>`}
    ${docRows([['Товарная накладная','Товарная накладная',ready?2:0],['ТТН (товарно-транспортная накладная)','ТТН',ready?2:0],['Документы на оплату перевозки','Документы на оплату перевозки',s.stage==='departed'?1:0]])}</section>`;
  }
- return topBar('Заявка '+c.id,{back:'shipments',actions:`<button class="icon-btn" data-toast="Диспетчер: +7 (800) 555-35-35" aria-label="Ещё">${ic('more')}</button>`})+
+ return topBar('Заявка '+c.id,{back:'shipments',actions:`<button class="icon-btn" data-toast="Диспетчер: +7 (800) 555-35-35" aria-label="Еще">${ic('more')}</button>`})+
  `<div class="page">${seg('tripTab',[['trip','В рейсе'],['about','О заявке'],['etn','ЭТрН']],S.tripTab)}${body}</div>`;
 };

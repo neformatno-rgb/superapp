@@ -123,11 +123,11 @@ const watchLabel=f=>[f.from||'Любой город',f.to||'',bodyList(f).join('
 const matches=f=>CARGO.filter(c=>(!f.from||c.from.toLowerCase().includes(f.from.toLowerCase().trim()))&&(!f.to||c.to.toLowerCase().includes(f.to.toLowerCase().trim()))&&(!bodyList(f).length||bodyList(f).some(b=>c.body===BODY_SHORT[b]))&&(!f.deals.length||f.deals.includes(c.deal)));
 const isWatched=()=>S.watch.some(w=>w.key===watchKey(S.filters));
 function watchCards(){return S.watch.map((w,i)=>{const n=matches(w.f).length;return `<article class="card"><div class="row">${ic('bellPlus')}<div class="grow"><b style="font-weight:500">${esc(w.label)}</b><div class="muted" style="font-size:13px">${plural(n,'груз подходит','груза подходят','грузов подходят')} · уведомим о новых</div></div></div><div class="row"><button class="btn sm primary grow" data-watchopen="${i}">Показать грузы</button><button class="btn sm secondary" data-unwatch="${i}">Не отслеживать</button></div></article>`}).join('')}
-const XF={cap:{title:'Грузоподъёмность',hint:'Сколько должна поднимать машина',opts:[['0-5','до 5 т'],['5-10','5–10 т'],['10-20','10–20 т'],['20-99','от 20 т']]},
- vol:{title:'Объём кузова',hint:'Требуемый объём прицепа',opts:[['0-40','до 40 м³'],['40-82','40–82 м³'],['82-999','от 82 м³']]},
+const XF={cap:{title:'Грузоподъемность',hint:'Сколько должна поднимать машина',opts:[['0-5','до 5 т'],['5-10','5–10 т'],['10-20','10–20 т'],['20-99','от 20 т']]},
+ vol:{title:'Объем кузова',hint:'Требуемый объем прицепа',opts:[['0-40','до 40 м³'],['40-82','40–82 м³'],['82-999','от 82 м³']]},
  wt:{title:'Вес груза',hint:'Общий вес груза в заказе',opts:[['0-5','до 5 т'],['5-15','5–15 т'],['15-99','от 15 т']]}};
-const RG={cap:{title:'Грузоподъёмность',unit:'т',hint:'Сколько должна поднимать машина, от 0,2 до 20 т',ph:['0,2 т','20 т']},
- vol:{title:'Объём, м³',unit:'м³',hint:'Требуемый объём кузова, от 4 до 120 м³',ph:['4 м³','120 м³']},
+const RG={cap:{title:'Грузоподъемность',unit:'т',hint:'Сколько должна поднимать машина, от 0,2 до 20 т',ph:['0,2 т','20 т']},
+ vol:{title:'Объем, м³',unit:'м³',hint:'Требуемый объем кузова, от 4 до 120 м³',ph:['4 м³','120 м³']},
  wt:{title:'Вес груза, т',unit:'т',hint:'Общий вес груза в заказе, от 0,2 до 24 т',ph:['0,2 т','24 т']}};
 const xfEmpty=()=>({cap:[],capFrom:'',capTo:'',vol:[],volFrom:'',volTo:'',wt:[],wtFrom:'',wtTo:'',fast:false});
 const num=v=>{const n=parseFloat(String(v||'').replace(',','.'));return isFinite(n)?n:null};

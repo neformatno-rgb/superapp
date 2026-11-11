@@ -7,6 +7,8 @@ select.input::-ms-expand{display:none}
 select.input.ph{color:var(--muted)}
 .pay-sum{font-size:16px;line-height:20px;font-weight:700}
 .xf-sq[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent)}
+.cost-box{background:var(--surface-2);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:4px}
+#costSec .kv{row-gap:4px;margin:0}
 .pay-sum.sm{font-size:13px;line-height:18px}
 .leader{gap:6px;align-items:baseline}
 .leader>:first-child{order:0;flex:none}

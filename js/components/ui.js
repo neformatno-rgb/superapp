@@ -2,7 +2,7 @@
 /* ---------- shared pieces ---------- */
 const tag=(label,tone)=>`<span class="tag ${tone}">${esc(label)}</span>`;
 /* documents block: one collapsible row per document type with a count badge */
-const DOC_LIST={'Товарная накладная':['Товарная накладная №1847','Товарная накладная №1848'],'ТТН':['ТТН №5521','ТТН №5522'],'Документы на оплату перевозки':['Счёт на оплату №П-0912']};
+const DOC_LIST={'Товарная накладная':['Товарная накладная №1847','Товарная накладная №1848'],'ТТН':['ТТН №5521','ТТН №5522'],'Документы на оплату перевозки':['Счет на оплату №П-0912']};
 const docRows=rows=>`<div class="docs">${rows.map(([title,key,n])=>n?`<details class="doc-row"><summary><span class="grow">${esc(title)}</span>${tag(n+' шт','green')}${ic('chevD','s')}</summary><div class="doc-items">${DOC_LIST[key].slice(0,n).map(d=>`<button type="button" class="doc-item" data-toast="${esc(d)}: открыт просмотр"><span class="grow">${esc(d)}</span></button>`).join('')}</div></details>`:`<div class="doc-row off"><div class="doc-sum"><span class="grow">${esc(title)}</span>${tag('нет','gray')}</div></div>`).join('')}</div>`;
 function cargoCard(c,opts={}){
  const fav=S.fav.includes(c.id);

@@ -1,10 +1,10 @@
 'use strict';
 V.search=()=>{
  let body;
- if(S.searchTab==='all') body=filterForm()+`<div class="row between"><b style="font-size:16px">Всего ${plural(FEED().length,'груз','груза','грузов')}</b>${vatBtn()}</div>`+FEED().slice(0,ALLN).map(c=>cargoCard(c)).join('')+(ALLN<FEED().length?`<button class="btn secondary" data-more>Показать ещё</button>`:'');
+ if(S.searchTab==='all') body=filterForm()+`<div class="row between"><b style="font-size:16px">Всего ${plural(FEED().length,'груз','груза','грузов')}</b>${vatBtn()}</div>`+FEED().slice(0,ALLN).map(c=>cargoCard(c)).join('')+(ALLN<FEED().length?`<button class="btn secondary" data-more>Показать еще</button>`:'');
  else if(S.searchTab==='bids') body=`<div class="card empty"><b>Ставок пока нет</b><span class="muted">Откройте груз с аукционом и сделайте ставку.</span></div>`;
  else if(S.searchTab==='fav'){const l=CARGO.filter(c=>S.fav.includes(c.id));body=l.length?`<div class="row between"><b style="font-size:16px">В избранном: ${l.length}</b>${vatBtn()}</div>`+l.map(c=>cargoCard(c)).join(''):`<div class="card empty"><b>В избранном пусто</b><span class="muted">Нажмите значок закладки на карточке груза, чтобы сохранить его здесь.</span><button class="btn secondary" data-seg="searchTab" data-val="all">Ко всем грузам</button></div>`;}
- else {body=S.watch.length?watchCards():`<div class="card empty"><span class="muted">Задайте фильтры и нажмите «Отслеживать» — сохранённые поиски появятся здесь.</span></div>`;}
+ else {body=S.watch.length?watchCards():`<div class="card empty"><span class="muted">Задайте фильтры и нажмите «Отслеживать» — сохраненные поиски появятся здесь.</span></div>`;}
  return topBar('Поиск грузов',{titleBtn:'shipments'})+
  `<div class="page">${seg('searchTab',[['all','Все грузы'],['bids','Мои ставки'],['track','Отслеживаю'],['fav','Избранное']],S.searchTab)}${body}</div>`;
 };

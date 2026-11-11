@@ -13,4 +13,4 @@ if(S.filters&&Array.isArray(S.filters.deals)&&S.filters.deals.length===3)S.filte
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
 const cargoById=id=>CARGO.find(c=>c.id===id)||CARGO[0];
 const shipById=id=>S.shipments.find(s=>s.id===id);
-const STATUS={assigned:['Назначен','blue'],loading:['На погрузке','green'],transit:['В пути','orange'],canceled:['Отменён','gray'],rejected:['Отклонён','gray']};
+const STATUS={assigned:['Назначен','blue'],loading:['На погрузке','green'],transit:['В пути','orange'],canceled:['Отменен','gray'],rejected:['Отклонен','gray']};
