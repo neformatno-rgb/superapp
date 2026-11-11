@@ -2,4 +2,5 @@
 .fin{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .fin .card{gap:8px}
 .fin b{font-size:16px;font-family:var(--font-ctl)}
-.sq-ic{width:32px;height:32px;border-radius:10px;background:var(--surface-2);display:grid;place-items:center}
+.sq-ic{width:32px;height:32px;border-radius:10px;background:var(--surface-2);display:grid;place-items:center;color:var(--muted)}
+.title-btn>svg,.chip:not([aria-pressed="true"])>svg.i,.tl-pill>svg.i,.doc-row summary>svg,a.row>svg.i,[data-theme-toggle]>svg.i{color:var(--muted)}

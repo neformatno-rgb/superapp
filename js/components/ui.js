@@ -29,7 +29,7 @@ function cargoCard(c,opts={}){
 function routeBlock(c,short){
  return `<div class="route">
   <div><div class="dotc"></div><div class="line" style="height:${c.via?44:30}px"></div></div>
-  <div><div class="city">${esc(c.from)}</div><div class="when num">${esc(c.fromWhen)}</div>${c.via?`<div class="via">+${c.via} ${c.via===1?'точка':'точки'} в рейсе</div>`:''}</div>
+  <div><div class="city">${esc(c.from)}</div><div class="when num">${esc(c.fromWhen)}</div>${c.via?`<button type="button" class="via" data-routesheet="${c.id}">+${c.via} ${c.via===1?'точка':'точки'} в рейсе</button>`:''}</div>
   <div><div class="dotc end"></div></div>
   <div><div class="city">${esc(c.to)}</div><div class="when num" style="padding-bottom:0">${esc(c.toWhen)}</div></div>
  </div>`;

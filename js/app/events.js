@@ -15,7 +15,7 @@ document.addEventListener('click',e=>{
  if('xfapply' in d){S.extra=XD;save();closeSheet();render();return}
  if('xffastchip' in d){S.extra=S.extra||xfEmpty();S.extra.fast=!S.extra.fast;save();const y=window.scrollY;render();window.scrollTo(0,y);return}
  if(d.sort){S.sort=d.sort;save();closeSheet();render();return}
- if(d.tl){const [k,i]=d.tl.split('|');TL[k]=TL[k]===+i?-1:+i;const y=window.scrollY;render();window.scrollTo(0,y);return}
+ if(d.tl){const [k,i]=d.tl.split('|');TL[k]=TL[k]===+i?-1:+i;if(k.startsWith('rs-')){sheet(routeSheet(cargoById(k.slice(3))));return}const y=window.scrollY;render();window.scrollTo(0,y);return}
  if(d.stop){const [id,i]=d.stop.split(':');openPts[id]=openPts[id]===+i?-1:+i;const y=window.scrollY;render();window.scrollTo(0,y);return}
  if(d.fullmap){e.preventDefault();e.stopPropagation();openFullMap(d.fullmap);return}
  if('closemap' in d){FM=null;closeSheet();return}

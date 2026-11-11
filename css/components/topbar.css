@@ -2,7 +2,7 @@
 .top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);display:flex;align-items:center;gap:12px;min-height:56px;padding-block:10px;padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px))}
 .top h1{margin:0;font-size:20px;line-height:24px;font-weight:700;flex:1;min-width:0;text-wrap:balance}
 .top h1.m{font-weight:500;font-size:18px}
-.icon-btn{width:36px;height:36px;border-radius:12px;border:0;background:var(--surface-2);display:grid;place-items:center;color:var(--fg);flex:none;position:relative}
+.icon-btn{width:36px;height:36px;border-radius:12px;border:0;background:var(--surface-2);display:grid;place-items:center;color:var(--muted);flex:none;position:relative}
 .icon-btn .dot{position:absolute;top:7px;right:8px;width:7px;height:7px;border-radius:50%;background:var(--red);box-shadow:0 0 0 2px var(--surface-2)}
 .avatar{width:36px;height:36px;border-radius:12px;background:var(--faint);color:#fff;display:grid;place-items:center;font-weight:500;flex:none}
 .avatar.user-ava{background:none;overflow:hidden}
