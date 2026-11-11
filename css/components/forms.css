@@ -6,6 +6,7 @@ select.input{-webkit-appearance:none;-moz-appearance:none;appearance:none;paddin
 select.input::-ms-expand{display:none}
 select.input.ph{color:var(--muted)}
 .pay-sum{font-size:16px;line-height:20px;font-weight:700}
+.xf-sq[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent)}
 .pay-sum.sm{font-size:13px;line-height:18px}
 .leader{gap:6px;align-items:baseline}
 .leader>:first-child{order:0;flex:none}

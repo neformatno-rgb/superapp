@@ -115,7 +115,7 @@ function filterForm(){
   <div class="grid2">${dateField('from',f.dateFrom)}${dateField('to',f.dateTo)}</div>
   ${bodyField(f.body)}
   <div class="grid3">${['Фикс','Аукцион','Встречное'].map(d=>`<button type="button" class="opt" data-deal="${d}" aria-pressed="${f.deals.includes(d)}">${d}</button>`).join('')}</div>
-  <div class="row"><button class="btn primary grow" type="submit">Найти груз</button></div>
+  <div class="row"><button class="btn primary grow" type="submit">Найти груз</button><button type="button" class="btn secondary sq xf-sq" data-xfopen aria-label="Фильтры${xfCount(S.extra||xfEmpty())?': выбрано '+xfCount(S.extra):''}" aria-pressed="${!!xfCount(S.extra||xfEmpty())}">${ic('filter')}</button></div>
  </form>`;
 }
 const watchKey=f=>[f.from.trim().toLowerCase(),f.to.trim().toLowerCase(),f.body,[...f.deals].sort().join('+')].join('|');
