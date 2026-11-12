@@ -1,5 +1,5 @@
 'use strict';
-/* ---------- counter offer: «Тариф заказчика / Встречное», «Мои ставки», wait timer ---------- */
+/* ---------- counter offer ---------- */
 /* counter offer: cargo with deal «Встречное» → carrier proposes own price → it lands in «Мои ставки» */
 const CO_WAIT=30*60;
 S.bids.forEach(b=>{if(!b.at)b.at=Date.now()});

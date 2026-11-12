@@ -93,7 +93,7 @@ function setBody(v){const h=document.getElementById('fBody');if(!h)return;h.pare
 /* «Сбросить» in the filters sheet: shown only while something is set */
 function ffAny(){const ff=document.getElementById('filterForm'),f=S.filters;if(!ff)return !!(f.from||f.to||f.dateFrom||f.dateTo||bodyList(f).length||f.deals.length);
  return ['#fFrom','#fTo','#fDf','#fDt','#fBody'].some(q=>{const el=ff.querySelector(q);return el&&el.value})||S.filters.deals.length>0}
-function ffRefresh(){const r=document.querySelector('[data-ffreset]');if(r)r.style.visibility=ffAny()?'':'hidden'}
+function ffRefresh(){const r=document.querySelector('[data-ffreset]');if(r)r.style.visibility=ffAny()?'':'hidden';if(typeof renderFab==='function')renderFab()}
 document.addEventListener('click',e=>{if(!e.target.closest('[data-ffreset]'))return;e.preventDefault();e.stopPropagation();
  setCity('from','');setCity('to','');setDate('from','');setDate('to','');setBody('');S.filters.deals=[];save();
  document.querySelectorAll('#filterForm [data-deal]').forEach(b=>b.setAttribute('aria-pressed','false'));const y=window.scrollY;render();window.scrollTo(0,y);ffRefresh()},true);
@@ -120,7 +120,7 @@ function filterForm(){
 }
 const watchKey=(f,x=S.extra||xfEmpty())=>JSON.stringify([f.from.trim().toLowerCase(),f.to.trim().toLowerCase(),f.dateFrom||'',f.dateTo||'',f.body||'',[...f.deals].sort(),['cap','vol','wt'].map(k=>[x[k+'From']||'',x[k+'To']||'']),!!x.fast]);
 /* how many filter parameters are set: route ends, dates, body, deal type, each extra range, fast pay */
-const paramCount=(f,x=S.extra||xfEmpty())=>[f.from,f.to,f.dateFrom||f.dateTo,bodyList(f).length,f.deals.length,rgOn(x,'cap'),rgOn(x,'vol'),rgOn(x,'wt'),x.fast].filter(Boolean).length;
+const paramCount=(f,x=S.extra||xfEmpty())=>[f.from,f.to,f.dateFrom,f.dateTo,bodyList(f).length,...f.deals,rgOn(x,'cap'),rgOn(x,'vol'),rgOn(x,'wt'),x.fast].filter(Boolean).length;
 const ruDate=iso=>new Date(iso+'T00:00').toLocaleDateString('ru-RU',{day:'numeric',month:'long',year:'numeric'}).replace(/\s*г\.?$/,'');
 const rgText=(x,k)=>{const a=num(x[k+'From']),b=num(x[k+'To']),u=RG[k].unit,t=RG[k].title.replace(/,.*$/,'').toLowerCase(),v=n=>String(n).replace('.',',');return a!==null&&b!==null?`${t} ${v(a)}–${v(b)} ${u}`:a!==null?`${t} от ${v(a)} ${u}`:`${t} до ${v(b)} ${u}`};
 /* card text: route → dates → body type → everything else */

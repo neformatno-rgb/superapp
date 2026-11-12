@@ -2,7 +2,7 @@
 :root{
   --bg:#f7f9f8; --surface:#ffffff; --surface-2:#f7f9f8; --fg:#323232; --muted:#74787f; --faint:#aabbca; --line:#e7e9e8;
   --accent:#3783ff; --accent-strong:#206cde; --accent-soft:rgba(55,131,255,.12); --on-accent:#ffffff;
-  --green:#1a9c3f; --green-soft:rgba(27,167,67,.12); --orange:#d96a17; --orange-soft:#fef5ee; --red:#d93a40; --red-soft:#fff5f6;
+  --green:#2CBA2E; --green-soft:rgba(44,186,46,.12); --orange:#d96a17; --orange-soft:#fef5ee; --red:#d93a40; --red-soft:#fff5f6;
   --gray-tag:#e7e9e8; --star:#ffc800; --coin-fill:#ffe16a; --coin:#fabd28; --scrim:rgba(50,52,56,.32); --shadow:0 2px 6px rgba(146,153,163,.2);
   --sea:#d6e6f5; --land:#efeee9; --land-ru:#fbfaf7; --border:#c9c2bd;
   --font-ui:'Ubuntu',system-ui,-apple-system,'Segoe UI',sans-serif; --font-ctl:'Roboto',system-ui,-apple-system,'Segoe UI',sans-serif;
@@ -11,10 +11,10 @@
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --sea:#14202c; --land:#22262a; --land-ru:#2a2f34; --border:#454c54; --bg:#111315; --surface:#1b1e21; --surface-2:#24282c; --fg:#eceef0; --muted:#9ba1a9; --faint:#5d6670; --line:#2d3237;
   --accent:#5b9bff; --accent-strong:#7fb0ff; --accent-soft:rgba(91,155,255,.18); --on-accent:#0d1420;
-  --green:#45c46b; --green-soft:rgba(69,196,107,.16); --orange:#f2954d; --orange-soft:rgba(242,149,77,.14); --red:#f06b70; --red-soft:rgba(240,107,112,.14);
+  --green:#2CBA2E; --green-soft:rgba(44,186,46,.16); --orange:#f2954d; --orange-soft:rgba(242,149,77,.14); --red:#f06b70; --red-soft:rgba(240,107,112,.14);
   --gray-tag:#2d3237; --star:#ffd23f; --coin-fill:#ffe16a; --coin:#e8a915; --scrim:rgba(0,0,0,.55); --shadow:0 2px 8px rgba(0,0,0,.4); color-scheme:dark}}
 :root[data-theme="dark"]{
   --sea:#14202c; --land:#22262a; --land-ru:#2a2f34; --border:#454c54; --bg:#111315; --surface:#1b1e21; --surface-2:#24282c; --fg:#eceef0; --muted:#9ba1a9; --faint:#5d6670; --line:#2d3237;
   --accent:#5b9bff; --accent-strong:#7fb0ff; --accent-soft:rgba(91,155,255,.18); --on-accent:#0d1420;
-  --green:#45c46b; --green-soft:rgba(69,196,107,.16); --orange:#f2954d; --orange-soft:rgba(242,149,77,.14); --red:#f06b70; --red-soft:rgba(240,107,112,.14);
+  --green:#2CBA2E; --green-soft:rgba(44,186,46,.16); --orange:#f2954d; --orange-soft:rgba(242,149,77,.14); --red:#f06b70; --red-soft:rgba(240,107,112,.14);
   --gray-tag:#2d3237; --star:#ffd23f; --coin-fill:#ffe16a; --coin:#e8a915; --scrim:rgba(0,0,0,.55); --shadow:0 2px 8px rgba(0,0,0,.4); color-scheme:dark}

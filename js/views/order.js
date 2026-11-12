@@ -16,6 +16,6 @@ V.order=()=>{
  return topBar('Просмотр заказа',{back:'search',actions:`<button class="icon-btn" data-share="${c.id}" aria-label="Поделиться">${ic('share')}</button><button class="icon-btn" data-fav="${c.id}" aria-pressed="${S.fav.includes(c.id)}" aria-label="${S.fav.includes(c.id)?'Убрать из избранного':'В избранное'}">${ic(S.fav.includes(c.id)?'bookmarkOn':'bookmark')}</button>`})+`<div class="page">
  ${orderSections(c)}
  <div aria-hidden="true" style="height:84px"></div>
- ${isCo(c)?coCta(c):isAuc(c)?aucCta(c):`<div class="cta-bar" id="ctaBar" aria-hidden="true"><div class="grow"><div class="muted" style="font-size:12px">К получению</div><b class="num price">до ${rub(Math.max(...PAYS.map(p=>payAmt(c,p))))}</b></div><button class="btn primary" data-go="apply" data-p="${c.id}" tabindex="-1">Забрать груз</button></div>`}
+ ${isCo(c)?coCta(c):isAuc(c)?aucCta(c):`<div class="cta-bar cta-foot" id="ctaBar" aria-hidden="true"><div class="row between"><span class="muted" style="font-size:13px">К получению</span><b class="num sf-sum">до ${rub(Math.max(...PAYS.map(p=>payAmt(c,p))))}</b></div><button class="btn primary sf-btn" data-go="apply" data-p="${c.id}" tabindex="-1">Забрать груз</button></div>`}
  </div>`;
 };

@@ -29,7 +29,7 @@ V.apply=()=>{
  <section class="card"><h2 class="h2">Подвижной состав</h2>${sel('truck','Машина',ORDER.trucks,a.truck,'Выберите машину')}${sel('trailer','Прицеп',ORDER.trailers,a.trailer,'Выберите прицеп')}
   ${sel('driver','Водитель',ORDER.drivers.map(d=>d.name),a.driver,'Выберите водителя')}
   ${a.driver==null?'':(d=>`<dl class="kv num"><dt>ВУ</dt><dd>${d.license}</dd><dt>Телефон</dt><dd>${d.phone}</dd><dt>Дата рождения</dt><dd>${d.birth}</dd><dt>Паспорт</dt><dd>${d.passport}</dd></dl>`)(ORDER.drivers[a.driver])}</section>
- `}<div class="sticky-foot"><div class="grow"><div class="muted" style="font-size:12px">К получению</div><b class="num price">${rub(applyTotal(c))}</b></div><button class="btn primary" data-confirm-apply="${c.id}">Забрать груз</button></div>
+ `}<div class="sticky-foot"><div class="row between"><span class="muted" style="font-size:13px">К получению</span><b class="num sf-sum">${rub(applyTotal(c))}</b></div><button class="btn primary sf-btn" data-confirm-apply="${c.id}">Оформить заявку</button></div>
  </div>`;
 };
 const SUCC_IMG='assets/img/success.webp';

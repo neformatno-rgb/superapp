@@ -1,5 +1,4 @@
 'use strict';
-/* ---------- tracking: saved searches, edit sheet, ⋮ menu ---------- */
 /* «Редактировать» opens a sheet with every filter parameter; the page filters are restored when it closes */
 let WE=null;
 function weHtml(){const form=filterForm().replace('class="card" id="filterForm"','class="sec" id="filterForm"').replace(/<div class="row"><button class="btn primary grow" type="submit">[\s\S]*?<\/div>\s*<\/form>/,'</form>');

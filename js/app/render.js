@@ -2,6 +2,11 @@
 /* ---------- render ---------- */
 const NAV=[['home','home','Главная'],['search','box','Грузы'],['map','map','Карта'],['menu','menu','Меню']];
 const NAVOF={home:'home',search:'search',results:'search',order:'search',apply:'search',success:'search',shipments:'search',trip:'search',map:'map',menu:'menu'};
+/* «Отслеживать грузы»: shown only when ≥2 filter params are set and this search isn't already tracked; hidden right after creating, reappears when a param changes */
+function renderFab(){const slot=document.getElementById('fabSlot');if(!slot)return;const v=current();const showFab=v==='results'||(v==='search'&&S.searchTab==='all');
+ if(!showFab){slot.innerHTML='';return}
+ const ed=S.editWatch!=null&&S.watch[S.editWatch],ok=paramCount(S.filters)>=2,show=ed?ok:(ok&&!isWatched());
+ slot.innerHTML=show?`<button class="fab" data-watch aria-label="${ed?'Сохранить отслеживание':'Отслеживать грузы'}">${ic('bellPlus')}<span>${ed?'Сохранить отслеживание':'Отслеживать грузы'}</span></button>`:'';}
 function render(){
  const v=current();if(S.param===undefined)S.param=null;
  document.getElementById('view').innerHTML=V[v]();
@@ -9,9 +14,7 @@ function render(){
  document.getElementById('nav').innerHTML=navHtml;
  const showFab=v==='results'||(v==='search'&&S.searchTab==='all');
  document.body.classList.toggle('has-fab',showFab);document.body.classList.toggle('on-map',v==='map');
- const w=showFab&&isWatched();
- const ed=S.editWatch!=null&&S.watch[S.editWatch],ok=paramCount(S.filters)>=2;
- document.getElementById('fabSlot').innerHTML=showFab?`<button class="fab${ok||w?'':' off'}" data-watch aria-pressed="${w&&!ed}" aria-label="${ed?'Сохранить отслеживание':w?'Перестать отслеживать поиск':'Отслеживать грузы'}">${ic('bellPlus')}<span>${ed?'Сохранить отслеживание':w?'Отслеживается':'Отслеживать грузы'}</span></button>`:'';
+ renderFab();
  document.title='Кабинет перевозчика';
  setupCta();
  if(v==='map')mvInit();
