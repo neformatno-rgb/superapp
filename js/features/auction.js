@@ -8,7 +8,7 @@ function aucState(c){const a=AUC(c),u=S.auc[c.id]||{},vals=[a.best0,u.my,u.rival
  const count=u.n||0,total=a.n0+(u.n||0)+(u.rival!=null?1:0); /* counter = my bids only */
  const max=(best??a.start)-a.step;
  const ended=!(c.timer>0);
- const status=ended?(mine?['Вы победили','blue']:['Торги завершены','gray']):!total?['Ставок не было','gray']:u.my==null?['Идут торги','gray']:mine?['Выигрываю','green']:['Проигрываю','red'];
+ const status=ended?(mine?['Вы победили','blue']:['Торги завершены','gray']):!total?['Нет ставок','gray']:u.my==null?['Идут торги','gray']:mine?['Выигрываю','green']:['Проигрываю','red'];
  const draft=Math.min(max,Math.max(a.min,u.draft??max));
  return {...a,u,best,mine,count,max,status,draft,ended,won:ended&&mine,can:max>=a.min&&!ended}}
 const aucTimer=c=>{const t=c.timer||0;return t?`Осталось ${t>=3600?String(Math.floor(t/3600)).padStart(2,'0')+':':''}${String(Math.floor(t%3600/60)).padStart(2,'0')}:${String(t%60).padStart(2,'0')}`:'Торги завершены'};

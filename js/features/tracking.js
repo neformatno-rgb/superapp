@@ -22,4 +22,5 @@ document.addEventListener('click',e=>{const k=e.target.closest('[data-wmenu]');
  const ed=e.target.closest('[data-wedit]');if(ed){e.stopPropagation();wmenuClose();weOpen(+ed.dataset.wedit);return}
  const dl=e.target.closest('[data-wdel]');if(dl){e.stopPropagation();S.watch.splice(+dl.dataset.wdel,1);S.editWatch=null;save();const y=window.scrollY;render();window.scrollTo(0,y);toast('Отслеживание удалено');return}
  if(e.target.closest('[data-newwatch]')){e.stopPropagation();S.searchTab='all';S.editWatch=null;save();go('search');return}
+ if(e.target.closest('[data-tobids]')){e.stopPropagation();S.filters.deals=['Аукцион','Встречное'];S.searchTab='all';ALLN=50;save();go('search');return}
  if(!e.target.closest('.wmenu'))wmenuClose()},true);

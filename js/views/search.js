@@ -2,11 +2,11 @@
 V.search=()=>{
  let body;
  if(S.searchTab==='all') body=filterForm()+`<div class="row between"><b style="font-size:16px">Всего ${plural(FEED().length,'груз','груза','грузов')}</b>${vatBtn()}</div>`+FEED().slice(0,ALLN).map(c=>cargoCard(c)).join('')+(ALLN<FEED().length?`<button class="btn secondary" data-more>Показать еще</button>`:'');
- else if(S.searchTab==='bids') body=(bidsBody())||`<div class="card empty"><b>Ставок пока нет</b><span class="muted">Откройте груз с аукционом или встречным предложением и сделайте ставку.</span></div>`;
+ else if(S.searchTab==='bids') body=(bidsBody())||`<div class="card empty track-empty"><img src="${BID_IMG}" alt=""><b>Ставок пока нет</b><span class="muted">Откройте груз с аукционом или встречным предложением и сделайте ставку.</span><button type="button" class="btn primary block" data-tobids>К торгам</button></div>`;
  else if(S.searchTab==='fav'){const l=CARGO.filter(c=>S.fav.includes(c.id));body=l.length?`<div class="row between"><b style="font-size:16px">В избранном: ${l.length}</b>${vatBtn()}</div>`+l.map(c=>cargoCard(c)).join(''):`<div class="card empty track-empty"><img src="${FAV_IMG}" alt=""><b>В избранном пусто</b><span class="muted">Нажмите значок закладки на карточке груза, чтобы сохранить его здесь.</span><button type="button" class="btn primary block" data-newwatch>Ко всем грузам</button></div>`;}
  else {body=S.watch.length?watchCards():`<div class="card empty track-empty"><img src="${TRACK_IMG}" alt=""><b>Отслеживаний пока нет</b><span class="muted">Задайте хотя бы 2 параметра в фильтре и нажмите «Отслеживать грузы» — подборка появится здесь.</span><button type="button" class="btn primary block" data-newwatch>Создайте отслеживание</button></div>`;}
  return topBar('Поиск грузов',{titleBtn:'shipments',actions:`<button class="icon-btn sq-btn" data-cargoq aria-label="Поиск по грузам" aria-haspopup="dialog">${SQ_SEARCH}</button>`})+
- `<div class="page">${seg('searchTab',[['all','Все грузы'],['bids','Мои ставки'+(bidCount()?`<span class="seg-badge num">${bidCount()}</span>`:'')],['track','Отслеживаю'+segBadge(S.watch.length)],['fav','Избранное'+segBadge(S.fav.length)]],S.searchTab)}${body}</div>`;
+ `<div class="page">${seg('searchTab',[['all','Все грузы'],['bids','Мои торги'+(bidCount()?`<span class="seg-badge num">${bidCount()}</span>`:'')],['track','Отслеживаю'+segBadge(S.watch.length)],['fav','Избранное'+segBadge(S.fav.length)]],S.searchTab)}${body}</div>`;
 };
 V.results=()=>{
  const f=S.filters,SORTS={price:(a,b)=>b.price-a.price,rate:(a,b)=>b.price/b.km-a.price/a.km,km:(a,b)=>a.km-b.km,date:()=>0},list=filtered().slice().sort(SORTS[S.sort||'date']);

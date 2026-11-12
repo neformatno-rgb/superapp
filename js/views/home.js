@@ -13,7 +13,7 @@ V.home=()=>{
   <section class="sec"><h2>Работа с заявками</h2>
    ${seg('homeTabA',[['active','Активные'],['bids','Мои торги'+(bidCount()?`<span class="seg-badge num">${bidCount()}</span>`:'')]],S.homeTabA)}
    ${S.homeTabA==='active'?(active.length?active.map(s=>shipCard(s,true)).join(''):`<div class="card empty"><b>Активных заявок нет</b><span class="muted">Найдите груз и оформите заявку.</span><button class="btn primary" data-go="search">Найти груз</button></div>`)
-     :bidCards()||`<div class="card empty"><b>Ставок пока нет</b><span class="muted">Ставки и встречные предложения появятся здесь.</span><button class="btn secondary" data-go="search">К поиску грузов</button></div>`}
+     :bidCards()||`<div class="card empty track-empty"><img src="${BID_IMG}" alt=""><b>Ставок пока нет</b><span class="muted">Откройте груз с аукционом или встречным предложением и сделайте ставку.</span><button type="button" class="btn primary block" data-tobids>К торгам</button></div>`}
   </section>
   <section class="sec"><h2>Дополнительно</h2>
    ${seg('homeTabB',[['fav','Избранные'+segBadge(S.fav.length)],['track','Отслеживание'+segBadge(S.watch.length)]],S.homeTabB)}

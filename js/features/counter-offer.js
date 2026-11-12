@@ -32,7 +32,7 @@ const coVal=()=>{const i=document.getElementById('coIn');return i?+(i.value.repl
 function coRefresh(){const b=document.querySelector('[data-cosend]');if(b)b.disabled=!coVal()}
 const coRerender=()=>{const y=window.scrollY;render();window.scrollTo(0,y);if(typeof coSheetRefresh==='function')coSheetRefresh()};
 function coSend(){const n=coVal();if(!n)return;const id=document.getElementById('coIn').dataset.co;
- S.bids=S.bids.filter(b=>b.id!==id);S.bids.unshift({id,amount:Math.round(n/vatK()),at:Date.now()});S.coEdit=null;save();coRerender();toast('Предложение отправлено, оно в «Мои ставки»')}
+ S.bids=S.bids.filter(b=>b.id!==id);S.bids.unshift({id,amount:Math.round(n/vatK()),at:Date.now()});S.coEdit=null;save();coRerender();toast('Предложение отправлено, оно в «Мои торги»')}
 document.addEventListener('input',e=>{if(e.target.id!=='coIn')return;const i=e.target;i.value=rubIn(coVal());const k=i.value.length-2;if(k>0)i.setSelectionRange(k,k);coRefresh()});
 document.addEventListener('keydown',e=>{if(e.target.id!=='coIn')return;const i=e.target;
  if(e.key==='Enter'){e.preventDefault();coSend();return}
