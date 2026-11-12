@@ -1,4 +1,6 @@
 /* segmented tabs */
-.seg{display:flex;background:var(--surface);border-radius:12px;padding:4px;gap:0}
-.seg button{flex:1;min-width:0;border:0;background:none;border-radius:10px;padding:7px 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px;line-height:18px;color:var(--fg);min-height:32px}
+.seg{display:flex;background:var(--surface);border-radius:999px;padding:4px;gap:0;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}.seg::-webkit-scrollbar{display:none}
+.seg button{flex:1 0 auto;border:0;background:none;border-radius:999px;padding:7px 12px;white-space:nowrap;font-size:13px;line-height:18px;color:var(--fg);min-height:32px}
+.seg button:has(.seg-badge){display:flex;align-items:center;justify-content:center}
+.seg-badge{flex:none;display:inline-block;min-width:18px;height:18px;padding:0 5px;margin-left:4px;border-radius:999px;background:var(--accent);color:#fff;font-size:11px;line-height:18px;font-weight:600;text-align:center;vertical-align:1px}
 .seg button[aria-selected="true"]{background:var(--accent-soft);color:var(--accent);font-weight:500}

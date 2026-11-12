@@ -2,6 +2,8 @@
 .tag{display:inline-flex;align-items:center;height:16px;padding:0 4px;border-radius:4px;font-family:var(--font-ctl);font-size:12px;font-weight:500;line-height:16px;letter-spacing:.2px;white-space:nowrap}
 .tag.green{background:var(--green-soft);color:var(--green)}
 .tag.blue{background:var(--accent-soft);color:var(--accent)}
+.tag.red{background:rgba(217,58,64,.1);color:var(--red)}
 .tag.gray{background:var(--gray-tag);color:var(--muted)}
+.tag.fix{background:rgba(233,144,36,.1);color:#E99024}
 .tag.orange{background:var(--orange-soft);color:var(--orange)}
 .tag.plain{background:var(--surface-2);color:var(--fg)}

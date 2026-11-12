@@ -1,7 +1,7 @@
 'use strict';
 /* ---------- events ---------- */
 document.addEventListener('click',e=>{
- const t=e.target.closest('button,a,article,[data-close]');if(!t)return;
+ const t=e.target.closest('button,a,article,[data-close],.co-cta-col');if(!t)return;
  const d=t.dataset;
  if(t.classList.contains('scrim')&&e.target!==t)return;
  if('close' in d&&(e.target===t||t.tagName==='BUTTON')){closeSheet();return}
@@ -24,8 +24,13 @@ document.addEventListener('click',e=>{
  if(d.fav){e.stopPropagation();const i=S.fav.indexOf(d.fav);i<0?S.fav.push(d.fav):S.fav.splice(i,1);save();render();toast(i<0?'Добавлено в избранное':'Убрано из избранного');return}
  if(d.share){e.stopPropagation();const txt=`Груз ${d.share}: ${cargoById(d.share).from} — ${cargoById(d.share).to}`;(navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(()=>toast('Ссылка на груз скопирована'),()=>toast(txt));return}
  if('more' in d){ALLN+=50;render();return}
- if('watch' in d){const k=watchKey(S.filters),i=S.watch.findIndex(w=>w.key===k);if(i<0){S.watch.push({key:k,f:JSON.parse(JSON.stringify(S.filters)),label:watchLabel(S.filters)})}else S.watch.splice(i,1);save();render();toast(i<0?'Поиск отслеживается — сообщим о новых грузах':'Поиск больше не отслеживается');return}
- if(d.watchopen!==undefined){const w=S.watch[+d.watchopen];S.filters=JSON.parse(JSON.stringify(w.f));save();go('results');return}
+ if('watch' in d){const k=watchKey(S.filters),i=S.watch.findIndex(w=>w.key===k),ed=S.editWatch!=null&&S.watch[S.editWatch];
+  if(i>=0&&!ed){S.watch.splice(i,1);save();render();toast('Поиск больше не отслеживается');return}
+  if(paramCount(S.filters)<2){toast('Заполните хотя бы 2 параметра фильтра');return}
+  const item={key:k,f:JSON.parse(JSON.stringify(S.filters)),x:JSON.parse(JSON.stringify(S.extra||xfEmpty())),label:watchLabel(S.filters)};item.desc=watchDesc(item.f,item.x);
+  if(ed){S.watch[S.editWatch]=item;S.editWatch=null;save();render();toast('Отслеживание обновлено');return}
+  S.watch.unshift(item);save();render();toast('Отслеживание создано — оно во вкладке «Отслеживаю»');return}
+ if(d.watchopen!==undefined){const w=S.watch[+d.watchopen];S.filters=JSON.parse(JSON.stringify(w.f));if(w.x)S.extra=JSON.parse(JSON.stringify(w.x));save();go('results');return}
  if(d.unwatch!==undefined){S.watch.splice(+d.unwatch,1);save();render();toast('Поиск больше не отслеживается');return}
  if(d.arrive){e.stopPropagation();S.param=d.arrive;save();sheet(SHEETS.arrive(d.arrive));return}
  if(d.trip){e.stopPropagation();S.tripTab='trip';go('trip',d.trip);return}
@@ -35,7 +40,7 @@ document.addEventListener('click',e=>{
  if(d.go){closeSheet();go(d.go,d.p);return}
  if(d.back==='order'){go('order');return}
  if(d.back){history.length>1?history.back():go(d.back);return}
- if(d.seg){S[d.seg]=d.val;save();render();return}
+ if(d.seg){S[d.seg]=d.val;save();const y=window.scrollY;render();if(d.seg==='coTab'||d.seg==='aucTab')window.scrollTo(0,y);return}
  if(d.sheet){sheet(SHEETS[d.sheet]());return}
  if(d.deal){const f=S.filters.deals,i=f.indexOf(d.deal);i<0?f.push(d.deal):f.splice(i,1);
   const ff=document.getElementById('filterForm');if(ff){S.filters.from=ff.querySelector('#fFrom').value;S.filters.to=ff.querySelector('#fTo').value;S.filters.dateFrom=ff.querySelector('#fDf').value;S.filters.dateTo=ff.querySelector('#fDt').value;S.filters.body=ff.querySelector('#fBody').value}

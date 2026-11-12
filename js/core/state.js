@@ -9,8 +9,11 @@ let S; try{S=JSON.parse(localStorage.getItem(KEY))||fresh()}catch(e){S=fresh()}
 /* search form starts empty: clear filters saved by earlier demo versions once */
 if(S.fv!==2){S.filters={from:'',to:'',dateFrom:'',dateTo:'',body:'',deals:[]};S.fv=2}
 if(!Array.isArray(S.watch))S.watch=[];
+/* demo: a couple of completed shipments for the «Завершенные» tab */
+if(!S.doneSeed){S.doneSeed=1;[['СП085267','04 дек'],['СП085204','28 ноя']].forEach(([id,d])=>{if(!S.shipments.some(x=>x.id===id))S.shipments.push({id,status:'done',stage:'departed',cargoCheck:'ok',remarks:null,done:['load','unload'],doneAt:d})})}
+if(!Array.isArray(S.bids))S.bids=[];
 if(S.filters&&Array.isArray(S.filters.deals)&&S.filters.deals.length===3)S.filters.deals=[];
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
 const cargoById=id=>CARGO.find(c=>c.id===id)||CARGO[0];
 const shipById=id=>S.shipments.find(s=>s.id===id);
-const STATUS={assigned:['Назначен','blue'],loading:['На погрузке','green'],transit:['В пути','orange'],canceled:['Отменен','gray'],rejected:['Отклонен','gray']};
+const STATUS={assigned:['Назначен','blue'],loading:['На погрузке','green'],transit:['В пути','orange'],done:['Завершен','green'],canceled:['Отменен','gray'],rejected:['Отклонен','gray']};

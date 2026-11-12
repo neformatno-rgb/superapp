@@ -1,5 +1,5 @@
 'use strict';
-function applyTotal(c){const a=S.apply,p=PAYS.find(x=>x.id===a.pay);let t=Math.round(c.price*(p.amount/148800));if(a.insure)t-=649;return t}
+function applyTotal(c){const a=S.apply,p=PAYS.find(x=>x.id===a.pay);let t=Math.round(effPrice(c)*(p.amount/148800));if(a.insure)t-=649;return t}
 V.apply=()=>{
  const c=cargoById(S.param),a=S.apply;
  if(S.applyFor!==c.id){a.contract=a.truck=a.trailer=a.driver=null;a.bonus=a.fuel=a.insure=false;a.bonusAmt=0;a.fuelAmt=0;a.fuelContract=null;S.applyFor=c.id}

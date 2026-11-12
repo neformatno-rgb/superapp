@@ -4,7 +4,7 @@
 const MANAGERS=['Иванова Анна','Петров Сергей','Смирнова Ольга'];
 const shipMgr=s=>MANAGERS[[...s.id].reduce((a,ch)=>a+ch.charCodeAt(0),0)%MANAGERS.length];
 const SHF_LBL={status:'Статус',from:'Откуда',to:'Куда',mgr:'Менеджер'};
-const SHIP_TAB={active:s=>!['canceled','rejected'].includes(s.status),canceled:s=>s.status==='canceled',rejected:s=>s.status==='rejected'};
+const SHIP_TAB={active:s=>!['done','canceled','rejected'].includes(s.status),done:s=>s.status==='done',canceled:s=>s.status==='canceled',rejected:s=>s.status==='rejected'};
 const shfVal={status:s=>s.status,from:s=>cargoById(s.id).from,to:s=>cargoById(s.id).to,mgr:shipMgr};
 const shfName=(k,v)=>k==='status'?STATUS[v][0]:v;
 const shfF=()=>S.shipF||(S.shipF={status:[],from:[],to:[],mgr:[]});

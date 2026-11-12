@@ -5,7 +5,7 @@
  let seed=20261210;const rnd=()=>(seed=(seed*1103515245+12345)%2147483648)/2147483648;const pick=a=>a[Math.floor(rnd()*a.length)];
  const clients=['ASHN','Нордлайн','Агроснаб','ТехноКом','Сибирь Логистик','ВолгаТранс','Магистраль','ЮгАгро','УралСталь','Деловые Линии','Фреш Маркет','СеверЛес','Полимер-М','ТрансЕвразия'];
  const bodies=[['Реф','Задняя'],['Тент','Боковая'],['Тент','Верхняя'],['Изотерм','Задняя'],['Тент','Задняя']];
- const deals=['Фикс','Фикс','Аукцион','Встречное'],mon=' дек';
+ const deals=['Фикс','Фикс','Аукцион','Фикс+аукцион','Фикс+встречное'],mon=' дек';
  const pad=n=>String(n).padStart(2,'0');
  const used=new Set(CARGO.map(c=>c.from+'|'+c.to));
  let n=0,id=85320;
@@ -21,7 +21,7 @@
    body,load,items:pick(['1 груз','2 груза','3 груза']),pallets:(cap>=20?18+Math.floor(rnd()*15):6+Math.floor(rnd()*12))+' пл.',from,to,
    fromWhen:`${d1}${mon}, ${pad(h1)}:00 — ${d1}${mon}, ${pad(Math.min(23,h1+4))}:00`,toWhen:`${d2}${mon}, ${pad(h2)}:00 — ${d2}${mon}, ${pad(Math.min(23,h2+6))}:00`,
    via,deal,km,price,bonus:Math.round(price/1000/10)*10||10,fast:rnd()<.5,express:rnd()<.4,vat:false};
-  if(deal==='Аукцион')c.timer=600+Math.floor(rnd()*7000);
+  if(isAuc({deal}))c.timer=60+Math.floor(rnd()*240);
   CARGO.push(c);
  });
 })();

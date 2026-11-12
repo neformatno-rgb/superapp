@@ -7,7 +7,7 @@ const docRows=rows=>`<div class="docs">${rows.map(([title,key,n])=>n?`<details c
 function cargoCard(c,opts={}){
  const fav=S.fav.includes(c.id);
  const t=c.timer?` (${String(Math.floor(c.timer/3600)).padStart(2,'0')}:${String(Math.floor(c.timer%3600/60)).padStart(2,'0')}:${String(c.timer%60).padStart(2,'0')})`:'';
- return `<article class="card cargo" data-open="${c.id}" tabindex="0" aria-label="Груз ${c.id}, ${esc(c.from)} — ${esc(c.to)}">
+ return `<article class="card cargo" data-open="${c.id}" tabindex="0" aria-label="Груз ${c.id}, ${esc(c.from)} — ${esc(c.to)}">${opts.bid?`<div class="co-wait" data-cowait="${c.id}">${coWaitText(opts.bid)}</div>`:opts.auc?aucBand(c):''}
   <div class="row">
    <div class="rating">${star}<span class="num">${String(c.rating).replace('.',',')}</span></div>
    <div class="grow"><div>${tag(c.client,'plain')}</div><div class="num" style="font-size:13px;margin-top:2px">${c.id}</div></div>
@@ -16,14 +16,14 @@ function cargoCard(c,opts={}){
   </div>
   <div class="strip"><span>${esc(c.body)} | ${esc(c.load)}</span><span class="num">${esc(c.items)} | ${esc(c.pallets)}</span></div>
   ${routeBlock(c)}
-  <div class="row" style="flex-wrap:wrap">
-   ${c.deal==='Аукцион'?`<span class="tag blue num" data-timer="${c.id}">${'Аукцион'+t}</span>`:tag(c.deal,'gray')}
+  ${opts.bid||opts.auc?'':`<div class="row" style="flex-wrap:wrap">
+   ${isFix(c)?tag('Фикс','fix'):''}${isAuc(c)?`<span class="tag blue num" data-timer="${c.id}">${'Аукцион'+t}</span>`:''}${isCo(c)?tag('Встречное','gray'):''}
    <span class="grow"></span>
    ${c.fast?`<span title="Быстрая оплата" aria-label="Быстрая оплата" style="display:inline-flex">${fastBadge}</span>`:''}
    <span class="bonus-pill" title="Бонусы">${coin}<span class="num">+${c.bonus}</span></span>
-  </div>
-  <hr class="hr">
-  <div class="row between"><span class="num muted" style="font-family:var(--font-ctl)">${c.km.toLocaleString('ru-RU')} км • ${Math.round(c.price*vatK()/c.km)} ₽/км</span><span class="price num">${rub(c.price)}</span></div>
+  </div>`}
+  ${opts.bid?bidRow(opts.bid):opts.auc?aucRow(c):`<hr class="hr">
+  <div class="row between"><span class="num muted" style="font-family:var(--font-ctl)">${c.km.toLocaleString('ru-RU')} км • ${Math.round(c.price*vatK()/c.km)} ₽/км</span><span class="price num">${rub(c.price)}</span></div>`}
  </article>`;
 }
 function routeBlock(c,short){
@@ -49,4 +49,5 @@ function topBar(title,{back,actions='',titleBtn}={}){
  return `<header class="top">${back?`<button class="icon-btn" data-back="${back}" aria-label="Назад">${ic('back')}</button>`:''}
   ${titleBtn?`<button class="title-btn" data-titlemenu aria-haspopup="menu" aria-expanded="false" aria-label="${esc(title)}, выбрать раздел"><span>${esc(title)}</span>${ic('chevD','s')}</button><span class="grow"></span>`:`<h1 class="${back?'m':''}">${esc(title)}</h1>`}${actions}</header>`;
 }
+const segBadge=n=>n?`<span class="seg-badge num">${n}</span>`:'';
 const seg=(name,items,val)=>`<div class="seg" role="tablist">${items.map(([v,l])=>`<button role="tab" aria-selected="${v===val}" data-seg="${name}" data-val="${v}">${l}</button>`).join('')}</div>`;

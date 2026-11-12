@@ -118,11 +118,25 @@ function filterForm(){
   <div class="row"><button class="btn primary grow" type="submit">Найти груз</button><button type="button" class="btn secondary sq xf-sq" data-xfopen aria-label="Фильтры${xfCount(S.extra||xfEmpty())?': выбрано '+xfCount(S.extra):''}" aria-pressed="${!!xfCount(S.extra||xfEmpty())}">${ic('filter')}</button></div>
  </form>`;
 }
-const watchKey=f=>[f.from.trim().toLowerCase(),f.to.trim().toLowerCase(),f.body,[...f.deals].sort().join('+')].join('|');
+const watchKey=(f,x=S.extra||xfEmpty())=>JSON.stringify([f.from.trim().toLowerCase(),f.to.trim().toLowerCase(),f.dateFrom||'',f.dateTo||'',f.body||'',[...f.deals].sort(),['cap','vol','wt'].map(k=>[x[k+'From']||'',x[k+'To']||'']),!!x.fast]);
+/* how many filter parameters are set: route ends, dates, body, deal type, each extra range, fast pay */
+const paramCount=(f,x=S.extra||xfEmpty())=>[f.from,f.to,f.dateFrom||f.dateTo,bodyList(f).length,f.deals.length,rgOn(x,'cap'),rgOn(x,'vol'),rgOn(x,'wt'),x.fast].filter(Boolean).length;
+const ruDate=iso=>new Date(iso+'T00:00').toLocaleDateString('ru-RU',{day:'numeric',month:'long',year:'numeric'}).replace(/\s*г\.?$/,'');
+const rgText=(x,k)=>{const a=num(x[k+'From']),b=num(x[k+'To']),u=RG[k].unit,t=RG[k].title.replace(/,.*$/,'').toLowerCase(),v=n=>String(n).replace('.',',');return a!==null&&b!==null?`${t} ${v(a)}–${v(b)} ${u}`:a!==null?`${t} от ${v(a)} ${u}`:`${t} до ${v(b)} ${u}`};
+/* card text: route → dates → body type → everything else */
+const watchDesc=(f,x)=>{x=Object.assign(xfEmpty(),x||{});const parts=[];
+ if(f.from||f.to)parts.push([f.from||'Любой город',f.to||'любой город'].join(' — '));
+ if(f.dateFrom||f.dateTo)parts.push(f.dateFrom&&f.dateTo&&f.dateFrom!==f.dateTo?`${ruDate(f.dateFrom)} — ${ruDate(f.dateTo)}`:ruDate(f.dateFrom||f.dateTo));
+ if(bodyList(f).length)parts.push(bodyList(f).join(', '));
+ if(f.deals.length)parts.push(f.deals.join(', '));
+ ['cap','vol','wt'].forEach(k=>{if(rgOn(x,k))parts.push(rgText(x,k))});
+ if(x.fast)parts.push('быстрая оплата');
+ return parts.join(', ')};
 const watchLabel=f=>[f.from||'Любой город',f.to||'',bodyList(f).join(', ').toLowerCase()].filter(Boolean).join(' — ');
-const matches=f=>CARGO.filter(c=>(!f.from||c.from.toLowerCase().includes(f.from.toLowerCase().trim()))&&(!f.to||c.to.toLowerCase().includes(f.to.toLowerCase().trim()))&&(!bodyList(f).length||bodyList(f).some(b=>c.body===BODY_SHORT[b]))&&(!f.deals.length||f.deals.includes(c.deal)));
+const matches=f=>CARGO.filter(c=>(!f.from||c.from.toLowerCase().includes(f.from.toLowerCase().trim()))&&(!f.to||c.to.toLowerCase().includes(f.to.toLowerCase().trim()))&&(!bodyList(f).length||bodyList(f).some(b=>c.body===BODY_SHORT[b]))&&dealMatch(f.deals,c));
 const isWatched=()=>S.watch.some(w=>w.key===watchKey(S.filters));
-function watchCards(){return S.watch.map((w,i)=>{const n=matches(w.f).length;return `<article class="card"><div class="row">${ic('bellPlus')}<div class="grow"><b style="font-weight:500">${esc(w.label)}</b><div class="muted" style="font-size:13px">${plural(n,'груз подходит','груза подходят','грузов подходят')} · уведомим о новых</div></div></div><div class="row"><button class="btn sm primary grow" data-watchopen="${i}">Показать грузы</button><button class="btn sm secondary" data-unwatch="${i}">Не отслеживать</button></div></article>`}).join('')}
+const watchCount=w=>{const keep=S.filters;S.filters=w.f;try{const x=Object.assign(xfEmpty(),w.x||{});let n=filteredBase().filter(c=>xfPass(c,x)).length;if(n<MINR){genFor(w.f,x,MINR-n);n=filteredBase().filter(c=>xfPass(c,x)).length}return n}finally{S.filters=keep}};
+function watchCards(){return S.watch.map((w,i)=>{const n=watchCount(w);return `<article class="card wcard" data-watchopen="${i}" tabindex="0"><div class="row between"><span class="tag num">${plural(n,'заявка','заявки','заявок')}</span><button type="button" class="kebab" data-wmenu="${i}" aria-label="Действия с отслеживанием" aria-haspopup="menu" aria-expanded="false">${ic('dotsV')}</button></div><div class="wdesc">${esc(w.desc||watchDesc(w.f,w.x))}</div><div class="wmenu" role="menu" hidden><button type="button" role="menuitem" data-wedit="${i}">Редактировать</button><button type="button" role="menuitem" class="danger" data-wdel="${i}">Удалить</button></div></article>`}).join('')}
 const XF={cap:{title:'Грузоподъемность',hint:'Сколько должна поднимать машина',opts:[['0-5','до 5 т'],['5-10','5–10 т'],['10-20','10–20 т'],['20-99','от 20 т']]},
  vol:{title:'Объем кузова',hint:'Требуемый объем прицепа',opts:[['0-40','до 40 м³'],['40-82','40–82 м³'],['82-999','от 82 м³']]},
  wt:{title:'Вес груза',hint:'Общий вес груза в заказе',opts:[['0-5','до 5 т'],['5-15','5–15 т'],['15-99','от 15 т']]}};
@@ -165,7 +179,7 @@ function genFor(f,x,need){
   const name=q.charAt(0).toUpperCase()+q.slice(1);if(!MAP.C[name]){const b=MAP.C[pick(known)];MAP.C[name]=[b[0]+(rnd()-.5)*60,b[1]+(rnd()-.5)*60]}return name};
  const F=cityFor(f.from),T=cityFor(f.to),bodyMap={'Рефрижератор':['Реф','Задняя'],'Тент':['Тент','Боковая'],'Изотерм':['Изотерм','Задняя']};
  const rg=(k,lo,hi,dec)=>{let a=num(x[k+'From']),b=num(x[k+'To']);if(a!==null&&b!==null&&a>b)[a,b]=[b,a];a=a===null?lo:a;b=b===null?Math.max(hi,a):b;const v=a+(b-a)*rnd();return dec?Math.round(v*10)/10:Math.round(v)};
- const deals=f.deals.length?f.deals:['Фикс','Аукцион','Встречное'],clients=['ASHN','Нордлайн','Агроснаб','ТехноКом','ВолгаТранс','Магистраль','ЮгАгро','УралСталь','Фреш Маркет','СеверЛес','Полимер-М','ТрансЕвразия'],pad=n=>String(n).padStart(2,'0');
+ const deals=[...new Set((f.deals.length?f.deals:Object.keys(DEAL_OF)).flatMap(d=>DEAL_OF[d]))],clients=['ASHN','Нордлайн','Агроснаб','ТехноКом','ВолгаТранс','Магистраль','ЮгАгро','УралСталь','Фреш Маркет','СеверЛес','Полимер-М','ТрансЕвразия'],pad=n=>String(n).padStart(2,'0');
  for(let i=0;i<need;i++){
   const from=F||pick(known.filter(n=>n!==T)),to=T||pick(known.filter(n=>n!==from)),A=MAP.C[from],B=MAP.C[to];
   const km=Math.max(60,Math.round(Math.hypot(A[0]-B[0],A[1]-B[1])*4.6/10)*10+40);
@@ -176,13 +190,13 @@ function genFor(f,x,need){
   const c={id:'СП09'+String(1000+Math.floor(rnd()*8999)),gen:true,cap,vol,wt,client:pick(clients),rating:Math.round((4+rnd()*.95)*10)/10,body,load,items:pick(['1 груз','2 груза','3 груза']),
    pallets:(cap>=15?18+Math.floor(rnd()*15):4+Math.floor(rnd()*12))+' пл.',from,to,fromWhen:`${d1} дек, ${pad(h1)}:00 — ${d1} дек, ${pad(Math.min(23,h1+4))}:00`,toWhen:`${d2} дек, ${pad(h2)}:00 — ${d2} дек, ${pad(Math.min(23,h2+6))}:00`,
    via:km>900&&rnd()<.4?1:0,deal,km,price,bonus:Math.max(10,Math.round(price/10000)*10),fast:x.fast?true:rnd()<.5,express:rnd()<.4,vat:false};
-  if(deal==='Аукцион')c.timer=600+Math.floor(rnd()*7000);
+  if(isAuc({deal}))c.timer=60+Math.floor(rnd()*240);
   if(!CARGO.some(o=>o.id===c.id))CARGO.push(c);
  }
 }
 function matchList(x){x=Object.assign(xfEmpty(),x||{});let l=filteredBase().filter(c=>xfPass(c,x));if(l.length<MINR){genFor(S.filters,x,MINR-l.length);l=filteredBase().filter(c=>xfPass(c,x))}return l}
 function filteredBase(){
  const f=S.filters,bodyMap={'Рефрижератор':'Реф','Тент':'Тент','Изотерм':'Изотерм'};
- return CARGO.filter(c=>(!f.from||c.from.toLowerCase().includes(f.from.toLowerCase().trim()))&&(!f.to||c.to.toLowerCase().includes(f.to.toLowerCase().trim()))&&(!bodyList(f).length||bodyList(f).some(b=>c.body===bodyMap[b]))&&(!f.deals.length||f.deals.includes(c.deal)));
+ return CARGO.filter(c=>(!f.from||c.from.toLowerCase().includes(f.from.toLowerCase().trim()))&&(!f.to||c.to.toLowerCase().includes(f.to.toLowerCase().trim()))&&(!bodyList(f).length||bodyList(f).some(b=>c.body===bodyMap[b]))&&dealMatch(f.deals,c));
 }
-let ALLN=50;const FEED=()=>CARGO.filter(c=>!c.gen&&(!S.filters.deals.length||S.filters.deals.includes(c.deal)));
+let ALLN=50;const FEED=()=>CARGO.filter(c=>!c.gen&&!S.bids.some(b=>b.id===c.id)&&!(S.auc&&S.auc[c.id]&&S.auc[c.id].my!=null)&&dealMatch(S.filters.deals,c));

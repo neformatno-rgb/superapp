@@ -3,6 +3,7 @@
 .cargo:hover{box-shadow:var(--shadow)}
 .rating{width:36px;height:36px;border-radius:10px;box-shadow:inset 0 0 0 1px var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;line-height:12px;flex:none}
 .rating svg{width:18px;height:18px;fill:var(--star);stroke:none}
+.rating svg.eye{width:16px;height:16px}
 .strip{background:linear-gradient(90deg,var(--surface),var(--surface-2));border-radius:8px;padding:5px 8px;display:flex;justify-content:space-between;gap:8px;font-size:13px;line-height:18px;font-family:var(--font-ctl)}
 .route{display:grid;grid-template-columns:16px 1fr;column-gap:8px;font-family:var(--font-ctl)}
 .route .dotc{width:12px;height:12px;border-radius:50%;margin:3px 2px 0;box-shadow:inset 0 0 0 3px var(--green);background:var(--surface)}

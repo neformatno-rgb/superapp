@@ -13,17 +13,21 @@ function sheetOut(sc,done){const sh=sc.querySelector('.sheet');if(!sh||matchMedi
  dim.style.animation='none';dim.style.transition=`opacity ${ms}ms`;dim.style.opacity='0';setTimeout(done,ms+20)}
 /* swipe down to dismiss bottom sheets (mobile): follows the finger 1:1, springs back or flicks away */
 let SD=null,SD_RAF=0;
+ /* handle bend follows the current direction of the finger, not the total offset: down → V, up → Λ, still → flat */
+function grabBend(sd,y){const prev=sd.by??y;sd.by=y;const v=y-prev;sd.bv=(sd.bv||0)*.6+v*.4;const deg=Math.max(-14,Math.min(14,sd.bv*2.2));sd.sh.style.setProperty('--bend',deg.toFixed(1)+'deg');clearTimeout(sd.bt);sd.bt=setTimeout(()=>{sd.bv=0;sd.sh.style.setProperty('--bend','0deg')},120)}
 const sdPaint=()=>{SD_RAF=0;if(!SD||!SD.on)return;SD.sh.style.transform=`translate3d(0,${SD.dy}px,0)`;SD.dim.style.opacity=String(Math.max(.25,1-SD.dy/(SD.h*1.2)))};
 document.addEventListener('touchstart',e=>{if(e.touches.length>1){SD=null;return}const sh=e.target.closest('.scrim>.sheet');if(!sh)return;
  const y=e.touches[0].clientY,head=y-sh.getBoundingClientRect().top<56,scroller=e.target.closest('.city-list,.dp-months')||sh;
  if(!head&&scroller.scrollTop>0)return;
  SD={sh,sc:sh.parentElement,dim:sh.parentElement.querySelector(':scope>.dim')||sh.parentElement,scroller,head,y0:y,dy:0,on:false,h:sh.offsetHeight,pts:[[y,e.timeStamp]]}},{passive:true});
 document.addEventListener('touchmove',e=>{if(!SD)return;const y=e.touches[0].clientY,dy=y-SD.y0;
+ grabBend(SD,y);
+ if(!SD.on&&SD.head&&dy<0){e.preventDefault();SD.sh.classList.add('dragging');return}
  if(!SD.on){if(dy<0||(!SD.head&&SD.scroller.scrollTop>0)){SD=null;return}e.preventDefault();if(dy<6)return;
-  SD.on=true;SD.y0=y;SD.sh.style.animation='none';SD.sh.style.transition='none';SD.dim.style.animation='none';SD.dim.style.transition='none';SD.sh.style.willChange='transform';
+  SD.on=true;SD.y0=y;SD.sh.style.animation='none';SD.sh.style.transition='none';SD.dim.style.animation='none';SD.dim.style.transition='none';SD.sh.style.willChange='transform';SD.sh.classList.add('dragging');
   const a=document.activeElement;if(a&&SD.sh.contains(a)&&a.matches('input,textarea'))a.blur()}
  e.preventDefault();SD.dy=Math.max(0,y-SD.y0);SD.pts.push([y,e.timeStamp]);if(SD.pts.length>6)SD.pts.shift();if(!SD_RAF)SD_RAF=requestAnimationFrame(sdPaint)},{passive:false});
-function sdEnd(e){if(!SD)return;const s=SD;SD=null;if(SD_RAF){cancelAnimationFrame(SD_RAF);SD_RAF=0}if(!s.on)return;
+function sdEnd(e){if(!SD)return;const s=SD;SD=null;clearTimeout(s.bt);s.sh.classList.remove('dragging');s.sh.style.setProperty('--bend','0deg');if(SD_RAF){cancelAnimationFrame(SD_RAF);SD_RAF=0}if(!s.on)return;
  const p=s.pts,a=p[0],b=p[p.length-1],now=e&&e.timeStamp||b[1],v=now-b[1]>80?0:(b[0]-a[0])/Math.max(1,b[1]-a[1]);
  s.sh.style.transform=`translate3d(0,${s.dy}px,0)`;s.sh.style.willChange='';
  if(s.dy>s.h*.3||(v>.45&&s.dy>16)){SHEET_V=Math.max(v,1);if(s.sc.id==='cityLayer')closeCity();else if(s.sc.id==='dateLayer')closeDate();else if(s.sc.id==='bodyLayer')closeBody();else closeSheet()}
