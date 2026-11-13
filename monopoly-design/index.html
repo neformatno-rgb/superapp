@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Монополия — дизайн</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="tokens/tokens.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--t1);font:14px/20px Roboto,system-ui,sans-serif}
+main{max-width:1166px;margin:0 auto;padding:40px 16px 64px;display:flex;flex-direction:column;gap:24px}
+h1{margin:0;font-size:24px;line-height:28px}
+h2{margin:0 0 16px;font-size:20px;line-height:26px}
+p{margin:0;color:var(--t2)}
+.card{background:var(--surface);border-radius:12px;padding:24px}
+.cta{display:inline-flex;align-items:center;height:40px;padding:0 20px;border-radius:8px;background:var(--accent);color:var(--on-accent);font-weight:500;text-decoration:none;margin-top:16px}
+.shots{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+.shot{margin:0}.shot img{width:100%;border-radius:8px;border:1px solid var(--line);display:block}
+figcaption{margin-top:6px;font-size:12px;line-height:16px;color:var(--t2)}
+.icons{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
+.icons figure{margin:0;padding:12px 4px;border-radius:8px;background:var(--subtle);display:flex;flex-direction:column;align-items:center;gap:6px}
+.icons img{max-width:40px;max-height:40px}
+code{font-size:13px}
+ul{margin:0;padding-left:18px;color:var(--t2)}
+</style>
+</head>
+<body>
+<main>
+<section class="card">
+<h1>Монополия — поиск грузов</h1>
+<p style="margin-top:8px">Кликабельный прототип маркетплейса грузов: список заявок с фильтрами, страница перевозки, встречное предложение с таймером, светлая и тёмная тема, адаптив 320–1920.</p>
+<a class="cta" href="prototype/index.html">Открыть прототип</a>
+</section>
+<section class="card"><h2>Как это работает</h2><ul>
+<li>Клик по карточке открывает полную версию заявки; «← К грузам» или «Назад» возвращают к списку.</li>
+<li>Фильтры, сортировка и НДС в списке — свои выпадающие списки; чипы «Фикс / Аукцион / Встречное» фильтруют по тегам.</li>
+<li>«Фикс» — «Забрать груз» сразу; «Фикс + Встречное» — «Предложить цену» (на странице заявки — таймер ожидания 30 минут); аукционы — «Сделать ставку».</li>
+<li>Тема переключается внизу бокового меню; номер заявки, адреса и координаты копируются по клику.</li>
+</ul></section>
+<section class="card"><h2>Экраны</h2><div class="shots"><figure class="shot"><a href="docs/screenshots/01-list-light.png"><img src="docs/screenshots/01-list-light.png" alt="Список грузов" loading="lazy"></a><figcaption>Список грузов</figcaption></figure><figure class="shot"><a href="docs/screenshots/02-order-light.png"><img src="docs/screenshots/02-order-light.png" alt="Страница перевозки" loading="lazy"></a><figcaption>Страница перевозки</figcaption></figure><figure class="shot"><a href="docs/screenshots/03-order-route.png"><img src="docs/screenshots/03-order-route.png" alt="Маршрут и груз" loading="lazy"></a><figcaption>Маршрут и груз</figcaption></figure><figure class="shot"><a href="docs/screenshots/04-list-dark.png"><img src="docs/screenshots/04-list-dark.png" alt="Тёмная тема" loading="lazy"></a><figcaption>Тёмная тема</figcaption></figure><figure class="shot"><a href="docs/screenshots/05-order-counter-dark.png"><img src="docs/screenshots/05-order-counter-dark.png" alt="Встречное предложение" loading="lazy"></a><figcaption>Встречное предложение</figcaption></figure><figure class="shot"><a href="docs/screenshots/06-list-mobile.png"><img src="docs/screenshots/06-list-mobile.png" alt="Телефон" loading="lazy"></a><figcaption>Телефон</figcaption></figure></div></section>
+<section class="card"><h2>Иконки UI-кита</h2><div class="icons"><figure><img src="assets/icons/arrow-back.svg" alt=""><figcaption>arrow-back</figcaption></figure><figure><img src="assets/icons/bell.svg" alt=""><figcaption>bell</figcaption></figure><figure><img src="assets/icons/bookmark-24.svg" alt=""><figcaption>bookmark-24</figcaption></figure><figure><img src="assets/icons/bookmark.svg" alt=""><figcaption>bookmark</figcaption></figure><figure><img src="assets/icons/calendar.svg" alt=""><figcaption>calendar</figcaption></figure><figure><img src="assets/icons/cargo-search.svg" alt=""><figcaption>cargo-search</figcaption></figure><figure><img src="assets/icons/chat-16.svg" alt=""><figcaption>chat-16</figcaption></figure><figure><img src="assets/icons/chat.svg" alt=""><figcaption>chat</figcaption></figure><figure><img src="assets/icons/check-16.svg" alt=""><figcaption>check-16</figcaption></figure><figure><img src="assets/icons/chevron-down-s.svg" alt=""><figcaption>chevron-down-s</figcaption></figure><figure><img src="assets/icons/chevron-down.svg" alt=""><figcaption>chevron-down</figcaption></figure><figure><img src="assets/icons/chevron-right.svg" alt=""><figcaption>chevron-right</figcaption></figure><figure><img src="assets/icons/claims.svg" alt=""><figcaption>claims</figcaption></figure><figure><img src="assets/icons/close-24.svg" alt=""><figcaption>close-24</figcaption></figure><figure><img src="assets/icons/close.svg" alt=""><figcaption>close</figcaption></figure><figure><img src="assets/icons/coin.svg" alt=""><figcaption>coin</figcaption></figure><figure><img src="assets/icons/collapse-all.svg" alt=""><figcaption>collapse-all</figcaption></figure><figure><img src="assets/icons/copy-outline-16.svg" alt=""><figcaption>copy-outline-16</figcaption></figure><figure><img src="assets/icons/copy.svg" alt=""><figcaption>copy</figcaption></figure><figure><img src="assets/icons/expand-all.svg" alt=""><figcaption>expand-all</figcaption></figure><figure><img src="assets/icons/eye-16.svg" alt=""><figcaption>eye-16</figcaption></figure><figure><img src="assets/icons/filter.svg" alt=""><figcaption>filter</figcaption></figure><figure><img src="assets/icons/home.svg" alt=""><figcaption>home</figcaption></figure><figure><img src="assets/icons/logo-mark.svg" alt=""><figcaption>logo-mark</figcaption></figure><figure><img src="assets/icons/menu.svg" alt=""><figcaption>menu</figcaption></figure><figure><img src="assets/icons/payments.svg" alt=""><figcaption>payments</figcaption></figure><figure><img src="assets/icons/plus.svg" alt=""><figcaption>plus</figcaption></figure><figure><img src="assets/icons/route-arrow.svg" alt=""><figcaption>route-arrow</figcaption></figure><figure><img src="assets/icons/routes.svg" alt=""><figcaption>routes</figcaption></figure><figure><img src="assets/icons/search.svg" alt=""><figcaption>search</figcaption></figure><figure><img src="assets/icons/services.svg" alt=""><figcaption>services</figcaption></figure><figure><img src="assets/icons/settings.svg" alt=""><figcaption>settings</figcaption></figure><figure><img src="assets/icons/share.svg" alt=""><figcaption>share</figcaption></figure><figure><img src="assets/icons/star.svg" alt=""><figcaption>star</figcaption></figure><figure><img src="assets/icons/swap.svg" alt=""><figcaption>swap</figcaption></figure><figure><img src="assets/icons/team.svg" alt=""><figcaption>team</figcaption></figure><figure><img src="assets/icons/tile-body-params.svg" alt=""><figcaption>tile-body-params</figcaption></figure><figure><img src="assets/icons/tile-body-type.svg" alt=""><figcaption>tile-body-type</figcaption></figure><figure><img src="assets/icons/tile-loading.svg" alt=""><figcaption>tile-loading</figcaption></figure><figure><img src="assets/icons/tile-temperature.svg" alt=""><figcaption>tile-temperature</figcaption></figure><figure><img src="assets/icons/tracking.svg" alt=""><figcaption>tracking</figcaption></figure><figure><img src="assets/icons/truck.svg" alt=""><figcaption>truck</figcaption></figure><figure><img src="assets/icons/user.svg" alt=""><figcaption>user</figcaption></figure></div></section>
+<section class="card"><h2>Состав</h2><ul>
+<li><code>prototype/index.html</code> — прототип одним файлом</li>
+<li><code>tokens/tokens.css</code> — цветовые токены светлой и тёмной темы</li>
+<li><code>assets/</code> — иконки SVG, логотипы, иллюстрации</li>
+<li><code>design/canvas/</code> — исходники бордов дизайн-канваса (<code>archive/</code> — ранние экраны)</li>
+</ul></section>
+</main>
+</body>
+</html>
