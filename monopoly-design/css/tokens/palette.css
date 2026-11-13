@@ -1,0 +1,44 @@
+/* Palette: raw colour primitives. Components never use these directly — only theme.css does. */
+:root {
+  /* Base */
+  --white: #FFFFFF;
+  --black: #000000;
+  /* Blue — brand / accent */
+  --blue-100: #E9F2FF;
+  --blue-200: #9CC8FF;
+  --blue-300: #6FAAFF;
+  --blue-500: #3783FF;
+  --blue-700: #206CDE;
+  /* Slate — light theme neutrals */
+  --slate-25: #F8F9FA;
+  --slate-50: #F3F5F7;
+  --slate-100: #E6EBEE;
+  --slate-150: #E1E6EF;
+  --slate-300: #C1CDD6;
+  --slate-400: #95AABA;
+  --slate-600: #607889;
+  --slate-900: #233F55;
+  /* Graphite — dark theme neutrals */
+  --graphite-950: #060709;
+  --graphite-850: #202632;
+  --graphite-800: #2C3341;
+  --graphite-750: #333B4B;
+  --graphite-700: #434B5C;
+  --graphite-500: #636D82;
+  --graphite-400: #8A95A7;
+  --graphite-200: #ADB5C6;
+  --graphite-50: #FAFBFE;
+  /* Purple — tag «Фикс» */
+  --purple-300: #B58AF0;
+  --purple-500: #874AD7;
+  /* Green — loading point, success */
+  --green-500: #2CBA2E;
+  --green-700: #008A61;
+  /* Yellow — rating, bonus coin */
+  --yellow-300: #FFE16A;
+  --yellow-400: #FECA3A;
+  --yellow-500: #FABD28;
+  /* Red — errors */
+  --red-300: #FF6B6B;
+  --red-500: #D93A3A;
+}

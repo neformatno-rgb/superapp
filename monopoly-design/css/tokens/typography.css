@@ -1,0 +1,14 @@
+/* Typography: Roboto, type scale from the UI kit. */
+:root {
+  --font: Roboto, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* name: size / line-height / weight */
+  --text-h1: 700 24px/28px var(--font);        /* H1 */
+  --text-h2: 700 20px/26px var(--font);        /* H2 */
+  --text-number: 700 30px/34px var(--font);    /* Number */
+  --text-accent: 700 15px/20px var(--font);    /* Accent */
+  --text-body-medium: 500 14px/20px var(--font);
+  --text-body: 400 14px/20px var(--font);
+  --text-caption: 400 12px/16px var(--font);
+  --text-micro: 500 11px/14px var(--font);
+}
