@@ -1,0 +1,99 @@
+/* Component: search field */
+
+.srch {
+  margin-left: auto;
+  width: 260px;
+  max-width: 100%;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  gap: 4px;
+  color: var(--t2);
+}
+
+.srch-btn {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+}
+
+.srch.collapsed {
+  width: 32px;
+  padding: 0;
+  justify-content: center;
+}
+
+.srch.collapsed .inp {
+  display: none;
+}
+
+.srch.collapsed .srch-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.srch.collapsed .srch-btn:hover {
+  color: var(--t1);
+}
+
+.srch.collapsed.expanded {
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 5;
+  width: 260px;
+  max-width: 100%;
+  padding: 0 4px 0 8px;
+  box-shadow: var(--shadow);
+}
+
+.srch.collapsed.expanded .inp {
+  display: block;
+}
+
+.srch.collapsed.expanded .srch-btn {
+  width: 24px;
+  height: 24px;
+}
+
+.inp {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  background: transparent;
+  color: var(--t1);
+  font-size: 14px;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.inp::placeholder {
+  color: var(--t2);
+  opacity: 1;
+}
+
+.inp::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
+
+@media (max-width:767px) {
+  .srch {
+    width: 100%;
+    margin-left: 0;
+  }
+}

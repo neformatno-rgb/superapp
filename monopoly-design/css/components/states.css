@@ -1,0 +1,19 @@
+/* Shared interactive states (hover on selected, transitions) */
+
+.nv.on:hover,
+.chip[aria-pressed="true"]:hover,
+.dd.on:hover,
+.book[aria-pressed="true"]:hover,
+.pg.on:hover,
+.bn.on:hover {
+  background: var(--tint-hover);
+}
+
+.nv,
+.chip,
+.dd,
+.book,
+.pg,
+.bn {
+  transition: background-color 160ms,color 160ms,border-color 160ms;
+}

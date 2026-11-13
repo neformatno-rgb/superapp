@@ -1,0 +1,78 @@
+/* Component: offer dialog */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: var(--overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.dlg {
+  width: 400px;
+  max-width: 100%;
+  border-radius: 16px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dlg h2 {
+  margin: 0;
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.big {
+  height: 44px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 18px;
+}
+
+.big .inp {
+  font-size: 18px;
+}
+
+.err {
+  font-size: 13px;
+  color: var(--error);
+}
+
+.dlg .btns {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.prim {
+  flex: 1;
+  height: 44px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.sec {
+  height: 44px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--subtle);
+  color: var(--t1);
+  font-size: 15px;
+  font-weight: 500;
+  padding: 0 16px;
+}
