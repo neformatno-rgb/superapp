@@ -1,0 +1,15 @@
+/* Монополия — дизайн-токены (из прототипа «Поиск грузов») */
+:root{
+  --bg:#F8F9FA;--surface:#FFFFFF;--subtle:#F3F5F7;--line:#E6EBEE;--tint:rgba(55,131,255,0.10);--tint-hover:rgba(55,131,255,0.15);--border:#C1CDD6;
+  --accent:#3783FF;--accent-text:#3783FF;--accent-soft:rgba(55,131,255,0.12);--t1:#233F55;--t2:#607889;--grey64:#95AABA;--on-accent:#FFFFFF;
+  --error:#D93A3A;--overlay:rgba(18,30,44,0.45);--shadow:0 8px 28px rgba(35,63,85,0.14);--shadow-sm:0 4px 12px rgba(35,63,85,0.10);--subtle-2:#F8F9FA;--shadow-card:0 7px 24px rgba(35,63,85,0.12);--purple:#874AD7;--purple-bg:rgba(135,74,215,0.10);
+  --font:Roboto,system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+--bg:#060709;--surface:#202632;--subtle:#333B4B;--line:#434B5C;--tint:rgba(111,170,255,0.22);--tint-hover:rgba(111,170,255,0.30);--border:#636D82;
+  --accent:#6FAAFF;--accent-text:#9CC8FF;--accent-soft:rgba(102,164,255,0.36);--t1:#FAFBFE;--t2:#ADB5C6;--grey64:#8A95A7;--on-accent:#FFFFFF;
+  --error:#FF6B6B;--overlay:rgba(0,0,0,0.6);--shadow:0 8px 28px rgba(0,0,0,0.5);--shadow-sm:0 4px 12px rgba(0,0,0,0.35);--subtle-2:#2C3341;--shadow-card:0 7px 24px rgba(0,0,0,0.43);--purple:#B58AF0;--purple-bg:rgba(160,110,255,0.18);color-scheme:dark}}
+:root[data-theme="dark"]{
+--bg:#060709;--surface:#202632;--subtle:#333B4B;--line:#434B5C;--tint:rgba(111,170,255,0.22);--tint-hover:rgba(111,170,255,0.30);--border:#636D82;
+  --accent:#6FAAFF;--accent-text:#9CC8FF;--accent-soft:rgba(102,164,255,0.36);--t1:#FAFBFE;--t2:#ADB5C6;--grey64:#8A95A7;--on-accent:#FFFFFF;
+  --error:#FF6B6B;--overlay:rgba(0,0,0,0.6);--shadow:0 8px 28px rgba(0,0,0,0.5);--shadow-sm:0 4px 12px rgba(0,0,0,0.35);--subtle-2:#2C3341;--shadow-card:0 7px 24px rgba(0,0,0,0.43);--purple:#B58AF0;--purple-bg:rgba(160,110,255,0.18);color-scheme:dark}
