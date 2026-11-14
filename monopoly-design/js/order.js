@@ -55,7 +55,11 @@ function detailHTML(o) {
     '<button type="button" class="sq" data-d="save" aria-pressed="' + saved + '" aria-label="' + (saved ? 'Убрать из избранного' : 'В избранное') + '">' + BOOK24 + '</button></div>';
   h += '<div class="dl">';
   // summary
-  h += '<section class="dcard dsum" aria-label="Заявка ' + o.id + '"><div class="rbox">' +
+  const mpt = (k, city, day, key) => '<div class="mpt ' + k + '"><i></i><span><span class="c">' + esc(city) + '</span><span class="w">' + winHTML(day, key) + '</span></span></div>';
+  h += '<section class="dcard dsum" aria-label="Заявка ' + o.id + '">' +
+    '<div class="mdsum"><div class="mdtop"><h2>' + o.id + '</h2><div class="minis"><span class="mini" title="Просмотры заявки">' + sqb(SQ_B, 'sqmB') + EYE16 + X.views + '</span><span class="mini" title="Рейтинг заявки">' + sqb(SQ_B, 'sqmB') + I.star + X.oRating + '</span></div></div>' +
+    '<div class="mroute">' + mpt('ld', o.from, o.fromDay, o.id + 'f') + (o.stops ? '<div class="mstops"><i></i><span>+' + o.stops + ' ' + stopsWord(o.stops) + ' в рейсе</span></div>' : '') + mpt('ul', o.to, o.toDay, o.id + 't') + '</div></div>' +
+    '<div class="rbox">' +
     '<div><div class="c" title="' + esc(o.from) + '">' + esc(o.from) + '</div><div class="w">' + winHTML(o.fromDay, o.id + 'f') + '</div></div>' +
     '<div class="mid2"><div class="arr2">' + DI.arrS + (o.stops ? '<span class="plus2" title="Промежуточные точки">+' + o.stops + '</span>' : '') + DI.arrS + '</div><span class="km2">' + nf(o.dist) + ' км</span></div>' +
     '<div class="end"><div class="c" title="' + esc(o.to) + '">' + esc(o.to) + '</div><div class="w">' + winHTML(o.toDay, o.id + 't') + '</div></div></div>' +

@@ -10,7 +10,7 @@ function filtered() {
     if (S.tab === 'track' || S.tab === 'upload') return false;
     if (S.from && o.from !== S.from) return false;
     if (S.to && o.to !== S.to) return false;
-    if (S.body && o.body !== S.body) return false;
+    if (S.body && S.body.split(',').indexOf(bodyKind(o.body)) === -1) return false;
     if (S.day) { const [a, b] = dayRange(S.day); if (o.fromDay < a || o.fromDay > b) return false; }
     if (anyType && !o.tags.some((t) => S.types[t])) return false;
     const inR = (v, r) => { if (!r) return true; const [a, b] = r.split('-').map(Number); return v > a - 1e-9 && v <= b; };
@@ -50,7 +50,7 @@ function cardHTML(o) {
     '<div class="prow"><span class="perkm">' + (price / o.dist).toFixed(2).replace('.', ',') + ' ₽/км</span><span class="price">' + money(price) + '</span></div>' +
     '<div class="acts"><button type="button" class="cta' + (taken ? ' done' : '') + '" data-act="cta" data-id="' + o.id + '"' + (taken ? ' disabled' : '') + '>' + cta + '</button>' +
     '<button type="button" class="book" data-act="save" data-id="' + o.id + '" aria-pressed="' + saved + '" aria-label="' + (saved ? 'Убрать из избранного' : 'В избранное') + '">' + I.book + '</button></div>' +
-    '</div></article>';
+    '</div>' + mCardHTML(o, price, saved) + '</article>';
 }
 
 const EMPTY = {
@@ -89,7 +89,7 @@ function render() {
   document.querySelectorAll('.chip').forEach((c) => c.setAttribute('aria-pressed', !!S.types[c.dataset.type]));
   document.querySelectorAll('.tab[data-tab]').forEach((t) => { const on = t.dataset.tab === S.tab; t.classList.toggle('on', on); t.setAttribute('aria-selected', on); });
   const bids = Object.keys(S.offers).length + Object.keys(S.taken).length; $('bidCnt').hidden = !bids; $('bidCnt').textContent = bids;
-  $('fFrom').value = S.from; $('fTo').value = S.to; $('fBody').value = S.body;
+  $('fFrom').value = S.from; $('fTo').value = S.to; msSync();
   syncDD(); dpSync(); $('sort').value = S.sort;
   [['fCap','cap'],['fVol','vol'],['fWt','wt']].forEach(([id, k]) => { $(id).value = S[k]; $(id).parentElement.classList.toggle('on', !!S[k]); });
   $('vat').value = S.vat ? '1' : '0';
@@ -121,7 +121,6 @@ document.querySelectorAll('.tab[data-tab]').forEach((t) => t.addEventListener('c
 $('q').addEventListener('input', (e) => set({ q: e.target.value }));
 $('fFrom').addEventListener('change', (e) => set({ from: e.target.value }));
 $('fTo').addEventListener('change', (e) => set({ to: e.target.value }));
-$('fBody').addEventListener('change', (e) => set({ body: e.target.value }));
 $('sort').addEventListener('change', (e) => set({ sort: e.target.value }));
 $('fCap').addEventListener('change', (e) => set({ cap: e.target.value }));
 $('fVol').addEventListener('change', (e) => set({ vol: e.target.value }));
@@ -139,6 +138,9 @@ $('list').addEventListener('click', (e) => {
   if (b.dataset.act === 'copy') {
     const done = () => { b.classList.add('done'); showTip(b, 'Скопировано'); clearTimeout(b._t); b._t = setTimeout(() => { b.classList.remove('done'); hideInfo(); }, 1600); };
     try { navigator.clipboard.writeText(id).then(done, done); } catch (err) { done(); }
+  } else if (b.dataset.act === 'share') {
+    const url = location.href.split('#')[0] + '#' + encodeURIComponent(id); const ok = () => toast('Ссылка на заявку ' + id + ' скопирована');
+    try { navigator.clipboard.writeText(url).then(ok, ok); } catch (err) { ok(); }
   } else if (b.dataset.act === 'save') {
     if (S.saved[id]) { delete S.saved[id]; toast('Убрано из избранного'); } else { S.saved[id] = true; toast('Добавлено в избранное'); }
     store.set('saved', S.saved); render();

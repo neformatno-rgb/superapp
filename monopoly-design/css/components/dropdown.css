@@ -277,3 +277,128 @@
 .ddl.open .fv-btn svg {
   transform: rotate(180deg);
 }
+
+/* Multi-select (Тип кузова) */
+
+.msm .msi {
+  width: 100%;
+  height: 36px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--t1);
+  font-size: 14px;
+  font-weight: 400;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.msm .msi:hover,
+.msm .msi:focus-visible {
+  background: var(--subtle);
+  outline: none;
+}
+
+.msm .box {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  border: 1.5px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--on-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 120ms, border-color 120ms;
+}
+
+.msm .box svg {
+  display: none;
+}
+
+.msm .msi[aria-checked="true"] .box {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.msm .msi[aria-checked="true"] .box svg {
+  display: block;
+}
+
+.fld.ms .fv-btn {
+  position: absolute;
+  inset: 0;
+  padding: 0 4px 0 8px;
+  border-radius: 8px;
+}
+
+.fld.ms.has .fv {
+  visibility: hidden;
+}
+
+.fld.ms.has .fv-btn svg {
+  display: none!important;
+}
+
+.fld.ms .mst {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.fld.ms .fld-clear {
+  position: relative;
+  z-index: 1;
+  margin-left: auto;
+}
+
+.mtag {
+  height: 22px;
+  padding: 0 2px 0 8px;
+  border-radius: 6px;
+  background: var(--subtle);
+  color: var(--t1);
+  font-size: 13px;
+  line-height: 22px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.mtag.more {
+  padding: 0 8px;
+  color: var(--t2);
+}
+
+.mtx {
+  width: 18px;
+  height: 18px;
+  border: 0;
+  border-radius: 4px;
+  padding: 0;
+  background: transparent;
+  color: var(--t2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.mtx:hover {
+  color: var(--t1);
+}

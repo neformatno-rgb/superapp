@@ -1,4 +1,4 @@
-/* Range date picker for «Дата загрузки». State lives in S.day as "from-to" (day indices, see dayLabel). */
+/* Range date picker for «Дата погрузки». State lives in S.day as "from-to" (day indices, see dayLabel). */
 'use strict';
 
 // day index ↔ Date: index 1 = 1 ноя 2026, 31 = 1 дек (same scale as o.fromDay)
@@ -52,7 +52,7 @@ function dpClose() {
 }
 function dpSync() {
   const r = dayRange(S.day); const fv = dpFld.querySelector('.fv');
-  fv.textContent = r ? rangeLabel(r) : 'Дата загрузки'; fv.classList.toggle('ph', !r);
+  fv.textContent = r ? rangeLabel(r) : 'Дата погрузки'; fv.classList.toggle('ph', !r);
   dpFld.classList.toggle('has', !!r);
 }
 
