@@ -267,7 +267,10 @@ if (location.hash.length > 1) fromHash();
 // Order page, desktop: hide the app header after a little scroll, the sticky «К грузам» bar replaces it
 const dbar = document.createElement('div'); dbar.className = 'dbar'; dbar.setAttribute('aria-hidden', 'true'); document.body.appendChild(dbar);
 const hdrSync = () => {
-  const on = mainEl.classList.contains('is-detail') && window.innerWidth >= 768 && window.scrollY > 24;
+  const det = mainEl.classList.contains('is-detail') && window.innerWidth >= 768;
+  const dh = det && document.querySelector('#detail .dhead');
+  // swap only once the bar has reached the very top under the header, so nothing jumps
+  const on = !!dh && window.scrollY > 0 && dh.getBoundingClientRect().top <= 0.5;
   document.body.classList.toggle('hdr-hide', on);
   if (on) dbar.style.left = mainEl.getBoundingClientRect().left + 'px';
 };
