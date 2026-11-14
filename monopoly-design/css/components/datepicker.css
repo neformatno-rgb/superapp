@@ -1,0 +1,178 @@
+/* Range date picker (Дата загрузки) */
+
+.fld.date.has .fv-btn svg {
+  display: none!important;
+}
+
+.fld.date.open .fv-btn svg {
+  transform: none;
+}
+
+.dp {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 60;
+  width: 296px;
+  padding: 16px;
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dp.open {
+  display: flex;
+}
+
+.dph {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dpt {
+  flex: 1;
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 500;
+  color: var(--t1);
+}
+
+.dpn {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 8px;
+  padding: 0;
+  background: transparent;
+  color: var(--t2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 160ms, color 160ms;
+}
+
+.dpn:hover {
+  background: var(--subtle);
+  color: var(--t1);
+}
+
+.dpn.prev svg {
+  transform: rotate(180deg);
+}
+
+.dpg {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  row-gap: 2px;
+}
+
+.dpw {
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--grey64);
+}
+
+.dpd {
+  height: 36px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--t1);
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dpd span {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 120ms, color 120ms;
+}
+
+.dpd:hover span {
+  background: var(--subtle);
+}
+
+.dpd.in {
+  background: var(--tint);
+  color: var(--accent-text);
+}
+
+.dpd.in:hover span {
+  background: var(--tint-hover);
+}
+
+.dpd.lo,
+.dpd.rs {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+.dpd.hi,
+.dpd.re {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.dpd.lo span,
+.dpd.hi span,
+.dpd.lo:hover span,
+.dpd.hi:hover span {
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 500;
+}
+
+.dpf {
+  display: flex;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.dpf button {
+  flex: 1;
+  height: 32px;
+  border: 0;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 160ms, filter 160ms;
+}
+
+.dpf .dp-reset {
+  background: var(--tint);
+  color: var(--accent-text);
+}
+
+.dpf .dp-reset:hover {
+  background: var(--tint-hover);
+}
+
+.dpf .dp-apply {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.dpf .dp-apply:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.dpf .dp-apply:disabled {
+  opacity: .4;
+  cursor: default;
+}

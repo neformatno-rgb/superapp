@@ -83,14 +83,6 @@
   display: flex;
 }
 
-.fld[data-dd="fDay"].has .fv-btn svg {
-  display: none!important;
-}
-
-.fld[data-dd="fDay"].open .fv-btn svg {
-  transform: none;
-}
-
 .menu {
   position: fixed;
   left: 0;

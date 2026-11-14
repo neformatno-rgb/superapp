@@ -11,7 +11,7 @@ function filtered() {
     if (S.from && o.from !== S.from) return false;
     if (S.to && o.to !== S.to) return false;
     if (S.body && o.body !== S.body) return false;
-    if (S.day && o.fromDay < +S.day) return false;
+    if (S.day) { const [a, b] = dayRange(S.day); if (o.fromDay < a || o.fromDay > b) return false; }
     if (anyType && !o.tags.some((t) => S.types[t])) return false;
     const inR = (v, r) => { if (!r) return true; const [a, b] = r.split('-').map(Number); return v > a - 1e-9 && v <= b; };
     if (!inR(o.t, S.cap) || !inR(o.m3, S.vol) || !inR(o.kg / 1000, S.wt)) return false;
@@ -89,8 +89,8 @@ function render() {
   document.querySelectorAll('.chip').forEach((c) => c.setAttribute('aria-pressed', !!S.types[c.dataset.type]));
   document.querySelectorAll('.tab[data-tab]').forEach((t) => { const on = t.dataset.tab === S.tab; t.classList.toggle('on', on); t.setAttribute('aria-selected', on); });
   const bids = Object.keys(S.offers).length + Object.keys(S.taken).length; $('bidCnt').hidden = !bids; $('bidCnt').textContent = bids;
-  $('fFrom').value = S.from; $('fTo').value = S.to; $('fBody').value = S.body; $('fDay').value = S.day;
-  syncDD(); $('sort').value = S.sort;
+  $('fFrom').value = S.from; $('fTo').value = S.to; $('fBody').value = S.body;
+  syncDD(); dpSync(); $('sort').value = S.sort;
   [['fCap','cap'],['fVol','vol'],['fWt','wt']].forEach(([id, k]) => { $(id).value = S[k]; $(id).parentElement.classList.toggle('on', !!S[k]); });
   $('vat').value = S.vat ? '1' : '0';
   if (typeof srch !== 'undefined') fitSearch();
@@ -122,7 +122,6 @@ $('q').addEventListener('input', (e) => set({ q: e.target.value }));
 $('fFrom').addEventListener('change', (e) => set({ from: e.target.value }));
 $('fTo').addEventListener('change', (e) => set({ to: e.target.value }));
 $('fBody').addEventListener('change', (e) => set({ body: e.target.value }));
-$('fDay').addEventListener('change', (e) => set({ day: e.target.value }));
 $('sort').addEventListener('change', (e) => set({ sort: e.target.value }));
 $('fCap').addEventListener('change', (e) => set({ cap: e.target.value }));
 $('fVol').addEventListener('change', (e) => set({ vol: e.target.value }));

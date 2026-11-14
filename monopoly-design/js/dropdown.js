@@ -7,7 +7,6 @@ const fill = (el, first, vals, fmt) => { el.innerHTML = '<option value="">' + fi
 fill($('fFrom'), 'Откуда: любой город', uniq(ALL.map((o) => o.from)));
 fill($('fTo'), 'Куда: любой город', uniq(ALL.map((o) => o.to)));
 fill($('fBody'), 'Тип кузова', uniq(ALL.map((o) => o.body)));
-fill($('fDay'), 'Дата загрузки', Array.from(new Set(ALL.map((o) => o.fromDay))).sort((a, b) => a - b).map(String), (d) => 'с ' + dayLabel(+d));
 
 
 // ---------- custom dropdowns for inputs ----------
