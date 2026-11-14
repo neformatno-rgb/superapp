@@ -8,8 +8,8 @@ function filtered() {
     if (S.tab === 'fav' && !S.saved[o.id]) return false;
     if (S.tab === 'bids' && !(S.offers[o.id] || S.taken[o.id])) return false;
     if (S.tab === 'track' || S.tab === 'upload') return false;
-    if (S.from && o.from !== S.from) return false;
-    if (S.to && o.to !== S.to) return false;
+    if (S.from && S.from.split(',').indexOf(o.from) === -1) return false;
+    if (S.to && S.to.split(',').indexOf(o.to) === -1) return false;
     if (S.body && S.body.split(',').indexOf(bodyKind(o.body)) === -1) return false;
     if (S.day) { const [a, b] = dayRange(S.day); if (o.fromDay < a || o.fromDay > b) return false; }
     if (anyType && !o.tags.some((t) => S.types[t])) return false;
@@ -89,7 +89,7 @@ function render() {
   document.querySelectorAll('.chip').forEach((c) => c.setAttribute('aria-pressed', !!S.types[c.dataset.type]));
   document.querySelectorAll('.tab[data-tab]').forEach((t) => { const on = t.dataset.tab === S.tab; t.classList.toggle('on', on); t.setAttribute('aria-selected', on); });
   const bids = Object.keys(S.offers).length + Object.keys(S.taken).length; $('bidCnt').hidden = !bids; $('bidCnt').textContent = bids;
-  $('fFrom').value = S.from; $('fTo').value = S.to; msSync();
+  msSync();
   syncDD(); dpSync(); $('sort').value = S.sort;
   [['fCap','cap'],['fVol','vol'],['fWt','wt']].forEach(([id, k]) => { $(id).value = S[k]; $(id).parentElement.classList.toggle('on', !!S[k]); });
   $('vat').value = S.vat ? '1' : '0';
@@ -119,8 +119,6 @@ const flipTheme = () => { S.theme = S.theme === 'dark' ? 'light' : 'dark'; store
 $('themeBtn').addEventListener('click', flipTheme); $('themeBtnM').addEventListener('click', flipTheme);
 document.querySelectorAll('.tab[data-tab]').forEach((t) => t.addEventListener('click', () => set({ tab: t.dataset.tab })));
 $('q').addEventListener('input', (e) => set({ q: e.target.value }));
-$('fFrom').addEventListener('change', (e) => set({ from: e.target.value }));
-$('fTo').addEventListener('change', (e) => set({ to: e.target.value }));
 $('sort').addEventListener('change', (e) => set({ sort: e.target.value }));
 $('fCap').addEventListener('change', (e) => set({ cap: e.target.value }));
 $('fVol').addEventListener('change', (e) => set({ vol: e.target.value }));

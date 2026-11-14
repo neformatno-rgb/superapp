@@ -34,7 +34,7 @@ setInterval(() => { document.querySelectorAll('[data-auc]').forEach((t) => { con
 const mSum = $('mSum'), mFields = $('mFields');
 function mSync() {
   const parts = [];
-  if (S.from || S.to) parts.push((S.from || 'Любой город') + ' — ' + (S.to || 'любой город'));
+  if (S.from || S.to) parts.push((S.from ? S.from.split(',').join(', ') : 'Любой город') + ' — ' + (S.to ? S.to.split(',').join(', ') : 'любой город'));
   if (S.day) parts.push(rangeLabel(dayRange(S.day)));
   if (S.body) parts.push(S.body.split(',').map((k) => k.toLowerCase()).join(', '));
   mSum.querySelector('span').textContent = parts.length ? parts.join(', ') : 'Откуда, куда, когда';

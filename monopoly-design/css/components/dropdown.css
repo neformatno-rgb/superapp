@@ -291,9 +291,10 @@
   font-size: 14px;
   font-weight: 400;
   text-align: left;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
   cursor: pointer;
 }
 
@@ -303,31 +304,19 @@
   outline: none;
 }
 
-.msm .box {
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
-  border: 1.5px solid var(--border);
-  border-radius: 4px;
-  background: var(--surface);
-  color: var(--on-accent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 120ms, border-color 120ms;
+.msm .msi[aria-checked="true"] {
+  background: var(--tint);
+  color: var(--accent-text);
+  font-weight: 500;
 }
 
-.msm .box svg {
-  display: none;
+.msm .msi[aria-checked="true"]:hover,
+.msm .msi[aria-checked="true"]:focus-visible {
+  background: var(--tint-hover);
 }
 
-.msm .msi[aria-checked="true"] .box {
-  border-color: var(--accent);
-  background: var(--accent);
-}
-
-.msm .msi[aria-checked="true"] .box svg {
-  display: block;
+.msm .msi + .msi {
+  margin-top: 2px;
 }
 
 .fld.ms .fv-btn {
