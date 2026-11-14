@@ -1272,3 +1272,15 @@ button.mini:hover .sqb .s {
     bottom: 16px;
   }
 }
+
+/* Order page, desktop: while scrolling the app header slides away and «К грузам» + actions take its place */
+@media (min-width:768px) {
+  .top { transition: transform 220ms cubic-bezier(.2,.8,.2,1); }
+  .side, .corner { transition: top 220ms cubic-bezier(.2,.8,.2,1), height 220ms cubic-bezier(.2,.8,.2,1), width 260ms cubic-bezier(.2,.8,.2,1); }
+  .main.is-detail .dhead { position: sticky; top: 0; z-index: 13; padding: 12px 0; margin: -12px 0; background: var(--bg); box-shadow: 0 0 0 24px var(--bg); clip-path: inset(0 -24px); }
+  body.hdr-hide .top { transform: translateY(-100%); }
+  body.hdr-hide .side { top: 0; height: 100vh; }
+  body.hdr-hide .corner { top: 0; }
+  body.hdr-hide .dr { top: 76px; }
+  body.hdr-hide .dsec { scroll-margin-top: 76px; }
+}

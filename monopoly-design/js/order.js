@@ -263,3 +263,9 @@ detailEl.addEventListener('input', (e) => { if (e.target.id === 'dOffer') { e.ta
 detailEl.addEventListener('keydown', (e) => { if (e.target.id === 'dOffer' && e.key === 'Enter') { e.preventDefault(); detailEl.querySelector('[data-d="send"]').click(); } });
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && V.id !== null && $('modal').hidden && !document.querySelector('.menu.open')) { if (history.state && history.state.order) history.back(); else hideDetail(true); } });
 if (location.hash.length > 1) fromHash();
+
+// Order page, desktop: hide the app header after a little scroll, the sticky «К грузам» bar replaces it
+const hdrSync = () => document.body.classList.toggle('hdr-hide', mainEl.classList.contains('is-detail') && window.innerWidth >= 768 && window.scrollY > 24);
+window.addEventListener('scroll', hdrSync, { passive: true });
+window.addEventListener('resize', hdrSync);
+new MutationObserver(hdrSync).observe(mainEl, { attributes: true, attributeFilter: ['class'] });
