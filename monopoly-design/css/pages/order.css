@@ -1277,7 +1277,8 @@ button.mini:hover .sqb .s {
 @media (min-width:768px) {
   .top { transition: transform 220ms cubic-bezier(.2,.8,.2,1); }
   .side, .corner { transition: top 220ms cubic-bezier(.2,.8,.2,1), height 220ms cubic-bezier(.2,.8,.2,1), width 260ms cubic-bezier(.2,.8,.2,1); }
-  .main.is-detail .dhead { position: sticky; top: 0; z-index: 13; padding: 12px 0; margin: -12px 0; background: var(--bg); box-shadow: 0 0 0 24px var(--bg); clip-path: inset(0 -24px); }
+  .main.is-detail .dhead { position: sticky; top: 0; z-index: 13; padding: 12px 0; margin: -12px 0; background: var(--bg); box-shadow: 0 0 0 24px var(--bg); clip-path: inset(0 -24px); transition: background-color 220ms, box-shadow 220ms; }
+  body.hdr-hide .main.is-detail .dhead { background: var(--surface); box-shadow: 0 0 0 24px var(--surface); }
   body.hdr-hide .top { transform: translateY(-100%); }
   body.hdr-hide .side { top: 0; height: 100vh; }
   body.hdr-hide .corner { top: 0; }
