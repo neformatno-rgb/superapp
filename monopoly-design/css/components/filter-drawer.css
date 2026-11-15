@@ -205,6 +205,28 @@
   font: var(--text-body);
 }
 
+/* multi-select tags inside a drawer field */
+.fd .inp > .fd-tags {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow: hidden;
+  margin-left: -4px;
+}
+
+.fd-tags .mtag {
+  flex-shrink: 0;
+  height: 24px;
+  font: var(--text-caption);
+  line-height: 24px;
+}
+
+.fd-tags .mtx {
+  cursor: pointer;
+}
+
 /* «от … до …» pair, two inputs sharing one border */
 .fd-pair {
   display: flex;

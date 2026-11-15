@@ -47,7 +47,20 @@
     '<button type="button" class="inp fd-sel' + (filled ? ' has' : '') + (menuKey === k ? ' open' : '') + '" data-f="open" data-k="' + k + '" aria-haspopup="' + (k === 'day' ? 'dialog' : 'listbox') + '" aria-expanded="' + (menuKey === k) + '">' +
       '<span' + (filled ? '' : ' class="ph"') + '>' + esc(text) + '</span>' +
       '<span class="fd-clr" data-f="clear" data-k="' + k + '" role="button" aria-label="Сбросить">' + IC.close + '</span>' + (icon ? '<i class="fd-ic keep">' + icon + '</i>' : '<i class="fd-ic">' + IC.chev + '</i>') + '</button>';
-  const multiField = (k) => { const v = sel(k); return field(k, v.length ? v.join(', ') : MULTI[k].ph, !!v.length); };
+  // multi-select: picked values as tags with «×», same as the multiselects in the filter bar
+  const tag = (k, x) => '<span class="mtag">' + esc(x) + '<span class="mtx" role="button" data-f="untag" data-k="' + k + '" data-v="' + esc(x) + '" aria-label="Убрать: ' + esc(x) + '">' + MS_X + '</span></span>';
+  const multiField = (k) => {
+    const v = sel(k); if (!v.length) return field(k, MULTI[k].ph, false);
+    return field(k, '', true).replace('<span>' + esc('') + '</span>', '<span class="fd-tags" data-k="' + k + '">' + v.map((x) => tag(k, x)).join('') + '</span>');
+  };
+  // fit as many tags as the field allows; the rest collapse into «+N»
+  function fitTags() {
+    body.querySelectorAll('.fd-tags').forEach((t) => {
+      const k = t.dataset.k; const v = sel(k); let n = v.length;
+      const drawN = (m) => { t.innerHTML = v.slice(0, m).map((x) => tag(k, x)).join('') + (m < v.length ? '<span class="mtag more">' + (m ? '+' + (v.length - m) : 'Выбрано: ' + v.length) + '</span>' : ''); };
+      while (n > 0 && t.scrollWidth > t.clientWidth + 0.5) { n--; drawN(n); }
+    });
+  }
   const singleField = (k) => { const it = SINGLE[k].items.find((x) => x[0] === S[k]); return field(k, it ? it[1] : 'Любой', !!it); };
   const wrap = (label, inner, id) => '<div class="fd-field"><span class="fd-label"' + (id ? ' id="' + id + '"' : '') + '>' + label + '</span>' + inner + '</div>';
 
@@ -91,6 +104,7 @@
     const n = filtered().length;
     root.querySelector('.fd-go').textContent = n ? 'Показать ' + n + ' ' + plural(n) : 'Ничего не найдено';
     root.querySelector('.fd-reset').disabled = !active();
+    fitTags();
     if (af) { const f = body.querySelector(af); if (f) { f.value = raw; f.focus({ preventScroll: true }); f.setSelectionRange(caret, caret); } } // keep exactly what is being typed («5,» → «5,5»)
   }
 
@@ -136,7 +150,7 @@
   let lastFocus = null;
   function open() {
     lastFocus = document.activeElement; closeDD(); msClose(); dpClose();
-    draw(); root.hidden = false; document.body.classList.add('fd-lock'); trigger.setAttribute('aria-expanded', 'true');
+    draw(); root.hidden = false; fitTags(); document.body.classList.add('fd-lock'); trigger.setAttribute('aria-expanded', 'true');
     requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('fd-open')));
     root.querySelector('.fd-x').focus({ preventScroll: true });
   }
@@ -157,6 +171,7 @@
       case 'swap': closeMenu(); set({ from: S.to, to: S.from }); break;
       case 'type': closeMenu(); set({ types: Object.assign({}, S.types, { [b.dataset.v]: !S.types[b.dataset.v] }) }); break;
       case 'clear': e.stopPropagation(); closeMenu(); dpClose(); set({ [k]: '' }); break;
+      case 'untag': e.stopPropagation(); closeMenu(); set({ [k]: sel(k).filter((x) => x !== b.dataset.v).join(',') }); break;
       case 'open':
         if (k === 'day') { closeMenu(); dp.classList.contains('open') ? dpClose() : dpOpen(b); }
         else openList(k);
