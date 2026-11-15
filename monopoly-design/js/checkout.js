@@ -52,7 +52,7 @@ function totals() {
 function selectHTML(key) {
   const f = FLEET[key];
   return '<div class="ck-field"><span class="ck-label" id="lbl-' + key + '">' + f.label + '</span><div class="ck-row">' +
-    '<button type="button" class="ck-sel" data-c="sel" data-k="' + key + '" aria-haspopup="listbox" aria-expanded="' + (C.open === key) + '" aria-labelledby="lbl-' + key + '"><span>' + esc(f.items[C[key]]) + '</span>' + CK_CHEV + '</button>' +
+    '<button type="button" class="inp ck-sel" data-c="sel" data-k="' + key + '" aria-haspopup="listbox" aria-expanded="' + (C.open === key) + '" aria-labelledby="lbl-' + key + '"><span>' + esc(f.items[C[key]]) + '</span>' + CK_CHEV + '</button>' +
     '<button type="button" class="ck-out" data-c="edit" data-k="' + key + '">Редактировать</button></div></div>';
 }
 
@@ -102,7 +102,7 @@ function render() {
     [['ck-pay', 'Договор и оплата'], ['ck-fleet', 'Подвижной состав'], ['ck-extra', 'Дополнительно']].map((x, i) => '<button type="button" class="tab' + (i === 0 ? ' on' : '') + '" data-c="tab" data-k="' + x[0] + '">' + x[1] + '</button>').join('') + '</div>';
   // contract + payment
   h += '<section class="dcard dsec" id="ck-pay"><h2>Заказ выполняется в рамках договора</h2>' +
-    '<div class="ck-sel dis" aria-disabled="true"><span>01/21 №Д-1224.2021 (ООО «' + esc(X.company) + '»)</span>' + CK_CHEV + '</div>' +
+    '<div class="inp ck-sel dis" aria-disabled="true"><span>01/21 №Д-1224.2021 (ООО «' + esc(X.company) + '»)</span>' + CK_CHEV + '</div>' +
     '<h2 class="ck-h2b">Выберите способ оплаты</h2><p class="ck-note">Срок получения оплаты или остатка — не позднее указанного количества рабочих дней с даты получения документов, подтверждающих перевозку.</p>' +
     '<div class="ck-pays" role="radiogroup" aria-label="Способ оплаты">' + pay + '</div></section>';
   // rolling stock
@@ -111,11 +111,11 @@ function render() {
   h += '<section class="dcard dsec" id="ck-extra"><h2>Дополнительно в заявке</h2><div class="ck-xs">' +
     extraHTML('fuel', 'Топливо после погрузки', 'До 90% от стоимости заявки — сразу на Моносчёт', C.fuel,
       '<p class="ck-terms">Услуга «Топливо после погрузки» будет оказана в рамках договора Д-10881.2021 от 14.09.2021 (с покупателем)</p>' +
-      '<label class="ck-field"><span class="ck-label">Сумма для «Топлива после погрузки», ₽</span><input class="ck-inp' + (fuelErr ? ' err' : '') + '" data-c="fuelSum" inputmode="numeric" value="' + (C.fuelSum ? nf(num(C.fuelSum)) : '') + '"' + (C.fuel ? '' : ' disabled') + '>' +
+      '<label class="ck-field"><span class="ck-label">Сумма для «Топлива после погрузки», ₽</span><input class="inp ck-inp' + (fuelErr ? ' err' : '') + '" data-c="fuelSum" inputmode="numeric" value="' + (C.fuelSum ? nf(num(C.fuelSum)) : '') + '"' + (C.fuel ? '' : ' disabled') + '>' +
       '<span class="ck-hint' + (fuelErr ? ' err' : '') + '">Не более 90% — ' + money2(fuelMax()) + '</span></label>') +
     extraHTML('bonus', 'Бонусы', 'Вы можете потратить накопленные бонусы, увеличив стоимость заявки по курсу 1 бонус = 1 ₽.', C.bonus,
       '<div class="ck-dots"><b>На вашем счету</b><i></i><b>' + nf(BONUS_BALANCE) + ' бонусов</b></div>' +
-      '<label class="ck-field"><span class="ck-label">Сумма для списания бонусов</span><input class="ck-inp' + (bonusErr ? ' err' : '') + '" data-c="bonusSum" inputmode="numeric" placeholder="0" value="' + (C.bonusSum ? nf(num(C.bonusSum)) : '') + '"' + (C.bonus ? '' : ' disabled') + '>' +
+      '<label class="ck-field"><span class="ck-label">Сумма для списания бонусов</span><input class="inp ck-inp' + (bonusErr ? ' err' : '') + '" data-c="bonusSum" inputmode="numeric" placeholder="0" value="' + (C.bonusSum ? nf(num(C.bonusSum)) : '') + '"' + (C.bonus ? '' : ' disabled') + '>' +
       (bonusErr ? '<span class="ck-hint err">Не больше ' + nf(BONUS_BALANCE) + ' бонусов</span>' : '') + '</label>') +
     extraHTML('ins', 'Страхование', 'Застрахуйте груз в 1 клик от 149 ₽. Страховая сумма до 10 млн ₽.', C.ins,
       '<p class="ck-txt">Сумма страховой премии будет вычтена из общей стоимости заявки. Ознакомьтесь с <a href="#" data-c="soon">условиями</a> и <a href="#" data-c="soon">правилами страхования</a>.<br>По вопросам страхования: <a href="mailto:monopoly.online@renins.com">monopoly.online@renins.com</a>.</p>' +

@@ -31,16 +31,7 @@
 }
 
 .fld {
-  height: 32px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--surface);
-  padding: 0 4px 0 8px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--t2);
+  /* size/border/colors come from the input component: class="inp s" */
   min-width: 0;
 }
 

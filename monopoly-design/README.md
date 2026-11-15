@@ -24,7 +24,7 @@ css/
     typography.css         шрифт и шкала текста из UI-кита
   base.css                 сброс, документ, утилиты
   layout/                  каркас: шапка и контент (shell), боковое меню (sidebar)
-  components/              tabs, search, filters, dropdown, switch, order-card, pager, modal, toast, tooltip, states, page-head (липкая шапка «← Заголовок» для внутренних страниц)
+  components/              tabs, search, filters, dropdown, switch, order-card, pager, modal, toast, tooltip, states, input (поле: .inp normal 40px, .inp.s small 32px), page-head (липкая шапка «← Заголовок» для внутренних страниц)
   pages/order.css          страница заявки
   pages/checkout.css       оформление заказа
   layout/mobile.css        раскладка для телефона (≤767px)

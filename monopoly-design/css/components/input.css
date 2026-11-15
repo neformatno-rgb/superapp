@@ -1,0 +1,84 @@
+/* Component: input
+   Base .inp = size "normal" (40px). Modifier .inp.s = size "small" (32px, filters on «Поиск грузов»).
+   Works on <input>, on a select-like <button>/<div> (text in <span>, chevron svg on the right).
+   States: :hover, :focus / .open (accent border), .dis / :disabled, .err */
+
+.inp {
+  width: 100%;
+  min-width: 0;
+  height: 40px;
+  padding: 0 8px 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--t1);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: var(--text-body);
+  font-variant-numeric: tabular-nums;
+  text-align: left;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 160ms;
+}
+
+input.inp {
+  padding-right: 12px;
+  cursor: text;
+}
+
+.inp > span {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.inp > svg {
+  flex-shrink: 0;
+  color: var(--t2);
+  transition: transform 160ms;
+}
+
+.inp::placeholder {
+  color: var(--grey64);
+}
+
+.inp:hover {
+  border-color: var(--grey64);
+}
+
+.inp:focus,
+.inp.open {
+  border-color: var(--accent);
+}
+
+.inp.open > svg {
+  transform: rotate(180deg);
+}
+
+.inp.dis,
+.inp:disabled {
+  border-color: var(--line);
+  background: var(--subtle);
+  color: var(--grey64);
+  cursor: default;
+}
+
+.inp.dis > svg {
+  color: var(--grey64);
+}
+
+.inp.err {
+  border-color: var(--error);
+}
+
+/* size: small */
+.inp.s {
+  height: 32px;
+  padding: 0 4px 0 8px;
+  gap: 6px;
+  color: var(--t2);
+}

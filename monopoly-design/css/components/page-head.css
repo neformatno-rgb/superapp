@@ -81,15 +81,12 @@
     top: 0;
     z-index: 13;
     padding: 12px 0;
-    margin: -12px 0;
+    min-height: 64px; /* = header height; same with or without the square buttons */
+    margin-top: -12px; /* not the shorthand: keeps the page's auto side margins (max-width 1166 column) */
+    margin-bottom: -12px;
     background: var(--bg);
     box-shadow: 0 0 0 24px var(--bg);
     clip-path: inset(0 -24px);
-  }
-
-  /* head without square buttons is 52px; when it replaces the 64px header, nudge the title to the bar's middle without moving the layout */
-  body.hdr-hide .phead:not(:has(.sq)) .dback {
-    transform: translateY(6px);
   }
 
   body.hdr-hide .phead {
