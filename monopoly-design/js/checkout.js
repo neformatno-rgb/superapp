@@ -187,7 +187,7 @@ ckEl.addEventListener('click', (e) => {
     case 'sel': e.stopPropagation(); if (C.open === b.dataset.k) closeSel(); else { closeSel(); openSel(b); } break;
     case 'edit': toast('Редактирование «' + FLEET[b.dataset.k].label.toLowerCase() + '» — в следующей итерации'); break;
     case 'sw': { const k = b.dataset.k; C[k] = !C[k]; render(); const nb = ckEl.querySelector('.ck-sw[data-k="' + k + '"]'); if (nb) nb.focus(); if (C[k] && k !== 'ins') { const inp = ckEl.querySelector('[data-c="' + k + 'Sum"]'); if (inp) inp.focus(); } break; }
-    case 'info': toast({ fuel: 'До 90% стоимости перевозки приходит на Моносчёт сразу после погрузки — на топливо и дорогу', bonus: 'Бонусы начисляются за выполненные заявки и списываются по курсу 1 бонус = 1 ₽', ins: 'Страхование груза от повреждения, утраты и хищения на всём маршруте' }[b.dataset.k]); break;
+    case 'info': showInfo(b); break;
     case 'tab': { const s = $(b.dataset.k); if (s) s.scrollIntoView({ behavior: 'smooth', block: 'start' }); break; }
     case 'vat': C.vat = !C.vat; render(); break;
     case 'soon': e.preventDefault(); toast('Раздел появится в следующей итерации'); break;
@@ -212,6 +212,23 @@ ckEl.addEventListener('input', (e) => {
   const hint = inp.parentNode.querySelector('.ck-hint'); if (hint && key === 'fuelSum') hint.classList.toggle('err', err);
   ckEl.querySelector('.ck-r').innerHTML = panelHTML();
 });
+// info tooltips on extras — same tooltip as on the order page
+const INFO_TXT = { fuel: 'До 90% стоимости перевозки приходит на Моносчёт сразу после погрузки — на топливо и дорогу', bonus: 'Бонусы начисляются за выполненные заявки и списываются по курсу 1 бонус = 1 ₽', ins: 'Страхование груза от повреждения, утраты и хищения на всём маршруте' };
+function showInfo(b) {
+  const tip = $('navTip'); if (!tip) return;
+  tip.textContent = INFO_TXT[b.dataset.k];
+  tip.style.whiteSpace = 'normal'; tip.style.width = '280px'; tip.style.height = 'auto'; tip.style.fontSize = '12px'; tip.style.lineHeight = '16px'; tip.style.fontWeight = '400'; tip.style.padding = '8px 12px';
+  const r = b.getBoundingClientRect();
+  tip.style.left = Math.min(r.right + 12, window.innerWidth - 292) + 'px'; tip.style.top = (r.top + r.height / 2) + 'px';
+  requestAnimationFrame(() => tip.classList.add('show'));
+}
+const hideInfo = () => { const tip = $('navTip'); if (!tip) return; tip.classList.remove('show'); setTimeout(() => { if (!tip.classList.contains('show')) tip.style.cssText = ''; }, 150); };
+ckEl.addEventListener('mouseover', (e) => { const b = e.target.closest('.info'); if (b && !b.contains(e.relatedTarget)) showInfo(b); });
+ckEl.addEventListener('mouseout', (e) => { const b = e.target.closest('.info'); if (b && !b.contains(e.relatedTarget)) hideInfo(); });
+ckEl.addEventListener('focusin', (e) => { const b = e.target.closest('.info'); if (b && b.matches(':focus-visible')) showInfo(b); });
+ckEl.addEventListener('focusout', (e) => { if (e.target.closest('.info')) hideInfo(); });
+window.addEventListener('scroll', hideInfo, { passive: true });
+
 // anchor tabs follow the scroll
 window.addEventListener('scroll', () => {
   const ids = ['ck-pay', 'ck-fleet', 'ck-extra']; let cur = ids[0];

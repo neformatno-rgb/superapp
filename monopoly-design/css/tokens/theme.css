@@ -13,6 +13,7 @@
   /* Text */
   --t1: var(--slate-900);
   --t2: var(--slate-600);
+  --grey40: var(--slate-300);
   --grey64: var(--slate-400);
   --on-accent: var(--white);
   /* Accent */
@@ -60,6 +61,7 @@
     /* Text */
     --t1: var(--graphite-50);
     --t2: var(--graphite-200);
+    --grey40: var(--graphite-500);
     --grey64: var(--graphite-400);
     --on-accent: var(--white);
     /* Accent */
@@ -107,6 +109,7 @@
   /* Text */
   --t1: var(--graphite-50);
   --t2: var(--graphite-200);
+  --grey40: var(--graphite-500);
   --grey64: var(--graphite-400);
   --on-accent: var(--white);
   /* Accent */

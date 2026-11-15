@@ -683,7 +683,7 @@ button.mini:hover .sqb .s {
   border: 0;
   padding: 0;
   background: transparent;
-  color: var(--grey64);
+  color: var(--grey40);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -691,8 +691,9 @@ button.mini:hover .sqb .s {
   cursor: pointer;
 }
 
-.info:hover {
-  color: var(--t2);
+.info:hover,
+.info:focus-visible {
+  color: var(--grey64);
 }
 
 .geo {
