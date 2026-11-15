@@ -224,14 +224,15 @@
   border: 1px solid var(--line);
   border-radius: 12px;
   display: grid;
-  grid-template-columns: 72px minmax(0, 1fr);
+  grid-template-columns: 60px minmax(0, 1fr);
   column-gap: 16px;
   align-items: start;
 }
 
 .ck-x img {
-  width: 72px;
-  height: 72px;
+  /* same size and radius as .xitem img on the order page */
+  width: 60px;
+  height: 60px;
   border-radius: 16px;
   display: block;
 }
@@ -441,17 +442,6 @@
   .ck-row {
     flex-direction: column;
     gap: 8px;
-  }
-
-  .ck-x {
-    grid-template-columns: 48px minmax(0, 1fr);
-    column-gap: 12px;
-  }
-
-  .ck-x img {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
   }
 
   .ck-pin {
