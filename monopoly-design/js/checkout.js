@@ -124,7 +124,7 @@ function render() {
   // step 3: rolling stock
   if (C.pay) h += '<section class="dcard dsec' + reveal('fleet') + '" id="ck-fleet"><h2>Укажите подвижной состав</h2><div class="ck-fleet">' + selectHTML('truck') + selectHTML('trailer') + selectHTML('driver') + '</div></section>';
   // extras — appear together with the rolling stock
-  if (C.pay) h += '<section class="dcard dsec' + reveal('fleet') + '" id="ck-extra"><h2>Дополнительно в заявке</h2><div class="ck-xs">' +
+  if (C.pay) h += '<section class="dcard dsec' + reveal('extra') + '" id="ck-extra"><h2>Дополнительно в заявке</h2><div class="ck-xs">' +
     extraHTML('fuel', 'Топливо после погрузки', 'До 90% от стоимости заявки — сразу на Моносчёт', C.fuel,
       '<p class="ck-terms">Услуга «Топливо после погрузки» будет оказана в рамках договора Д-10881.2021 от 14.09.2021 (с покупателем)</p>' +
       '<label class="ck-field"><span class="ck-label">Сумма для «Топлива после погрузки», ₽</span><input class="inp ck-inp' + (fuelErr ? ' err' : '') + '" data-c="fuelSum" inputmode="numeric" value="' + (C.fuelSum ? nf(num(C.fuelSum)) : '') + '"' + (C.fuel ? '' : ' disabled') + '>' +
