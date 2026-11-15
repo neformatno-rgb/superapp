@@ -44,7 +44,6 @@ const PAYS = [
 const payTotal = () => (PAYS.find((p) => p.k === C.pay) || PAYS[0]).total();
 const fleetDone = () => C.truck !== null && C.trailer !== null && C.driver !== null;
 const ready = () => C.contract !== null && !!C.pay && fleetDone();
-const nextStep = () => C.contract === null ? 'Выберите договор' : !C.pay ? 'Выберите способ оплаты' : !fleetDone() ? 'Укажите подвижной состав' : '';
 const seen = new Set(); // sections already shown — only a newly revealed one fades in
 const reveal = (id) => { const n = !seen.has(id); seen.add(id); return n ? ' ck-new' : ''; };
 const fuelMax = () => Math.floor(payTotal() * 0.9);
@@ -88,7 +87,7 @@ function panelHTML() {
     (C.ins ? '<div><span>Страховая премия</span><b>−' + money2(t.ins) + '</b></div>' : '') + '</div>' +
     (C.done ? '<button type="button" class="ck-go done" disabled>Заявка оформлена</button>'
       : ready() ? '<button type="button" class="ck-go" data-c="submit">Оформить заявку</button>'
-      : '<button type="button" class="ck-go" disabled>Оформить заявку</button><p class="ck-step">' + nextStep() + '</p>') +
+      : '<button type="button" class="ck-go" disabled>Оформить заявку</button>') +
     '</div><div class="pnote">Цены указаны <button type="button" data-c="vat">' + (C.vat ? 'с учётом НДС 22%' : 'без НДС') + CK_CHEV + '</button></div></div>';
 }
 

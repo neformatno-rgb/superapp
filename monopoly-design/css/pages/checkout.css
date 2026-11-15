@@ -380,13 +380,6 @@
   cursor: default;
 }
 
-.ck-step {
-  margin: -8px 0 0;
-  font: var(--text-caption);
-  color: var(--t2);
-  text-align: center;
-}
-
 .ck-go.done {
   background: var(--subtle);
   color: var(--t2);
