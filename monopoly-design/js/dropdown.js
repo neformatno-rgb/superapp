@@ -80,7 +80,7 @@ function rangeSync() {
     let a = '', b = '';
     if (S[R.k]) { const r = S[R.k].split('-').map(Number); if (r[0] > 0) a = rnum(r[0]); if (r[1] < 999) b = rnum(r[1]); }
     if (m.classList.contains('open')) return; // don't overwrite what is being typed
-    m.querySelector('[data-r="a"]').value = a; m.querySelector('[data-r="b"]').value = b;
+    m.querySelector('[data-r="a"]').value = a; m.querySelector('[data-r="b"]').value = b; if (R.resetVis) R.resetVis();
   });
 }
 Object.keys(RANGE_DD).forEach((id) => {
@@ -89,16 +89,20 @@ Object.keys(RANGE_DD).forEach((id) => {
   m.classList.add('rmenu'); m.setAttribute('role', 'dialog');
   m.innerHTML = '<div class="inp-pair" role="group" aria-label="' + R.label + ', ' + R.unit + '">' +
     '<input class="inp" type="text" inputmode="decimal" data-r="a" aria-label="' + R.label + ' от, ' + R.unit + '" placeholder="от ' + rnum(lo) + '">' +
-    '<input class="inp" type="text" inputmode="decimal" data-r="b" aria-label="' + R.label + ' до, ' + R.unit + '" placeholder="до ' + rnum(hi) + '"></div><button type="button" class="rapply" data-r="go">Применить</button>';
+    '<input class="inp" type="text" inputmode="decimal" data-r="b" aria-label="' + R.label + ' до, ' + R.unit + '" placeholder="до ' + rnum(hi) + '"></div><div class="rfoot"><button type="button" class="rreset" hidden>Сбросить</button><button type="button" class="rapply">Применить</button></div>';
   m.addEventListener('click', (e) => e.stopPropagation());
   // typed values are applied by «Применить» (or Enter); closing the panel otherwise discards them
-  m.addEventListener('input', (e) => { const f = e.target.closest('input[data-r]'); if (f) f.value = f.value.replace(/[^\d.,]/g, ''); });
+  // «Сбросить» shows up as soon as something is typed
+  const resetVis = () => { m.querySelector('.rreset').hidden = !Array.from(m.querySelectorAll('input[data-r]')).some((x) => x.value.trim()); };
+  R.resetVis = resetVis;
+  m.addEventListener('input', (e) => { const f = e.target.closest('input[data-r]'); if (f) f.value = f.value.replace(/[^\d.,]/g, ''); resetVis(); });
   const apply = () => {
     const num = (r) => { const x = parseFloat(m.querySelector('[data-r="' + r + '"]').value.replace(',', '.')); return isNaN(x) ? null : x; };
     const a = num('a'), b = num('b');
     closeDD(); set({ [R.k]: a === null && b === null ? '' : (a ?? 0) + '-' + (b ?? 999) }); w.querySelector('.fv-btn').focus();
   };
   m.querySelector('.rapply').addEventListener('click', apply);
+  m.querySelector('.rreset').addEventListener('click', () => { closeDD(); set({ [R.k]: '' }); w.querySelector('.fv-btn').focus(); });
   m.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); apply(); } });
   // opening the panel puts the caret into «от»
   w.querySelector('.fv-btn').addEventListener('click', () => { if (w.classList.contains('open')) { m.classList.remove('open'); rangeSync(); m.classList.add('open'); placeMenu(w); requestAnimationFrame(() => m.querySelector('[data-r="a"]').focus()); } });

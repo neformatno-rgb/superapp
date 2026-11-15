@@ -399,16 +399,37 @@
   overflow: visible;
 }
 
-.rapply {
-  width: 100%;
-  height: 40px;
+.rfoot {
+  display: flex;
+  gap: 8px;
   margin-top: 12px;
+}
+
+.rfoot button {
+  flex: 1;
+  height: 40px;
   border: 0;
   border-radius: 8px;
+  font: var(--text-body-medium);
+  transition: background-color 160ms, filter 160ms;
+}
+
+.rreset {
+  background: var(--tint);
+  color: var(--accent-text);
+}
+
+.rreset:hover {
+  background: var(--tint-hover);
+}
+
+.rfoot .rreset[hidden] {
+  display: none;
+}
+
+.rapply {
   background: var(--accent);
   color: var(--on-accent);
-  font: var(--text-body-medium);
-  transition: filter 160ms;
 }
 
 .rapply:hover {
