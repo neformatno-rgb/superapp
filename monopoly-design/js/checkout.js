@@ -185,7 +185,13 @@ ckEl.addEventListener('click', (e) => {
   const b = e.target.closest('[data-c]'); if (!b) return;
   switch (b.dataset.c) {
     case 'back': goBack(); break;
-    case 'pay': C.pay = b.dataset.k; if (num(C.fuelSum) > fuelMax()) C.fuelSum = String(fuelMax()); render(); { const nb = ckEl.querySelector('.ck-pay[data-k="' + C.pay + '"]'); if (nb) nb.focus(); } break;
+    case 'pay': {
+      C.pay = b.dataset.k; if (num(C.fuelSum) > fuelMax()) C.fuelSum = String(fuelMax()); render();
+      const nb = ckEl.querySelector('.ck-pay[data-k="' + C.pay + '"]'); if (nb) nb.focus({ preventScroll: true });
+      // bring the next step (rolling stock) into view
+      const next = $('ck-fleet'); if (next) requestAnimationFrame(() => next.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+      break;
+    }
     case 'sel': e.stopPropagation(); if (C.open === b.dataset.k) closeSel(); else { closeSel(); openSel(b); } break;
     case 'edit': toast('Редактирование «' + FLEET[b.dataset.k].label.toLowerCase() + '» — в следующей итерации'); break;
     case 'sw': { const k = b.dataset.k; C[k] = !C[k]; render(); const nb = ckEl.querySelector('.ck-sw[data-k="' + k + '"]'); if (nb) nb.focus(); if (C[k] && k !== 'ins') { const inp = ckEl.querySelector('[data-c="' + k + 'Sum"]'); if (inp) inp.focus(); } break; }
