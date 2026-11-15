@@ -341,6 +341,43 @@
   color: var(--t1);
 }
 
+.eill {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.eill .pb {
+  fill: var(--accent-soft);
+}
+
+.eill .pf {
+  fill: var(--accent);
+}
+
+.eill .pl {
+  stroke: var(--accent);
+}
+
+.eill .pw {
+  fill: var(--surface);
+}
+
+.ebtn {
+  height: 40px;
+  margin-top: 8px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font: var(--text-body-medium);
+  transition: filter 160ms;
+}
+
+.ebtn:hover {
+  filter: brightness(1.08);
+}
+
 .order {
   cursor: pointer;
 }

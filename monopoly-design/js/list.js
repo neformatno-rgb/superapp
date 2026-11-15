@@ -53,6 +53,8 @@ function cardHTML(o) {
     '</div>' + mCardHTML(o, price, saved) + '</article>';
 }
 
+// empty «Отслеживаемые»: illustration (assets/img/empty-track.svg, colours via tokens) + CTA
+const EMPTY_TRACK_ILL = '<svg class="eill" width="96" height="96" viewBox="0 0 40 40" fill="none" aria-hidden="true"><path class="pb" d="M33.0389 1.2265C35.9569 1.76595 38.2342 4.04325 38.7736 6.9612C39.5455 11.1368 40 15.5041 40 19.9998C40 24.4956 39.5455 28.8631 38.7735 33.0389C38.2341 35.9568 35.9568 38.2341 33.0389 38.7735C28.8631 39.5455 24.4956 40 19.9998 40C15.5041 40 11.1368 39.5455 6.9612 38.7736C4.04326 38.2342 1.76595 35.9569 1.2265 33.0389C0.454511 28.8632 0 24.4957 0 19.9998C0 15.5041 0.454476 11.1367 1.22641 6.96111C1.76584 4.04316 4.04316 1.76585 6.96111 1.22641C11.1367 0.454479 15.5041 0 19.9998 0C24.4957 0 28.8632 0.45451 33.0389 1.2265Z"/><circle class="pf" cx="11" cy="27" r="3"/><path class="pl" d="M11 27C11 19 29 21 29 13" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="0.1 3.2"/><path class="pf" d="M29 7.5a4.5 4.5 0 0 0-4.5 4.5c0 3.2 4.5 7.5 4.5 7.5s4.5-4.3 4.5-7.5A4.5 4.5 0 0 0 29 7.5Zm0 6.2a1.7 1.7 0 1 1 0-3.4 1.7 1.7 0 0 1 0 3.4Z"/><circle class="pw" cx="28.5" cy="27.5" r="6.5"/><path class="pf" d="M28.5 23.3a2.6 2.6 0 0 0-2.6 2.6v1.8l-.8 1.3a.5.5 0 0 0 .4.8h6a.5.5 0 0 0 .4-.8l-.8-1.3v-1.8a2.6 2.6 0 0 0-2.6-2.6Zm-1.1 6.9a1.1 1.1 0 0 0 2.2 0Z"/></svg>';
 const EMPTY = {
   all: ['Ничего не нашлось', 'Уберите часть фильтров или выберите другой город.'],
   bids: ['Пока нет торгов', 'Предложите цену по заявке или заберите её сразу — она появится здесь.'],
@@ -67,7 +69,7 @@ function render() {
   const slice = l.slice((S.page - 1) * PER, S.page * PER);
   $('found').textContent = 'Найдено ' + l.length + ' ' + plural(l.length);
   $('list').innerHTML = slice.length ? slice.map(cardHTML).join('') :
-    (function () { const E = EMPTY[S.tab] || EMPTY.all; return '<div class="card empty"><b>' + E[0] + '</b><span>' + E[1] + '</span>' + (S.tab === 'all' ? '<button type="button" class="reset" data-act="reset" style="margin-top:8px">Сбросить фильтры</button>' : '') + '</div>'; })();
+    (function () { const E = EMPTY[S.tab] || EMPTY.all; return '<div class="card empty">' + (S.tab === 'track' ? EMPTY_TRACK_ILL : '') + '<b>' + E[0] + '</b><span>' + E[1] + '</span>' + (S.tab === 'track' ? '<button type="button" class="ebtn" data-act="track">Создать отслеживание</button>' : '') + (S.tab === 'all' ? '<button type="button" class="reset" data-act="reset" style="margin-top:8px">Сбросить фильтры</button>' : '') + '</div>'; })();
   // pager
   const pg = $('pager');
   if (!l.length) { pg.hidden = true; } else {
@@ -146,6 +148,7 @@ $('list').addEventListener('click', (e) => {
   const b = e.target.closest('[data-act]'); if (!b) return;
   const id = b.dataset.id; const o = ALL.find((x) => x.id === id);
   if (b.dataset.act === 'reset') return resetAll();
+  if (b.dataset.act === 'track') return toast('Создание отслеживания — в следующей итерации');
   if (b.dataset.act === 'copy') {
     const done = () => { b.classList.add('done'); showTip(b, 'Скопировано'); clearTimeout(b._t); b._t = setTimeout(() => { b.classList.remove('done'); hideInfo(); }, 1600); };
     try { navigator.clipboard.writeText(id).then(done, done); } catch (err) { done(); }
