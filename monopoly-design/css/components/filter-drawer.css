@@ -284,6 +284,60 @@ body.fd-lock {
   overflow: hidden;
 }
 
+/* phone: the same panel as a bottom sheet, 24px from the top edge */
+@media (max-width:767px) {
+  .fd {
+    top: 24px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: auto;
+    max-width: none;
+    border-radius: 16px 16px 0 0;
+    transform: translateY(100%);
+  }
+
+  .fd::before {
+    content: "";
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    width: 36px;
+    height: 4px;
+    margin-left: -18px;
+    border-radius: 2px;
+    background: var(--border);
+  }
+
+  .fd-head {
+    height: 60px;
+    padding-top: 8px;
+  }
+
+  .fd-body {
+    padding: 20px 16px 24px;
+  }
+
+  .fd-foot {
+    padding: 12px 16px calc(16px + env(safe-area-inset-bottom));
+  }
+
+  /* keep the drawer's chips as in the desktop panel (the phone chip row restyles .chip) */
+  .fd-chips .chip {
+    border-color: var(--border);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--t2);
+    padding: 0 12px;
+  }
+
+  .fd-chips .chip[aria-pressed="true"] {
+    border-color: var(--accent);
+    background: var(--tint);
+    color: var(--accent-text);
+  }
+}
+
 /* «Фильтры» in the filter bar is a button now */
 button.fbtn {
   border: 0;

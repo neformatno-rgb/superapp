@@ -150,17 +150,18 @@
   let lastFocus = null;
   function open() {
     lastFocus = document.activeElement; closeDD(); msClose(); dpClose();
-    draw(); root.hidden = false; fitTags(); document.body.classList.add('fd-lock'); trigger.setAttribute('aria-expanded', 'true');
+    draw(); root.hidden = false; fitTags(); document.body.classList.add('fd-lock'); trigger.setAttribute('aria-expanded', 'true'); $('mFlt').setAttribute('aria-pressed', 'true');
     requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('fd-open')));
     root.querySelector('.fd-x').focus({ preventScroll: true });
   }
   function close() {
     if (root.hidden) return;
-    closeMenu(); dpClose(); root.classList.remove('fd-open'); document.body.classList.remove('fd-lock'); trigger.setAttribute('aria-expanded', 'false');
+    closeMenu(); dpClose(); root.classList.remove('fd-open'); document.body.classList.remove('fd-lock'); trigger.setAttribute('aria-expanded', 'false'); $('mFlt').setAttribute('aria-pressed', 'false');
     setTimeout(() => { if (!root.classList.contains('fd-open')) root.hidden = true; }, 260);
     if (lastFocus) lastFocus.focus({ preventScroll: true });
   }
   trigger.addEventListener('click', open);
+  window.fdOpen = open; // the phone filter button opens the same panel (as a bottom sheet)
 
   root.addEventListener('click', (e) => {
     const b = e.target.closest('[data-f]'); if (!b) { closeMenu(); return; }

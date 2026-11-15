@@ -40,9 +40,9 @@ function mSync() {
   mSum.classList.toggle('ph', !parts.length);
   $('mSort').classList.toggle('on', S.sort !== 'default');
 }
-const mToggle = (open) => { mFields.classList.toggle('mf-open', open); mSum.setAttribute('aria-expanded', open); $('mFlt').setAttribute('aria-pressed', open); if (open && typeof msSync === 'function') msSync(); };
+const mToggle = (open) => { mFields.classList.toggle('mf-open', open); mSum.setAttribute('aria-expanded', open); if (open && typeof msSync === 'function') msSync(); };
 mSum.addEventListener('click', () => mToggle(!mFields.classList.contains('mf-open')));
-$('mFlt').addEventListener('click', (e) => { e.stopPropagation(); mToggle(!mFields.classList.contains('mf-open')); });
+$('mFlt').addEventListener('click', (e) => { e.stopPropagation(); mToggle(false); if (window.fdOpen) window.fdOpen(); });
 $('mSort').addEventListener('click', (e) => {
   e.stopPropagation();
   const w = document.querySelector('[data-dd="sort"]'); w.querySelector('.fv-btn').click();
