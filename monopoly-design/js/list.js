@@ -86,6 +86,8 @@ function render() {
   // counters
   const act = [S.from, S.to, S.body, S.day, S.cap, S.vol, S.wt].filter(Boolean).length + types.filter((t) => S.types[t]).length;
   $('actCnt').hidden = !act; $('actCnt').textContent = act;
+  // phone filter button: highlighted with a counter while any filter is set
+  $('mFlt').classList.toggle('on', !!act); $('mFltCnt').hidden = !act; $('mFltCnt').textContent = act;
   $('reset').hidden = !act;
   const fav = Object.keys(S.saved).length;
   $('favCnt').hidden = !fav; $('favCnt').textContent = fav;

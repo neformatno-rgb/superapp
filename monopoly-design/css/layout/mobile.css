@@ -63,6 +63,10 @@
   .chips .reset { height: 40px; border-radius: 12px; }
   .mic { width: 40px; height: 40px; flex-shrink: 0; border: 0; border-radius: 12px; padding: 0; background: var(--surface); color: var(--t1); align-items: center; justify-content: center; transition: background-color 160ms, color 160ms; }
   .mic[aria-pressed="true"], .mic.on { background: var(--tint); color: var(--accent-text); }
+  .mic { position: relative; }
+  .mic-cnt { position: absolute; top: -4px; right: -4px; box-shadow: 0 0 0 2px var(--bg); }
+  .chips { padding-top: 6px; margin-top: -6px; } /* room for the counter badge inside the scrolling row */
+  .mic-cnt[hidden] { display: none; }
   .bar { border-top: 0; padding: 4px 0 0; min-height: 0; gap: 12px; }
   .bar .found { font-size: 18px; line-height: 24px; }
   .bar .ddl[data-dd="sort"] { position: absolute; width: 0; height: 0; overflow: hidden; }
