@@ -1284,59 +1284,60 @@ button.mini:hover .sqb .s {
   body.hdr-hide .dsec { scroll-margin-top: 76px; }
 }
 
-/* «Условия перевозки»: two plain label/value groups, no icons */
+/* «Условия перевозки»: two separate cards of label/value pairs, no icons */
+#d-cond {
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+}
+
 .cond {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  column-gap: 32px;
-  row-gap: 32px;
+  gap: 8px;
+}
+
+.cgrp {
+  padding: 24px;
+  border-radius: 8px;
+  background: var(--surface);
 }
 
 .cgrp h2 {
-  margin: 0 0 24px;
+  margin: 0 0 16px;
 }
 
 .kvs {
   display: grid;
-  grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
-  gap: 24px 32px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 12px;
 }
 
 .kv {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
 }
 
 .kv span {
-  font: var(--text-body);
+  font: var(--text-caption);
   color: var(--t2);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .kv b {
-  font-size: 15px;
-  line-height: 20px;
-  font-weight: 400;
+  font: var(--text-body);
   color: var(--t1);
   overflow-wrap: anywhere;
 }
 
-@media (max-width:1279px) {
+@media (max-width:767px) {
   .cond {
     grid-template-columns: minmax(0, 1fr);
   }
-}
 
-@media (max-width:767px) {
-  .cgrp h2 {
-    margin-bottom: 16px;
-  }
-
-  .kvs {
-    gap: 16px;
+  .cgrp {
+    padding: 16px;
+    border-radius: 12px;
   }
 }
