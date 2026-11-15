@@ -49,8 +49,8 @@ function detailHTML(o) {
   let h = '';
   // head
   h += '<div class="dhead phead"><button type="button" class="dback" data-d="back">' + DI.back + 'К грузам</button><span class="phead-sp"></span>' +
-    '<button type="button" class="sq" data-d="share" aria-label="Поделиться заявкой">' + DI.share + '</button>' +
-    '<button type="button" class="sq" data-d="save" aria-pressed="' + saved + '" aria-label="' + (saved ? 'Убрать из избранного' : 'В избранное') + '">' + BOOK24 + '</button></div>';
+    '<button type="button" class="sq" data-d="share" data-tip="Поделиться заявкой" aria-label="Поделиться заявкой">' + DI.share + '</button>' +
+    '<button type="button" class="sq" data-d="save" aria-pressed="' + saved + '" data-tip="' + (saved ? 'Убрать из избранного' : 'В избранное') + '" aria-label="' + (saved ? 'Убрать из избранного' : 'В избранное') + '">' + BOOK24 + '</button></div>';
   h += '<div class="dl">';
   // summary
   const mpt = (k, city, day, key) => '<div class="mpt ' + k + '"><i></i><span><span class="c">' + esc(city) + '</span><span class="w">' + winHTML(day, key) + '</span></span></div>';
