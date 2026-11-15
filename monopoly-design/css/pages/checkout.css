@@ -233,7 +233,7 @@
   /* same size and radius as .xitem img on the order page */
   width: 60px;
   height: 60px;
-  border-radius: 16px;
+  border-radius: 0; /* the squircle is part of the image */
   display: block;
 }
 

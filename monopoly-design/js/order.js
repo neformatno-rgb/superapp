@@ -2,7 +2,7 @@
 'use strict';
 
 // ---------- order detail: click a card → full version ----------
-const ILL = ['assets/img/extras/fuel.png', 'assets/img/extras/insurance.png', 'assets/img/extras/bonus.png'];
+const ILL = ['assets/img/extras/fuel.svg', 'assets/img/extras/insurance.svg', 'assets/img/extras/bonus.svg'];
 const OFFER_TTL = 30 * 60 * 1000;
 const timerText = (ms) => { if (ms <= 0) return 'Время ожидания истекло'; const t = Math.ceil(ms / 1000); return 'Ожидание ответа ' + String(Math.floor(t / 60)).padStart(2, '0') + ':' + String(t % 60).padStart(2, '0'); };
 setInterval(() => { document.querySelectorAll('.wtimer').forEach((el) => { const id = V.id; const at = S.offerAt[id]; if (!at) return; el.textContent = timerText(OFFER_TTL - (Date.now() - at)); }); }, 1000);
