@@ -141,6 +141,19 @@
   justify-content: center;
 }
 
+/* kit icons that carry their own squircle */
+.ck-pi:has(.pico) {
+  background: none;
+}
+
+.pico .pb {
+  fill: var(--accent-soft);
+}
+
+.pico .pf {
+  fill: var(--accent);
+}
+
 .ck-radio {
   position: absolute;
   right: 16px;
@@ -156,7 +169,7 @@
 }
 
 .ck-radio svg {
-  display: none;
+  display: none !important;
 }
 
 .ck-pay[aria-checked="true"] .ck-radio {
@@ -165,7 +178,7 @@
 }
 
 .ck-pay[aria-checked="true"] .ck-radio svg {
-  display: block;
+  display: block !important;
 }
 
 .ck-pt {
