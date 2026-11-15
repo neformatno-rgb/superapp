@@ -127,18 +127,19 @@ function render() {
   if (C.pay) h += '<section class="dcard dsec' + reveal('fleet') + '" id="ck-fleet"><h2>Укажите подвижной состав</h2><div class="ck-fleet">' + selectHTML('truck') + selectHTML('trailer') + selectHTML('driver') + '</div></section>';
   // extras — appear together with the rolling stock
   if (C.pay) h += '<section class="dcard dsec' + reveal('extra') + '" id="ck-extra"><h2>Дополнительно в заявке</h2><div class="ck-xs">' +
-    extraHTML('fuel', 'Топливо после погрузки', 'До 90% от стоимости заявки — сразу на Моносчёт', C.fuel,
+    // same order and texts as «Дополнительно» on the order page (EXTRAS in data.js)
+    extraHTML('fuel', EXTRAS[0][0], EXTRAS[0][1], C.fuel,
       '<p class="ck-terms">Услуга «Топливо после погрузки» будет оказана в рамках договора Д-10881.2021 от 14.09.2021 (с покупателем)</p>' +
       '<label class="ck-field"><span class="ck-label">Сумма для «Топлива после погрузки», ₽</span><input class="inp ck-inp' + (fuelErr ? ' err' : '') + '" data-c="fuelSum" inputmode="numeric" value="' + (C.fuelSum ? nf(num(C.fuelSum)) : '') + '"' + (C.fuel ? '' : ' disabled') + '>' +
       '<span class="ck-hint' + (fuelErr ? ' err' : '') + '">Не более 90% — ' + money2(fuelMax()) + '</span></label>') +
-    extraHTML('bonus', 'Бонусы', 'Вы можете потратить накопленные бонусы, увеличив стоимость заявки по курсу 1 бонус = 1 ₽.', C.bonus,
-      '<div class="ck-dots"><b>На вашем счету</b><i></i><b>' + nf(BONUS_BALANCE) + ' бонусов</b></div>' +
-      '<label class="ck-field"><span class="ck-label">Сумма для списания бонусов</span><input class="inp ck-inp' + (bonusErr ? ' err' : '') + '" data-c="bonusSum" inputmode="numeric" placeholder="0" value="' + (C.bonusSum ? nf(num(C.bonusSum)) : '') + '"' + (C.bonus ? '' : ' disabled') + '>' +
-      (bonusErr ? '<span class="ck-hint err">Не больше ' + nf(BONUS_BALANCE) + ' бонусов</span>' : '') + '</label>') +
-    extraHTML('ins', 'Страхование', 'Застрахуйте груз в 1 клик от 149 ₽. Страховая сумма до 10 млн ₽.', C.ins,
+    extraHTML('ins', EXTRAS[1][0], EXTRAS[1][1], C.ins,
       '<p class="ck-txt">Сумма страховой премии будет вычтена из общей стоимости заявки. Ознакомьтесь с <a href="#" data-c="soon">условиями</a> и <a href="#" data-c="soon">правилами страхования</a>.<br>По вопросам страхования: <a href="mailto:monopoly.online@renins.com">monopoly.online@renins.com</a>.</p>' +
       '<div class="ck-dots"><b>Страховая сумма</b><i></i><b>' + money2(X.cargoValue) + '</b></div>' +
       '<div class="ck-dots"><b>Страховая премия</b><i></i><b>' + nf(insPremium()) + ' ₽</b></div>') +
+    extraHTML('bonus', EXTRAS[2][0], EXTRAS[2][1], C.bonus,
+      '<div class="ck-dots"><b>На вашем счету</b><i></i><b>' + nf(BONUS_BALANCE) + ' бонусов</b></div>' +
+      '<label class="ck-field"><span class="ck-label">Сумма для списания бонусов</span><input class="inp ck-inp' + (bonusErr ? ' err' : '') + '" data-c="bonusSum" inputmode="numeric" placeholder="0" value="' + (C.bonusSum ? nf(num(C.bonusSum)) : '') + '"' + (C.bonus ? '' : ' disabled') + '>' +
+      (bonusErr ? '<span class="ck-hint err">Не больше ' + nf(BONUS_BALANCE) + ' бонусов</span>' : '') + '</label>') +
     '</div></section>';
   h += '</div>';
   h += '<aside class="ck-r">' + panelHTML() + '</aside>';
@@ -227,7 +228,7 @@ ckEl.addEventListener('input', (e) => {
   ckEl.querySelector('.ck-r').innerHTML = panelHTML();
 });
 // info tooltips on extras — same tooltip as on the order page
-const INFO_TXT = { fuel: 'До 90% стоимости перевозки приходит на Моносчёт сразу после погрузки — на топливо и дорогу', bonus: 'Бонусы начисляются за выполненные заявки и списываются по курсу 1 бонус = 1 ₽', ins: 'Страхование груза от повреждения, утраты и хищения на всём маршруте' };
+const INFO_TXT = { fuel: EXTRAS[0][2], ins: EXTRAS[1][2], bonus: EXTRAS[2][2] };
 function showInfo(b) {
   const tip = $('navTip'); if (!tip) return;
   tip.textContent = INFO_TXT[b.dataset.k];
