@@ -133,7 +133,7 @@ function render() {
       '<label class="ck-field"><span class="ck-label">Сумма для «Топлива после погрузки», ₽</span><input class="inp ck-inp' + (fuelErr ? ' err' : '') + '" data-c="fuelSum" inputmode="numeric" value="' + (C.fuelSum ? nf(num(C.fuelSum)) : '') + '"' + (C.fuel ? '' : ' disabled') + '>' +
       '<span class="ck-hint' + (fuelErr ? ' err' : '') + '">Не более 90% — ' + money2(fuelMax()) + '</span></label>') +
     extraHTML('ins', EXTRAS[1][0], EXTRAS[1][1], C.ins,
-      '<p class="ck-txt">Сумма страховой премии будет вычтена из общей стоимости заявки. Ознакомьтесь с <a href="#" data-c="soon">условиями</a> и <a href="#" data-c="soon">правилами страхования</a>.<br>По вопросам страхования: <a href="mailto:monopoly.online@renins.com">monopoly.online@renins.com</a>.</p>' +
+      '<p class="ck-txt">Сумма страховой премии будет вычтена из общей стоимости заявки. Ознакомьтесь с <a href="#" data-c="soon">условиями</a> и <a href="#" data-c="soon">правилами страхования</a>. По вопросам страхования: <a href="mailto:monopoly.online@renins.com">monopoly.online@renins.com</a>.</p>' +
       '<div class="ck-dots"><b>Страховая сумма</b><i></i><b>' + money2(X.cargoValue) + '</b></div>' +
       '<div class="ck-dots"><b>Страховая премия</b><i></i><b>' + nf(insPremium()) + ' ₽</b></div>') +
     extraHTML('bonus', EXTRAS[2][0], EXTRAS[2][1], C.bonus,
