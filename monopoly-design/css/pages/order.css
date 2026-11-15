@@ -314,9 +314,7 @@ button.mini:hover .sqb .s {
 
 .dsec h2 {
   margin: 0 0 16px;
-  font-size: 20px;
-  line-height: 26px;
-  font-weight: 700;
+  font: var(--text-h2);
 }
 
 .dsec h3 {
@@ -938,7 +936,7 @@ button.mini:hover .sqb .s {
 }
 
 .cost b {
-  font-size: 20px;
+  font-size: 18px;
   line-height: 24px;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
@@ -1199,7 +1197,7 @@ button.mini:hover .sqb .s {
 
 @media (max-width:767px) {
   .dback {
-    font-size: 20px;
+    font-size: 18px;
     line-height: 24px;
   }
 
