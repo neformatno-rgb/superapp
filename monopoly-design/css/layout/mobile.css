@@ -47,6 +47,8 @@
   .msum.ph span { color: var(--grey64); font-weight: 400; }
   .msum svg { flex-shrink: 0; color: var(--t2); transition: transform 160ms; }
   .filters.mf-open .msum svg { transform: rotate(180deg); }
+  /* «Откуда, куда, когда» summary is gone on phones: everything is in the filter sheet (filter button) */
+  .filters .msum, .filters.mf-open .frow { display: none !important; }
   .filters .frow { display: none; }
   .filters.mf-open .frow { display: flex; padding: 12px; border-radius: 12px; background: var(--surface); }
   .filters.mf-open .frow { flex-direction: column; align-items: stretch; gap: 8px; }
