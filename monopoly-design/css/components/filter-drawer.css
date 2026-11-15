@@ -205,6 +205,31 @@
   font: var(--text-body);
 }
 
+/* «от … до …» pair, two inputs sharing one border */
+.fd-pair {
+  display: flex;
+}
+
+.fd-pair .inp {
+  flex: 1;
+  min-width: 0;
+}
+
+.fd-pair .inp:first-child {
+  border-radius: 8px 0 0 8px;
+}
+
+.fd-pair .inp:last-child {
+  margin-left: -1px;
+  border-radius: 0 8px 8px 0;
+}
+
+.fd-pair .inp:hover,
+.fd-pair .inp:focus {
+  position: relative;
+  z-index: 1;
+}
+
 /* foot */
 .fd-foot {
   flex-shrink: 0;

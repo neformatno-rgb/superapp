@@ -26,3 +26,6 @@ function winHTML(day, key) {
   return '<b>' + dayLabel(day) + ',</b> ' + hh(start) + ' — ' + dayLabel(day + 1) + ', ' + hh(end - 24);
 }
 const stopsWord = (n) => n === 1 ? 'точка' : n < 5 ? 'точки' : 'точек';
+
+// range filter value "a-b" (a=0: no lower bound, b>=999: no upper bound) → «от 0,2 т», «до 20 т», «0,2–20 т»
+const rangeText = (v, unit) => { const [a, b] = v.split('-').map(Number); const f = (x) => String(x).replace('.', ','); return a <= 0 ? 'до ' + f(b) + ' ' + unit : b >= 999 ? 'от ' + f(a) + ' ' + unit : f(a) + '–' + f(b) + ' ' + unit; };

@@ -51,7 +51,33 @@
   const singleField = (k) => { const it = SINGLE[k].items.find((x) => x[0] === S[k]); return field(k, it ? it[1] : 'Любой', !!it); };
   const wrap = (label, inner, id) => '<div class="fd-field"><span class="fd-label"' + (id ? ' id="' + id + '"' : '') + '>' + label + '</span>' + inner + '</div>';
 
+  // «Грузоподъемность», «Объем», «Вес груза»: free range «от … до …» (stored as "a-b", see rangeText)
+  const num = (x) => String(Math.round(x * 10) / 10).replace('.', ',');
+  const RANGE = {
+    cap: { label: 'Грузоподъемность', unit: 'т', val: (o) => o.t },
+    vol: { label: 'Объем', unit: 'м³', val: (o) => o.m3 },
+    wt: { label: 'Вес груза', unit: 'т', val: (o) => o.kg / 1000 },
+  };
+  Object.values(RANGE).forEach((R) => { const v = ALL.map(R.val); R.min = Math.min.apply(null, v); R.max = Math.max.apply(null, v); });
+  function rangePair(k) {
+    const R = RANGE[k]; let a = '', b = '';
+    if (S[k]) { const r = S[k].split('-').map(Number); if (r[0] > 0) a = num(r[0]); if (r[1] < 999) b = num(r[1]); }
+    return '<div class="fd-pair" role="group" aria-label="' + R.label + ', ' + R.unit + '">' +
+      '<input class="inp" type="text" inputmode="decimal" data-k="' + k + '" data-r="a" aria-label="' + R.label + ' от, ' + R.unit + '" placeholder="от ' + num(R.min) + '" value="' + a + '">' +
+      '<input class="inp" type="text" inputmode="decimal" data-k="' + k + '" data-r="b" aria-label="' + R.label + ' до, ' + R.unit + '" placeholder="до ' + num(R.max) + '" value="' + b + '"></div>';
+  }
+  body.addEventListener('input', (e) => {
+    const f = e.target.closest('[data-r]'); if (!f) return; const k = f.dataset.k;
+    f.value = f.value.replace(/[^\d.,]/g, '');
+    const v = (r) => { const x = parseFloat(body.querySelector('[data-k="' + k + '"][data-r="' + r + '"]').value.replace(',', '.')); return isNaN(x) ? null : x; };
+    const a = v('a'), b = v('b');
+    set({ [k]: a === null && b === null ? '' : (a ?? 0) + '-' + (b ?? 999) });
+  });
+
   function draw() {
+    // keep the caret in a range input that is being typed into
+    const ae = document.activeElement; const af = ae && ae.dataset && ae.dataset.r ? '[data-k="' + ae.dataset.k + '"][data-r="' + ae.dataset.r + '"]' : null;
+    const caret = af ? ae.selectionStart : 0; const raw = af ? ae.value : '';
     const r = dayRange(S.day);
     body.innerHTML =
       wrap('Откуда', '<div class="fd-row">' + multiField('from') + '<button type="button" class="fd-swap" data-f="swap" aria-label="Поменять «Откуда» и «Куда» местами">' + IC.swap + '</button></div>') +
@@ -59,12 +85,13 @@
       wrap('Дата погрузки', field('day', r ? rangeLabel(r) : 'Любая дата', !!r, IC.cal)) +
       wrap('Тип кузова', multiField('body')) +
       wrap('Тип заказа', '<div class="fd-chips" role="group" aria-labelledby="fdType">' + types.map((t) => '<button type="button" class="chip" data-f="type" data-v="' + esc(t) + '" aria-pressed="' + !!S.types[t] + '">' + esc(t === 'Встречное' ? 'Встречное предложение' : t) + '</button>').join('') + '</div>', 'fdType') +
-      wrap('Грузоподъемность, т', singleField('cap')) +
-      wrap('Объем, м³', singleField('vol')) +
-      wrap('Вес груза, т', singleField('wt'));
+      wrap('Грузоподъемность, т', rangePair('cap')) +
+      wrap('Объем, м³', rangePair('vol')) +
+      wrap('Вес груза, т', rangePair('wt'));
     const n = filtered().length;
     root.querySelector('.fd-go').textContent = n ? 'Показать ' + n + ' ' + plural(n) : 'Ничего не найдено';
     root.querySelector('.fd-reset').disabled = !active();
+    if (af) { const f = body.querySelector(af); if (f) { f.value = raw; f.focus({ preventScroll: true }); f.setSelectionRange(caret, caret); } } // keep exactly what is being typed («5,» → «5,5»)
   }
 
   // ---------- dropdown lists inside the drawer ----------

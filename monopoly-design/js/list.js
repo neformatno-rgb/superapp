@@ -93,7 +93,14 @@ function render() {
   const bids = Object.keys(S.offers).length + Object.keys(S.taken).length; $('bidCnt').hidden = !bids; $('bidCnt').textContent = bids;
   msSync();
   syncDD(); dpSync(); $('sort').value = S.sort;
-  [['fCap','cap'],['fVol','vol'],['fWt','wt']].forEach(([id, k]) => { $(id).value = S[k]; $(id).parentElement.classList.toggle('on', !!S[k]); });
+  // a custom range typed in the filter drawer gets its own option, so the bar dropdown can show it
+  [['fCap','cap','т'],['fVol','vol','м³'],['fWt','wt','т']].forEach(([id, k, u]) => {
+    const sel = $(id); let c = sel.querySelector('option[data-custom]');
+    if (S[k] && !Array.from(sel.options).some((o) => o.value === S[k] && !o.dataset.custom)) { if (!c) { c = document.createElement('option'); c.dataset.custom = '1'; sel.appendChild(c); } c.value = S[k]; c.text = rangeText(S[k], u); }
+    else if (c) c.remove();
+    sel.value = S[k]; sel.parentElement.classList.toggle('on', !!S[k]);
+  });
+  syncDD();
   $('vat').value = S.vat ? '1' : '0';
   if (typeof srch !== 'undefined') fitSearch();
 }
