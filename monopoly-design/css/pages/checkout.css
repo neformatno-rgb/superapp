@@ -87,9 +87,17 @@
   border-color: var(--error);
 }
 
-.ck-payhint {
-  display: block;
-  margin-top: 8px;
+/* «required» hints sit in the gap under the field — they don't push the content down */
+.ck-field,
+.ck-paywrap {
+  position: relative;
+}
+
+.ck-miss {
+  position: absolute;
+  left: 0;
+  top: calc(100% + 4px);
+  white-space: nowrap;
 }
 
 .ck-pay[aria-checked="true"] {

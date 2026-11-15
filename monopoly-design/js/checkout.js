@@ -64,7 +64,7 @@ function selBtn(key, labelled) {
   return '<button type="button" class="inp ck-sel' + (miss ? ' err' : '') + '" data-c="sel" data-k="' + key + '" aria-haspopup="listbox" aria-expanded="' + (C.open === key) + '" ' + labelled + (miss ? ' aria-invalid="true"' : '') + '>' +
     (v === null ? '<span class="ph">' + PH[key] + '</span>' : '<span>' + esc(OPTS[key].items[v]) + '</span>') + CK_CHEV + '</button>';
 }
-const missHint = (key) => (C.tried && C[key] === null ? '<span class="ck-hint err">Обязательное поле</span>' : '');
+const missHint = (key) => (C.tried && C[key] === null ? '<span class="ck-hint err ck-miss">Обязательное поле</span>' : '');
 
 
 function selectHTML(key) {
@@ -122,7 +122,7 @@ function render() {
   // step 1: contract → step 2: payment method
   h += '<section class="dcard dsec" id="ck-pay"><h2 id="lbl-contract">Заказ выполняется в рамках договора</h2>' + '<div class="ck-field">' + selBtn('contract', 'aria-labelledby="lbl-contract"') + missHint('contract') + '</div>' +
     (C.contract === null ? '' : '<div class="ck-step2' + reveal('pay') + '"><h2 class="ck-h2b">Выберите способ оплаты</h2><p class="ck-note">Срок получения оплаты или остатка — не позднее указанного количества рабочих дней с даты получения документов, подтверждающих перевозку.</p>' +
-    '<div class="ck-pays' + (C.tried && !C.pay ? ' err' : '') + '" role="radiogroup" aria-label="Способ оплаты"' + (C.tried && !C.pay ? ' aria-invalid="true"' : '') + '>' + pay + '</div>' + (C.tried && !C.pay ? '<span class="ck-hint err ck-payhint">Выберите способ оплаты</span>' : '') + '</div>') + '</section>';
+    '<div class="ck-paywrap"><div class="ck-pays' + (C.tried && !C.pay ? ' err' : '') + '" role="radiogroup" aria-label="Способ оплаты"' + (C.tried && !C.pay ? ' aria-invalid="true"' : '') + '>' + pay + '</div>' + (C.tried && !C.pay ? '<span class="ck-hint err ck-miss">Выберите способ оплаты</span>' : '') + '</div></div>') + '</section>';
   // step 3: rolling stock
   if (C.pay) h += '<section class="dcard dsec' + reveal('fleet') + '" id="ck-fleet"><h2>Укажите подвижной состав</h2><div class="ck-fleet">' + selectHTML('truck') + selectHTML('trailer') + selectHTML('driver') + '</div></section>';
   // extras — appear together with the rolling stock
