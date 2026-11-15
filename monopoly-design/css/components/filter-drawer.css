@@ -322,6 +322,172 @@ body.fd-lock {
     padding: 12px 16px calc(16px + env(safe-area-inset-bottom));
   }
 
+  /* compact sheet (by the phone mockup): content-high, filled fields, no labels */
+  .fd {
+    top: auto;
+    max-height: calc(100% - 24px);
+  }
+
+  .fd-head {
+    height: 52px;
+    padding: 12px 8px 0 8px;
+    border-bottom: 0;
+  }
+
+  .fd-head h2 {
+    font-size: 16px;
+  }
+
+  .fd-body {
+    padding: 4px 16px 16px;
+    gap: 12px;
+  }
+
+  .fd-foot {
+    border-top: 0;
+    padding-top: 4px;
+  }
+
+  .fd-go {
+    border-radius: 12px;
+  }
+
+  .fdm-route {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 4px 12px 4px 0;
+    border-radius: 12px;
+    background: var(--subtle);
+  }
+
+  .fdm-lines {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .fdm-div {
+    height: 1px;
+    margin-left: 12px;
+    background: var(--line);
+  }
+
+  .fd .fd-sel.fdm-line,
+  .fd .fd-sel.fdm-date,
+  .fd .fd-sel.fdm-fld {
+    height: 44px;
+    padding: 0 12px;
+    border: 0;
+    border-radius: 12px;
+    background: var(--subtle);
+    font: var(--text-body-medium);
+    font-size: 16px;
+    color: var(--t1);
+  }
+
+  .fd .fd-sel.fdm-line {
+    width: 100%;
+    background: transparent;
+  }
+
+  .fd .fd-sel .ph {
+    font-weight: 400;
+    color: var(--t2);
+  }
+
+  .fdm-route .mtag,
+  .fdm-fld .mtag {
+    background: var(--surface);
+  }
+
+  .fdm-swap {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border: 0;
+    border-radius: 8px;
+    background: var(--tint);
+    color: var(--accent-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .fdm-swap svg {
+    transform: rotate(90deg);
+  }
+
+  .fdm-dates {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .fd .fd-sel.fdm-date {
+    gap: 10px;
+  }
+
+  .fd .fd-sel.fdm-date > svg {
+    flex-shrink: 0;
+    color: var(--t1);
+  }
+
+  .fdm-types {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .fdm-chip {
+    height: 40px;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    background: var(--subtle);
+    color: var(--t1);
+    font: var(--text-body-medium);
+    font-size: 15px;
+    transition: background-color 160ms, border-color 160ms, color 160ms;
+  }
+
+  .fdm-chip[aria-pressed="true"] {
+    border-color: var(--accent);
+    background: var(--tint);
+    color: var(--accent-text);
+  }
+
+  .fdm-range {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .fdm-rl {
+    font: var(--text-caption);
+    color: var(--t2);
+  }
+
+  .fdm-range .inp {
+    height: 44px;
+    border-color: transparent;
+    background: var(--subtle);
+    font-size: 16px;
+  }
+
+  .fdm-range .inp:first-child {
+    border-radius: 12px 0 0 12px;
+  }
+
+  .fdm-range .inp:last-child {
+    margin-left: 1px;
+    border-radius: 0 12px 12px 0;
+  }
+
+  .fdm-range .inp:focus {
+    border-color: var(--accent);
+  }
+
   /* keep the drawer's chips as in the desktop panel (the phone chip row restyles .chip) */
   .fd-chips .chip {
     border-color: var(--border);

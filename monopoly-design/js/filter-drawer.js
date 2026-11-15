@@ -92,6 +92,8 @@
     const ae = document.activeElement; const af = ae && ae.dataset && ae.dataset.r ? '[data-k="' + ae.dataset.k + '"][data-r="' + ae.dataset.r + '"]' : null;
     const caret = af ? ae.selectionStart : 0; const raw = af ? ae.value : '';
     const r = dayRange(S.day);
+    const n = filtered().length;
+    if (window.matchMedia('(max-width:767px)').matches) { drawPhone(r, n); if (af) { const f = body.querySelector(af); if (f) { f.value = raw; f.focus({ preventScroll: true }); f.setSelectionRange(caret, caret); } } return; }
     body.innerHTML =
       wrap('Откуда', '<div class="fd-row">' + multiField('from') + '<button type="button" class="fd-swap" data-f="swap" aria-label="Поменять «Откуда» и «Куда» местами">' + IC.swap + '</button></div>') +
       wrap('Куда', multiField('to')) +
@@ -101,11 +103,29 @@
       wrap('Грузоподъемность, т', rangePair('cap')) +
       wrap('Объем, м³', rangePair('vol')) +
       wrap('Вес груза, т', rangePair('wt'));
-    const n = filtered().length;
     root.querySelector('.fd-go').textContent = n ? 'Показать ' + n + ' ' + plural(n) : 'Ничего не найдено';
     root.querySelector('.fd-reset').disabled = !active();
     fitTags();
     if (af) { const f = body.querySelector(af); if (f) { f.value = raw; f.focus({ preventScroll: true }); f.setSelectionRange(caret, caret); } } // keep exactly what is being typed («5,» → «5,5»)
+  }
+
+  // phone bottom sheet: compact filled fields, no labels (route card, two dates, body type, order type, ranges)
+  function drawPhone(r, n) {
+    const from = sel('from'), to = sel('to');
+    const line = (k, v, ph) => '<button type="button" class="inp fd-sel fdm-line' + (v.length ? ' has' : '') + (menuKey === k ? ' open' : '') + '" data-f="open" data-k="' + k + '" aria-haspopup="listbox" aria-expanded="' + (menuKey === k) + '" aria-label="' + ph + '">' +
+      (v.length ? '<span class="fd-tags" data-k="' + k + '">' + v.map((x) => tag(k, x)).join('') + '</span>' : '<span class="ph">' + ph + '</span>') + '</button>';
+    const date = (i, ph) => '<button type="button" class="inp fd-sel fdm-date' + (r ? ' has' : '') + '" data-f="open" data-k="day" aria-haspopup="dialog" aria-label="' + ph + '">' + IC.cal +
+      (r ? '<span>' + dayLabel(r[i]) + '</span>' : '<span class="ph">' + ph + '</span>') + '</button>';
+    body.innerHTML =
+      '<div class="fdm-route"><div class="fdm-lines">' + line('from', from, 'Откуда') + '<i class="fdm-div"></i>' + line('to', to, 'Куда') + '</div>' +
+        '<button type="button" class="fdm-swap" data-f="swap" aria-label="Поменять «Откуда» и «Куда» местами">' + IC.swap + '</button></div>' +
+      '<div class="fdm-dates">' + date(0, 'Дата с') + date(1, 'Дата по') + '</div>' +
+      multiField('body').replace('inp fd-sel', 'inp fd-sel fdm-fld').replace('>' + MULTI.body.ph + '<', '>Тип кузова<') +
+      '<div class="fdm-types" role="group" aria-label="Тип заказа">' + types.map((t) => '<button type="button" class="fdm-chip" data-f="type" data-v="' + esc(t) + '" aria-pressed="' + !!S.types[t] + '">' + esc(t) + '</button>').join('') + '</div>' +
+      ['cap', 'vol', 'wt'].map((k) => '<div class="fdm-range"><span class="fdm-rl">' + RANGE[k].label + ', ' + RANGE[k].unit + '</span>' + rangePair(k) + '</div>').join('');
+    root.querySelector('.fd-go').textContent = n ? 'Найти груз · ' + n : 'Ничего не найдено';
+    root.querySelector('.fd-reset').disabled = !active();
+    fitTags();
   }
 
   // ---------- dropdown lists inside the drawer ----------
