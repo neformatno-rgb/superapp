@@ -106,15 +106,15 @@ function render() {
   h += '<div class="ck-grid"><div class="ck-l">';
   // summary — same block as on the order page
   h += '<section class="dcard dsum" aria-label="Заявка ' + o.id + '">' +
-    '<div class="mdsum"><div class="mdtop"><h2>' + o.id + '</h2><div class="minis"><span class="mini" title="Просмотры заявки">' + sqb(SQ_B, 'sqmB') + EYE16 + X.views + '</span><span class="mini" title="Рейтинг заявки">' + sqb(SQ_B, 'sqmB') + I.star + X.oRating + '</span></div></div>' +
+    '<div class="mdsum"><div class="mdtop"><h2>' + o.id + '</h2><div class="minis"><span class="mini" data-tip="Заявку просматривали">' + sqb(SQ_B, 'sqmB') + EYE16 + X.views + '</span><span class="mini" data-tip="Рейтинг заявки">' + sqb(SQ_B, 'sqmB') + I.star + X.oRating + '</span></div></div>' +
     '<div class="mroute">' + mpt('ld', o.from, o.fromDay, o.id + 'f') + (o.stops ? '<div class="mstops"><i></i><span>+' + o.stops + ' ' + stopsWord(o.stops) + ' в рейсе</span></div>' : '') + mpt('ul', o.to, o.toDay, o.id + 't') + '</div></div>' +
     '<div class="rbox"><div><div class="c">' + esc(o.from) + '</div><div class="w">' + winHTML(o.fromDay, o.id + 'f') + '</div></div>' +
     '<div class="mid2"><div class="arr2">' + DI.arrS + (o.stops ? '<span class="plus2" title="Промежуточные точки">+' + o.stops + '</span>' : '<span class="plus2" title="Без промежуточных точек" aria-label="Без промежуточных точек">—</span>') + DI.arrS + '</div><span class="km2">' + nf(o.dist) + ' км</span></div>' +
     '<div class="end"><div class="c">' + esc(o.to) + '</div><div class="w">' + winHTML(o.toDay, o.id + 't') + '</div></div></div>' +
     '<div class="co"><span class="ava" aria-hidden="true">' + X.ini + '</span><span class="coname"><b>' + esc(X.company) + '</b><button type="button" data-c="soon">Профиль компании</button></span>' +
-    '<div class="minis"><button type="button" class="mini" data-c="soon" aria-label="Чат с ' + esc(X.company) + '">' + sqb(SQ_B, 'sqmB') + '<span class="chat">' + DI.chat + '</span>Чат</button>' +
-    '<span class="mini" title="Рейтинг компании">' + sqb(SQ_B, 'sqmB') + I.star + o.rating + '</span></div><span class="vsep" aria-hidden="true"></span>' +
-    '<div class="minis"><span class="mini" title="Просмотры заявки">' + sqb(SQ_B, 'sqmB') + EYE16 + X.views + '</span><span class="mini" title="Рейтинг заявки">' + sqb(SQ_B, 'sqmB') + I.star + X.oRating + '</span></div></div></section>';
+    '<div class="minis"><button type="button" class="mini" data-c="soon" data-tip="Начать чат с грузовладельцем" aria-label="Чат с ' + esc(X.company) + '">' + sqb(SQ_B, 'sqmB') + '<span class="chat">' + DI.chat + '</span>Чат</button>' +
+    '<span class="mini" data-tip="Рейтинг грузовладельца">' + sqb(SQ_B, 'sqmB') + I.star + o.rating + '</span></div><span class="vsep" aria-hidden="true"></span>' +
+    '<div class="minis"><span class="mini" data-tip="Заявку просматривали">' + sqb(SQ_B, 'sqmB') + EYE16 + X.views + '</span><span class="mini" data-tip="Рейтинг заявки">' + sqb(SQ_B, 'sqmB') + I.star + X.oRating + '</span></div></div></section>';
   // anchor tabs — only once there is more than one section to jump between
   const secs = [['ck-pay', 'Договор и оплата']].concat(C.pay ? [['ck-fleet', 'Подвижной состав']] : [], C.pay ? [['ck-extra', 'Дополнительно']] : []);
   if (secs.length > 1) h += '<div class="dtabs" role="tablist" aria-label="Разделы оформления">' +
@@ -243,6 +243,16 @@ ckEl.addEventListener('mouseout', (e) => { const b = e.target.closest('.info'); 
 ckEl.addEventListener('focusin', (e) => { const b = e.target.closest('.info'); if (b && b.matches(':focus-visible')) showInfo(b); });
 ckEl.addEventListener('focusout', (e) => { if (e.target.closest('.info')) hideInfo(); });
 window.addEventListener('scroll', hideInfo, { passive: true });
+// small stat chips (views, ratings): tooltip with their meaning
+ckEl.addEventListener('mouseover', (e) => {
+  const t = e.target.closest('[data-tip]'); if (!t || t.contains(e.relatedTarget)) return;
+  const tip = $('navTip'); if (!tip) return;
+  tip.style.cssText = ''; tip.textContent = t.dataset.tip;
+  const r = t.getBoundingClientRect();
+  tip.style.left = Math.max(8, Math.min(r.right + 12, window.innerWidth - tip.offsetWidth - 8)) + 'px'; tip.style.top = (r.top + r.height / 2) + 'px';
+  requestAnimationFrame(() => tip.classList.add('show'));
+});
+ckEl.addEventListener('mouseout', (e) => { const t = e.target.closest('[data-tip]'); if (t && !t.contains(e.relatedTarget)) hideInfo(); });
 
 // anchor tabs follow the scroll
 window.addEventListener('scroll', () => {

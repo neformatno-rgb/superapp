@@ -55,16 +55,16 @@ function detailHTML(o) {
   // summary
   const mpt = (k, city, day, key) => '<div class="mpt ' + k + '"><i></i><span><span class="c">' + esc(city) + '</span><span class="w">' + winHTML(day, key) + '</span></span></div>';
   h += '<section class="dcard dsum" aria-label="Заявка ' + o.id + '">' +
-    '<div class="mdsum"><div class="mdtop"><h2>' + o.id + '</h2><div class="minis"><span class="mini" title="Просмотры заявки">' + sqb(SQ_B, 'sqmB') + EYE16 + X.views + '</span><span class="mini" title="Рейтинг заявки">' + sqb(SQ_B, 'sqmB') + I.star + X.oRating + '</span></div></div>' +
+    '<div class="mdsum"><div class="mdtop"><h2>' + o.id + '</h2><div class="minis"><span class="mini" data-tip="Заявку просматривали">' + sqb(SQ_B, 'sqmB') + EYE16 + X.views + '</span><span class="mini" data-tip="Рейтинг заявки">' + sqb(SQ_B, 'sqmB') + I.star + X.oRating + '</span></div></div>' +
     '<div class="mroute">' + mpt('ld', o.from, o.fromDay, o.id + 'f') + (o.stops ? '<div class="mstops"><i></i><span>+' + o.stops + ' ' + stopsWord(o.stops) + ' в рейсе</span></div>' : '') + mpt('ul', o.to, o.toDay, o.id + 't') + '</div></div>' +
     '<div class="rbox">' +
     '<div><div class="c" title="' + esc(o.from) + '">' + esc(o.from) + '</div><div class="w">' + winHTML(o.fromDay, o.id + 'f') + '</div></div>' +
     '<div class="mid2"><div class="arr2">' + DI.arrS + (o.stops ? '<span class="plus2" title="Промежуточные точки">+' + o.stops + '</span>' : '<span class="plus2" title="Без промежуточных точек" aria-label="Без промежуточных точек">—</span>') + DI.arrS + '</div><span class="km2">' + nf(o.dist) + ' км</span></div>' +
     '<div class="end"><div class="c" title="' + esc(o.to) + '">' + esc(o.to) + '</div><div class="w">' + winHTML(o.toDay, o.id + 't') + '</div></div></div>' +
     '<div class="co"><span class="ava" aria-hidden="true">' + X.ini + '</span><span class="coname"><b>' + esc(X.company) + '</b><button type="button" data-d="profile">Профиль компании</button></span>' +
-    '<div class="minis"><button type="button" class="mini" data-d="chat" aria-label="Чат с ' + esc(X.company) + '">' + sqb(SQ_B, 'sqmB') + '<span class="chat">' + DI.chat + '</span>Чат</button>' +
-    '<span class="mini" title="Рейтинг компании">' + sqb(SQ_B, 'sqmB') + I.star + o.rating + '</span></div><span class="vsep" aria-hidden="true"></span>' +
-    '<div class="minis"><span class="mini" title="Просмотры заявки">' + sqb(SQ_B, 'sqmB') + EYE16 + X.views + '</span><span class="mini" title="Рейтинг заявки">' + sqb(SQ_B, 'sqmB') + I.star + X.oRating + '</span></div></div></section>';
+    '<div class="minis"><button type="button" class="mini" data-d="chat" data-tip="Начать чат с грузовладельцем" aria-label="Чат с ' + esc(X.company) + '">' + sqb(SQ_B, 'sqmB') + '<span class="chat">' + DI.chat + '</span>Чат</button>' +
+    '<span class="mini" data-tip="Рейтинг грузовладельца">' + sqb(SQ_B, 'sqmB') + I.star + o.rating + '</span></div><span class="vsep" aria-hidden="true"></span>' +
+    '<div class="minis"><span class="mini" data-tip="Заявку просматривали">' + sqb(SQ_B, 'sqmB') + EYE16 + X.views + '</span><span class="mini" data-tip="Рейтинг заявки">' + sqb(SQ_B, 'sqmB') + I.star + X.oRating + '</span></div></div></section>';
   // tabs
   h += '<div class="dtabs" role="tablist" aria-label="Разделы заявки">' +
     [['cond', 'Условия перевозки'], ['route', 'Маршрут и груз'], ['extra', 'Дополнительно'], ['docs', 'Документы']].map(([id, t], i) => '<button type="button" class="tab' + (i === 0 ? ' on' : '') + '" data-d="jump" data-to="' + id + '">' + t + '</button>').join('') + '</div>';
@@ -255,6 +255,9 @@ detailEl.addEventListener('focusin', (e) => { const g = e.target.closest('.geo')
 detailEl.addEventListener('focusout', (e) => { if (e.target.closest('.geo')) hideInfo(); });
 const hideInfo = () => { const tip = $('navTip'); if (!tip) return; tip.classList.remove('show'); setTimeout(() => { if (!tip.classList.contains('show')) { tip.style.cssText = ''; } }, 150); };
 detailEl.addEventListener('mouseover', (e) => { const b = e.target.closest('.info'); if (b) showInfo(b); });
+// small stat chips (views, ratings): tooltip with their meaning
+detailEl.addEventListener('mouseover', (e) => { const t = e.target.closest('[data-tip]'); if (t && !t.contains(e.relatedTarget)) showTip(t, t.dataset.tip); });
+detailEl.addEventListener('mouseout', (e) => { const t = e.target.closest('[data-tip]'); if (t && !t.contains(e.relatedTarget)) hideInfo(); });
 detailEl.addEventListener('mouseout', (e) => { if (e.target.closest('.info')) hideInfo(); });
 detailEl.addEventListener('focusout', (e) => { if (e.target.closest('.info')) hideInfo(); });
 window.addEventListener('scroll', hideInfo, { passive: true });
