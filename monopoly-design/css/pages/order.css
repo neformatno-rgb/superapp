@@ -1313,6 +1313,14 @@ button.mini:hover .sqb .s {
   gap: 16px 12px;
 }
 
+.cgrp.wide {
+  grid-column: 1 / -1;
+}
+
+.kvs.one {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .kv {
   min-width: 0;
   display: flex;

@@ -39,6 +39,13 @@ function orderInfo(o) {
 
 const V = { id: null, edit: false, seg: 'tariff', pay: true, map: false, only: false, closed: {}, docs: {}, offer: '' , listY: 0 };
 
+// «Прочие условия»: a stable per-order subset of each list (mock data)
+const OTHER_REQS = ['Медицинская книжка', 'Санитарная обработка', 'Отслеживание машины', 'Погрузка/разгрузка силами водителя', 'Возврат тары', 'Смартфон'];
+const OTHER_EQUIP = ['Гидроборт', 'Сдвижные стойки', 'Крепежные ремни 6 шт'];
+function pickSome(list, seed, min) {
+  const h = hashStr(seed); const out = list.filter((x, i) => (h >> i) & 1);
+  return out.length >= min ? out : list.slice(0, Math.max(min, out.length));
+}
 function propHTML(icon, label, value) { return '<div class="prop">' + DI[icon] + '<span><small>' + label + '</small><b>' + esc(value) + '</b></span></div>'; }
 
 function detailHTML(o) {
@@ -81,6 +88,9 @@ function detailHTML(o) {
     '<div class="cgrp"><h2>Груз</h2><div class="kvs">' +
       kv('Количество', nCargo + ' ' + cargoWord) + kv('Упаковка', o.pl + ' Плт.') +
       kv('Категория груза', esc(o.cargo)) + '</div></div>' +
+    '<div class="cgrp wide"><h2>Прочие условия</h2><div class="kvs one">' +
+      kv('Дополнительно', pickSome(OTHER_REQS, o.id + 'r', 2).join(', ')) +
+      kv('Дополнительное оборудование', pickSome(OTHER_EQUIP, o.id + 'e', 1).join(', ')) + '</div></div>' +
   '</div></section>';
   // route
   h += '<section class="dcard dsec' + (V.only ? ' only-cargo' : '') + '" id="d-route"><div class="rhd"><h2>Маршрут</h2>' +
