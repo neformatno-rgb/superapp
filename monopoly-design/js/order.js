@@ -6,7 +6,7 @@ const ILL = ['assets/img/extras/fuel.svg', 'assets/img/extras/insurance.svg', 'a
 const OFFER_TTL = 30 * 60 * 1000;
 const timerText = (ms) => { if (ms <= 0) return 'Время ожидания истекло'; const t = Math.ceil(ms / 1000); return 'Ожидание ответа ' + String(Math.floor(t / 60)).padStart(2, '0') + ':' + String(t % 60).padStart(2, '0'); };
 setInterval(() => { document.querySelectorAll('.wtimer').forEach((el) => { const id = V.id; const at = S.offerAt[id]; if (!at) return; el.textContent = timerText(OFFER_TTL - (Date.now() - at)); }); }, 1000);
-const V = { id: null, edit: false, seg: 'tariff', pay: true, map: false, only: false, closed: {}, docs: {}, odocs: {}, offer: '' , listY: 0 };
+const V = { id: null, edit: false, seg: 'tariff', pay: true, map: false, only: false, closed: {}, docs: {}, odocs: { 0: true, 1: true, 2: true }, /* «Прочие условия» open by default */ offer: '' , listY: 0 };
 
 // «Прочие условия»: a stable per-order subset of each list (mock data)
 const OTHER_REQS = ['Медицинская книжка', 'Санитарная обработка', 'Отслеживание машины', 'Погрузка/разгрузка силами водителя', 'Возврат тары', 'Смартфон'];
@@ -158,7 +158,7 @@ function showDetail(id, push) {
   const o = ALL.find((x) => x.id === id);
   if (!o) return hideDetail(false);
   if (V.id === null) V.listY = window.scrollY;
-  if (V.id !== id) Object.assign(V, { edit: false, seg: 'tariff', pay: true, map: false, only: false, closed: {}, docs: {}, odocs: {}, offer: '' });
+  if (V.id !== id) Object.assign(V, { edit: false, seg: 'tariff', pay: true, map: false, only: false, closed: {}, docs: {}, odocs: { 0: true, 1: true, 2: true }, offer: '' });
   V.id = id;
   if (push) { try { history.pushState({ order: id }, '', '#' + encodeURIComponent(id)); } catch (e) {} }
   mainEl.classList.add('is-detail');
