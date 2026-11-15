@@ -36,6 +36,10 @@ input.inp {
   text-overflow: ellipsis;
 }
 
+.inp > span.ph {
+  color: var(--grey64);
+}
+
 .inp > svg {
   flex-shrink: 0;
   color: var(--t2);

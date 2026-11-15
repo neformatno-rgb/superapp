@@ -37,6 +37,24 @@
 
 /* contract + rolling-stock selects and number inputs use the input component (.inp, size normal 40px) */
 
+/* step-by-step reveal: a section that just appeared fades in */
+.ck-new {
+  animation: ck-in 240ms ease-out;
+}
+
+@keyframes ck-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@media (prefers-reduced-motion:reduce) {
+  .ck-new {
+    animation: none;
+  }
+}
+
 /* payment method cards */
 .ck-pays {
   display: grid;
@@ -354,6 +372,19 @@
 
 .ck-go:hover:not(:disabled) {
   filter: brightness(1.08);
+}
+
+.ck-go:disabled:not(.done) {
+  background: var(--subtle);
+  color: var(--grey64);
+  cursor: default;
+}
+
+.ck-step {
+  margin: -8px 0 0;
+  font: var(--text-caption);
+  color: var(--t2);
+  text-align: center;
 }
 
 .ck-go.done {
