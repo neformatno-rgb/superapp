@@ -123,3 +123,9 @@
     color: var(--accent-text);
   }
 }
+
+/* theme toggle icon: moon in the light theme, sun in the dark one (the visible one keeps its normal display) */
+:root:not([data-theme="dark"]) .ico-sun,
+[data-theme="dark"] .ico-moon {
+  display: none !important;
+}
