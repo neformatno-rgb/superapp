@@ -341,6 +341,10 @@
   color: var(--t1);
 }
 
+.empty span {
+  font: var(--text-body);
+}
+
 .eill {
   display: block;
   width: 160px;

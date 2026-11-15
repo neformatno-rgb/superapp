@@ -118,8 +118,7 @@
   border-radius: 8px;
   background: var(--tint);
   color: var(--accent-text);
-  font-size: 14px;
-  font-weight: 500;
+  font: var(--text-body-medium);
 }
 
 .bar {
