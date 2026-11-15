@@ -83,6 +83,15 @@
   border-color: var(--border);
 }
 
+.ck-pays.err .ck-pay {
+  border-color: var(--error);
+}
+
+.ck-payhint {
+  display: block;
+  margin-top: 8px;
+}
+
 .ck-pay[aria-checked="true"] {
   border-color: var(--accent);
 }

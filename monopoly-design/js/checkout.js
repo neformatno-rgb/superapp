@@ -30,7 +30,7 @@ const C = {
   // step by step: contract → payment method → rolling stock (+ extras); everything starts empty
   vat: true, contract: null, pay: null, truck: null, trailer: null, driver: null,
   fuel: false, fuelSum: '', bonus: false, bonusSum: '', ins: false,
-  done: !!store.get('taken', {})[o.id], open: null,
+  done: !!store.get('taken', {})[o.id], open: null, tried: false, // tried: «Оформить» was pressed — empty required fields get highlighted
 };
 
 const money2 = (n) => (Math.round(n * 100) / 100).toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ₽';
@@ -60,14 +60,17 @@ function totals() {
 
 function selBtn(key, labelled) {
   const v = C[key];
-  return '<button type="button" class="inp ck-sel" data-c="sel" data-k="' + key + '" aria-haspopup="listbox" aria-expanded="' + (C.open === key) + '" ' + labelled + '>' +
+  const miss = C.tried && v === null;
+  return '<button type="button" class="inp ck-sel' + (miss ? ' err' : '') + '" data-c="sel" data-k="' + key + '" aria-haspopup="listbox" aria-expanded="' + (C.open === key) + '" ' + labelled + (miss ? ' aria-invalid="true"' : '') + '>' +
     (v === null ? '<span class="ph">' + PH[key] + '</span>' : '<span>' + esc(OPTS[key].items[v]) + '</span>') + CK_CHEV + '</button>';
 }
+const missHint = (key) => (C.tried && C[key] === null ? '<span class="ck-hint err">Обязательное поле</span>' : '');
+
 
 function selectHTML(key) {
   return '<div class="ck-field"><span class="ck-label" id="lbl-' + key + '">' + FLEET[key].label + '</span><div class="ck-row">' +
     selBtn(key, 'aria-labelledby="lbl-' + key + '"') +
-    '<button type="button" class="ck-out" data-c="edit" data-k="' + key + '">Редактировать</button></div></div>';
+    '<button type="button" class="ck-out" data-c="edit" data-k="' + key + '">Редактировать</button></div>' + missHint(key) + '</div>';
 }
 
 function extraHTML(k, title, desc, on, body) {
@@ -86,8 +89,7 @@ function panelHTML() {
     (C.bonus && t.bonus ? '<div><span>Бонусы</span><b>+' + money2(t.bonus) + '</b></div>' : '') +
     (C.ins ? '<div><span>Страховая премия</span><b>−' + money2(t.ins) + '</b></div>' : '') + '</div>' +
     (C.done ? '<button type="button" class="ck-go done" disabled>Заявка оформлена</button>'
-      : ready() ? '<button type="button" class="ck-go" data-c="submit">Оформить заявку</button>'
-      : '<button type="button" class="ck-go" disabled>Оформить заявку</button>') +
+      : '<button type="button" class="ck-go" data-c="submit">Оформить заявку</button>') +
     '</div><div class="pnote">Цены указаны <button type="button" data-c="vat">' + (C.vat ? 'с учётом НДС 22%' : 'без НДС') + CK_CHEV + '</button></div></div>';
 }
 
@@ -118,9 +120,9 @@ function render() {
   if (secs.length > 1) h += '<div class="dtabs" role="tablist" aria-label="Разделы оформления">' +
     secs.map((x, i) => '<button type="button" class="tab' + (i === 0 ? ' on' : '') + '" data-c="tab" data-k="' + x[0] + '">' + x[1] + '</button>').join('') + '</div>';
   // step 1: contract → step 2: payment method
-  h += '<section class="dcard dsec" id="ck-pay"><h2 id="lbl-contract">Заказ выполняется в рамках договора</h2>' + selBtn('contract', 'aria-labelledby="lbl-contract"') +
+  h += '<section class="dcard dsec" id="ck-pay"><h2 id="lbl-contract">Заказ выполняется в рамках договора</h2>' + '<div class="ck-field">' + selBtn('contract', 'aria-labelledby="lbl-contract"') + missHint('contract') + '</div>' +
     (C.contract === null ? '' : '<div class="ck-step2' + reveal('pay') + '"><h2 class="ck-h2b">Выберите способ оплаты</h2><p class="ck-note">Срок получения оплаты или остатка — не позднее указанного количества рабочих дней с даты получения документов, подтверждающих перевозку.</p>' +
-    '<div class="ck-pays" role="radiogroup" aria-label="Способ оплаты">' + pay + '</div></div>') + '</section>';
+    '<div class="ck-pays' + (C.tried && !C.pay ? ' err' : '') + '" role="radiogroup" aria-label="Способ оплаты"' + (C.tried && !C.pay ? ' aria-invalid="true"' : '') + '>' + pay + '</div>' + (C.tried && !C.pay ? '<span class="ck-hint err ck-payhint">Выберите способ оплаты</span>' : '') + '</div>') + '</section>';
   // step 3: rolling stock
   if (C.pay) h += '<section class="dcard dsec' + reveal('fleet') + '" id="ck-fleet"><h2>Укажите подвижной состав</h2><div class="ck-fleet">' + selectHTML('truck') + selectHTML('trailer') + selectHTML('driver') + '</div></section>';
   // extras — appear together with the rolling stock
@@ -193,6 +195,12 @@ ckEl.addEventListener('click', (e) => {
     case 'soon': e.preventDefault(); toast('Раздел появится в следующей итерации'); break;
     case 'submit': {
       const t = totals();
+      if (!ready()) { // highlight what is still empty and bring the first one into view
+        C.tried = true; render();
+        const first = ckEl.querySelector('.ck-sel.err, .ck-pays.err');
+        if (first) { first.scrollIntoView({ behavior: 'smooth', block: 'center' }); (first.matches('.ck-pays') ? first.querySelector('.ck-pay') : first).focus({ preventScroll: true }); }
+        break;
+      }
       if (C.fuel && num(C.fuelSum) > fuelMax()) { toast('Сумма «Топлива после погрузки» — не больше 90% стоимости'); ckEl.querySelector('[data-c="fuelSum"]').focus(); break; }
       if (C.bonus && num(C.bonusSum) > BONUS_BALANCE) { toast('Столько бонусов нет на счету'); ckEl.querySelector('[data-c="bonusSum"]').focus(); break; }
       const tk = store.get('taken', {}); tk[o.id] = true; store.set('taken', tk); C.done = true; render();
