@@ -20,6 +20,34 @@ html {
   overflow-y: scroll;
 }
 
+/* Custom scrollbar for the whole project: native behaviour, 8px, blue-grey thumb */
+/* Firefox has no ::-webkit-scrollbar; Chromium/Safari ignore the webkit rules if these are set, so scope them */
+@supports not selector(::-webkit-scrollbar) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scroll-thumb) transparent;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background: var(--scroll-thumb);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scroll-thumb-hover);
+}
+
 body {
   margin: 0;
   min-width: 320px;
