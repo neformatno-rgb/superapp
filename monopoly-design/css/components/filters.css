@@ -200,3 +200,22 @@
     width: auto;
   }
 }
+
+/* Sticky filter card: sticks under the header while scrolling; the sort/VAT bar hides meanwhile */
+@media (min-width:768px) {
+  .fcard {
+    position: sticky;
+    top: calc(68px + env(safe-area-inset-top,0px));
+    z-index: 12;
+    transition: box-shadow 200ms;
+  }
+
+  .fcard.stuck {
+    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--bar-h,0px);
+  }
+
+  .fcard.stuck .bar {
+    display: none;
+  }
+}

@@ -127,6 +127,19 @@ $('swap').addEventListener('click', () => set({ from: S.to, to: S.from }));
 $('vat').addEventListener('change', (e) => { S.vat = e.target.value === '1'; render(); });
 const resetAll = () => { $('q').value = ''; set({ q: '', from: '', to: '', body: '', day: '', cap: '', vol: '', wt: '', types: {} }); toast('Фильтры сброшены'); };
 $('reset').addEventListener('click', resetAll);
+// sticky filter card: while stuck the sort/VAT bar is hidden; its height moves into margin-bottom so the list doesn't jump
+(function () {
+  const fc = $('fcard'); const bar = fc.querySelector('.bar');
+  const upd = () => {
+    const sticky = getComputedStyle(fc).position === 'sticky';
+    const top = parseFloat(getComputedStyle(fc).top) || 68;
+    const was = fc.classList.contains('stuck');
+    if (!was && bar) fc.style.setProperty('--bar-h', bar.offsetHeight + 'px');
+    const now = sticky && window.scrollY > 0 && fc.getBoundingClientRect().top <= top + 0.5;
+    if (now !== was) { fc.classList.toggle('stuck', now); if (now) { closeDD(); if (typeof dpClose === 'function') dpClose(); } }
+  };
+  window.addEventListener('scroll', upd, { passive: true }); window.addEventListener('resize', upd); upd();
+})();
 $('chips').addEventListener('click', (e) => { const c = e.target.closest('.chip'); if (!c) return; const n = Object.assign({}, S.types); n[c.dataset.type] = !n[c.dataset.type]; set({ types: n }); });
 $('pager').addEventListener('click', (e) => { const b = e.target.closest('[data-page]'); if (!b || b.disabled) return; S.page = +b.dataset.page; render(); document.querySelector('.main h1').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
 $('list').addEventListener('click', (e) => {
