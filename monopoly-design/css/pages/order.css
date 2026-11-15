@@ -1305,6 +1305,10 @@ button.mini:hover .sqb .s {
   margin: 0 0 16px;
 }
 
+.cgrp .rhd h2 {
+  margin: 0;
+}
+
 .kvs {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

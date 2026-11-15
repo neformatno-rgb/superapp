@@ -53,6 +53,12 @@ const OWNER_NOTES = [
   'Возможна догрузка попутно по маршруту до 2 паллет — согласуем отдельно, доплата сверху. Оплата по факту доставки, без отсрочки.',
   'Получатель — торговая сеть, нужна медкнижка и санобработка кузова с отметкой. Без справки машину на выгрузку не пустят.',
 ];
+// «Прочие условия» header button: same mechanics as the route's expand/collapse-all
+const ODOCS_N = 3;
+function oallBtn() {
+  const anyOpen = Array.from({ length: ODOCS_N }, (x, i) => i).some((i) => V.odocs[i]); const t = anyOpen ? 'Свернуть все пункты' : 'Раскрыть все пункты';
+  return '<button type="button" class="xall" data-d="oall" aria-label="' + t + '" title="' + t + '">' + (anyOpen ? EXPAND_ALL : COLLAPSED_ALL) + '</button>';
+}
 // the cold-chain note only makes sense for refrigerated / isothermal bodies
 function ownerNote(o) {
   const pool = OWNER_NOTES.filter((t) => tempMode(o.body) !== 'Не требуется' || !/Температурный режим/.test(t));
@@ -104,7 +110,7 @@ function detailHTML(o) {
     '<div class="cgrp"><h2>Груз</h2><div class="kvs">' +
       kv('Количество', nCargo + ' ' + cargoWord) + kv('Упаковка', o.pl + ' Плт.') +
       kv('Категория груза', esc(o.cargo)) + kv('Стоимость груза', money((50 + hashStr(o.id + 'v') % 450) * 10000)) + '</div></div>' +
-    '<div class="cgrp wide"><h2>Прочие условия</h2><div class="docs">' +
+    '<div class="cgrp wide"><div class="rhd"><h2>Прочие условия</h2>' + oallBtn() + '</div><div class="docs">' +
       [['Дополнительно', pickSome(OTHER_REQS, o.id + 'r', 2)], ['Дополнительное оборудование', pickSome(OTHER_EQUIP, o.id + 'e', 1)]].map((d, i) => {
         const open = !!V.odocs[i];
         return '<div class="doc' + (open ? ' open' : '') + '"><button type="button" class="dhd" data-d="odoc" data-i="' + i + '" aria-expanded="' + open + '"><span>' + d[0] + '</span><span class="ttag ld">' + d[1].length + ' шт.</span>' + CHEV24 + '</button><p class="dnote">' + esc(d[1].join(', ')) + '</p></div>';
@@ -231,12 +237,13 @@ detailEl.addEventListener('click', (e) => {
     case 'only': V.only = !V.only; renderDetail(); break;
     case 'map': V.map = !V.map; { const m = detailEl.querySelector('.map'); m.classList.toggle('open', V.map); b.setAttribute('aria-expanded', V.map); b.firstChild.textContent = V.map ? 'Скрыть карту' : 'Показать карту'; } break;
     case 'all': { const anyOpen = X.pts.some((p, i) => !V.closed[i]); X.pts.forEach((p, i) => { V.closed[i] = anyOpen; }); renderDetail(); const nb = detailEl.querySelector('[data-d="all"]'); if (nb) nb.focus(); break; }
-    case 'stop': { const i = +b.dataset.i; V.closed[i] = !V.closed[i]; b.closest('.stop').classList.toggle('closed', V.closed[i]); b.setAttribute('aria-expanded', !V.closed[i]); { const xa = detailEl.querySelector('.xall'); const anyOpen = X.pts.some((p, j) => !V.closed[j]); const t = anyOpen ? 'Свернуть все точки' : 'Раскрыть все точки'; if (xa) { xa.setAttribute('aria-label', t); xa.title = t; xa.innerHTML = anyOpen ? EXPAND_ALL : COLLAPSED_ALL; } } break; }
+    case 'stop': { const i = +b.dataset.i; V.closed[i] = !V.closed[i]; b.closest('.stop').classList.toggle('closed', V.closed[i]); b.setAttribute('aria-expanded', !V.closed[i]); { const xa = detailEl.querySelector('[data-d="all"]'); const anyOpen = X.pts.some((p, j) => !V.closed[j]); const t = anyOpen ? 'Свернуть все точки' : 'Раскрыть все точки'; if (xa) { xa.setAttribute('aria-label', t); xa.title = t; xa.innerHTML = anyOpen ? EXPAND_ALL : COLLAPSED_ALL; } } break; }
     case 'seg': V.seg = b.dataset.seg; if (V.seg === 'tariff') V.edit = false; renderDetail(); if (V.seg === 'counter') { const f = $('dOffer'); if (f) { f.focus(); f.select(); } } break;
     case 'pay': V.pay = !V.pay; b.closest('.pay').classList.toggle('closed', !V.pay); b.setAttribute('aria-expanded', V.pay); break;
     case 'vat': S.vat = !S.vat; renderDetail(); break;
     case 'info': showInfo(b); break;
-    case 'odoc': { const i = +b.dataset.i; V.odocs[i] = !V.odocs[i]; b.closest('.doc').classList.toggle('open', V.odocs[i]); b.setAttribute('aria-expanded', V.odocs[i]); break; }
+    case 'odoc': { const i = +b.dataset.i; V.odocs[i] = !V.odocs[i]; b.closest('.doc').classList.toggle('open', V.odocs[i]); b.setAttribute('aria-expanded', V.odocs[i]); const ob = detailEl.querySelector('[data-d="oall"]'); if (ob) ob.outerHTML = oallBtn(); break; }
+    case 'oall': { const anyOpen = Array.from({ length: ODOCS_N }, (x, i) => i).some((i) => V.odocs[i]); for (let i = 0; i < ODOCS_N; i++) V.odocs[i] = !anyOpen; renderDetail(); const nb = detailEl.querySelector('[data-d="oall"]'); if (nb) nb.focus(); break; }
     case 'doc': { const i = +b.dataset.i; V.docs[i] = !V.docs[i]; b.closest('.doc').classList.toggle('open', V.docs[i]); b.setAttribute('aria-expanded', V.docs[i]); break; }
     case 'geo': {
       const v = b.dataset.geo;
