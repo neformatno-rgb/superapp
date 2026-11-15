@@ -55,6 +55,7 @@ function cardHTML(o) {
 
 // empty «Отслеживаемые»: illustration (assets/img/empty-track.png) + CTA
 const EMPTY_TRACK_ILL = '<img class="eill" src="assets/img/empty-track.png" width="160" alt="">';
+const EMPTY_SEARCH_ILL = '<img class="eill" src="assets/img/empty-search.png" width="160" alt="">'; // «Ничего не нашлось»
 const EMPTY = {
   all: ['Ничего не нашлось', 'Уберите часть фильтров или выберите другой город.'],
   bids: ['Пока нет торгов', 'Предложите цену по заявке или заберите её сразу — она появится здесь.'],
@@ -69,7 +70,7 @@ function render() {
   const slice = l.slice((S.page - 1) * PER, S.page * PER);
   $('found').textContent = 'Найдено ' + l.length + ' ' + plural(l.length);
   $('list').innerHTML = slice.length ? slice.map(cardHTML).join('') :
-    (function () { const E = EMPTY[S.tab] || EMPTY.all; return '<div class="card empty">' + (S.tab === 'track' ? EMPTY_TRACK_ILL : '') + '<b>' + E[0] + '</b><span>' + E[1] + '</span>' + (S.tab === 'track' ? '<button type="button" class="ebtn" data-act="track">Создать отслеживание</button>' : '') + (S.tab === 'all' ? '<button type="button" class="reset" data-act="reset" style="margin-top:8px">Сбросить фильтры</button>' : '') + '</div>'; })();
+    (function () { const E = EMPTY[S.tab] || EMPTY.all; return '<div class="card empty">' + (S.tab === 'track' ? EMPTY_TRACK_ILL : S.tab === 'all' ? EMPTY_SEARCH_ILL : '') + '<b>' + E[0] + '</b><span>' + E[1] + '</span>' + (S.tab === 'track' ? '<button type="button" class="ebtn" data-act="track">Создать отслеживание</button>' : '') + (S.tab === 'all' ? '<button type="button" class="reset" data-act="reset" style="margin-top:8px">Сбросить фильтры</button>' : '') + '</div>'; })();
   // pager
   const pg = $('pager');
   if (!l.length) { pg.hidden = true; } else {
