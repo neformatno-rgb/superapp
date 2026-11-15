@@ -343,23 +343,9 @@
 
 .eill {
   display: block;
+  width: 160px;
+  height: auto;
   margin-bottom: 8px;
-}
-
-.eill .pb {
-  fill: var(--accent-soft);
-}
-
-.eill .pf {
-  fill: var(--accent);
-}
-
-.eill .pl {
-  stroke: var(--accent);
-}
-
-.eill .pw {
-  fill: var(--surface);
 }
 
 .ebtn {
