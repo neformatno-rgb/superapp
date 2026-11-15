@@ -24,7 +24,7 @@ css/
     typography.css         шрифт и шкала текста из UI-кита
   base.css                 сброс, документ, утилиты
   layout/                  каркас: шапка и контент (shell), боковое меню (sidebar)
-  components/              tabs, search, filters, dropdown, switch, order-card, pager, modal, toast, tooltip, states
+  components/              tabs, search, filters, dropdown, switch, order-card, pager, modal, toast, tooltip, states, page-head (липкая шапка «← Заголовок» для внутренних страниц)
   pages/order.css          страница заявки
   pages/checkout.css       оформление заказа
   layout/mobile.css        раскладка для телефона (≤767px)
@@ -38,6 +38,7 @@ js/                        подключаются по порядку, общ�
   search.js                поиск сворачивается в кнопку на узких экранах
   nav-tooltip.js           тултипы свёрнутого меню
   order-info.js            данные заявки: компания, точки маршрута, адреса (общий для обеих страниц)
+  page-head.js             initPageHead(getHead, isActive): шапка страницы прилипает и заменяет хедер при скролле
   order.js                 страница заявки, роутинг по #hash, панель цены
   mobile.js                мобильная карточка и сводка фильтров
   checkout.js              страница оформления: оплата, подвижной состав, доп. услуги, итог

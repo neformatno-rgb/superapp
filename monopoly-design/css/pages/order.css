@@ -27,67 +27,6 @@
   min-height: 40px;
 }
 
-.dback {
-  border: 0;
-  background: transparent;
-  padding: 0;
-  color: var(--t1);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 24px;
-  line-height: 28px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.dback svg {
-  color: var(--t1);
-}
-
-.dback:hover {
-  color: var(--accent-text);
-}
-
-.dback:hover svg {
-  color: var(--accent-text);
-}
-
-.sq {
-  width: 40px;
-  height: 40px;
-  border: 0;
-  border-radius: 8px;
-  background: var(--surface);
-  color: var(--t2);
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 160ms,color 160ms;
-}
-
-.sq:hover {
-  color: var(--t1);
-}
-
-.sq[aria-pressed="true"] {
-  background: var(--tint);
-  color: var(--accent-text);
-}
-
-.sq[aria-pressed="true"]:hover {
-  background: var(--tint-hover);
-}
-
-.sq .solid {
-  display: none;
-}
-
-.sq[aria-pressed="true"] .solid {
-  display: block;
-}
-
 .dl {
   min-width: 0;
   display: flex;
@@ -1196,11 +1135,6 @@ button.mini:hover .sqb .s {
 }
 
 @media (max-width:767px) {
-  .dback {
-    font-size: 18px;
-    line-height: 24px;
-  }
-
   .dsum,
   .dsec {
     padding: 16px;
@@ -1269,17 +1203,6 @@ button.mini:hover .sqb .s {
     top: auto;
     bottom: 16px;
   }
-}
-
-/* Order page, desktop: while scrolling, «К грузам» + actions cover the header to the right of the side menu;
-   the burger and the side menu stay where they are */
-@media (min-width:768px) {
-  .main.is-detail .dhead { position: sticky; top: 0; z-index: 13; padding: 12px 0; margin: -12px 0; background: var(--bg); box-shadow: 0 0 0 24px var(--bg); clip-path: inset(0 -24px); }
-  body.hdr-hide .main.is-detail .dhead { z-index: 17; background: transparent; box-shadow: none; }
-  .dbar { position: fixed; top: 0; right: 0; height: 64px; z-index: 16; background: var(--surface); pointer-events: none; opacity: 0; }
-  body.hdr-hide .dbar { opacity: 1; }
-  body.hdr-hide .dr { top: 76px; }
-  body.hdr-hide .dsec { scroll-margin-top: 76px; }
 }
 
 /* «Условия перевозки»: two separate cards of label/value pairs, no icons */

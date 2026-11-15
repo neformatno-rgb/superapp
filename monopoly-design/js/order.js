@@ -48,7 +48,7 @@ function detailHTML(o) {
   const cargoLine = esc(o.cargo) + ' — ' + o.pl + ' плт, Бр./Нетто (кг): ' + nf(gross) + '/' + nf(o.kg) + ', Стоимость: ' + money(X.cargoValue);
   let h = '';
   // head
-  h += '<div class="dhead"><button type="button" class="dback" data-d="back">' + DI.back + 'К грузам</button><span style="flex:1"></span>' +
+  h += '<div class="dhead phead"><button type="button" class="dback" data-d="back">' + DI.back + 'К грузам</button><span class="phead-sp"></span>' +
     '<button type="button" class="sq" data-d="share" aria-label="Поделиться заявкой">' + DI.share + '</button>' +
     '<button type="button" class="sq" data-d="save" aria-pressed="' + saved + '" aria-label="' + (saved ? 'Убрать из избранного' : 'В избранное') + '">' + BOOK24 + '</button></div>';
   h += '<div class="dl">';
@@ -276,16 +276,6 @@ detailEl.addEventListener('keydown', (e) => { if (e.target.id === 'dOffer' && e.
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && V.id !== null && $('modal').hidden && !document.querySelector('.menu.open')) { if (history.state && history.state.order) history.back(); else hideDetail(true); } });
 if (location.hash.length > 1) fromHash();
 
-// Order page, desktop: hide the app header after a little scroll, the sticky «К грузам» bar replaces it
-const dbar = document.createElement('div'); dbar.className = 'dbar'; dbar.setAttribute('aria-hidden', 'true'); document.body.appendChild(dbar);
-const hdrSync = () => {
-  const det = mainEl.classList.contains('is-detail') && window.innerWidth >= 768;
-  const dh = det && document.querySelector('#detail .dhead');
-  // swap only once the bar has reached the very top under the header, so nothing jumps
-  const on = !!dh && window.scrollY > 0 && dh.getBoundingClientRect().top <= 0.5;
-  document.body.classList.toggle('hdr-hide', on);
-  if (on) dbar.style.left = mainEl.getBoundingClientRect().left + 'px';
-};
-window.addEventListener('scroll', hdrSync, { passive: true });
-window.addEventListener('resize', hdrSync);
+// sticky page head (component): «К грузам» + actions replace the app header while scrolling
+const hdrSync = initPageHead(() => detailEl.querySelector('.phead'), () => mainEl.classList.contains('is-detail'));
 new MutationObserver(hdrSync).observe(mainEl, { attributes: true, attributeFilter: ['class'] });

@@ -24,7 +24,7 @@ const X = orderInfo(o);
 const theme = { get: () => store.get('theme', 'light') };
 const C = {
   vat: true, pay: 'fast', truck: 0, trailer: 0, driver: 0,
-  fuel: true, fuelSum: '', bonus: false, bonusSum: '', ins: false,
+  fuel: false, fuelSum: '', bonus: false, bonusSum: '', ins: false,
   done: !!store.get('taken', {})[o.id], open: null,
 };
 
@@ -60,7 +60,7 @@ function extraHTML(k, title, desc, on, body) {
   return '<div class="ck-x' + (on ? ' on' : '') + '"><img src="' + CK_ILL[k] + '" alt=""><div class="ck-xb">' +
     '<div class="ck-xh"><b>' + title + '<button type="button" class="info" data-c="info" data-k="' + k + '" aria-label="Подробнее: ' + title + '">' + INFO + '</button></b>' +
     '<button type="button" class="ck-sw" data-c="sw" data-k="' + k + '" role="switch" aria-checked="' + on + '" aria-label="' + title + '"><span class="sw' + (on ? ' on' : '') + '"></span></button></div>' +
-    '<p class="ck-xd">' + desc + '</p>' + body + '</div></div>';
+    '<p class="ck-xd">' + desc + '</p>' + (on ? body : '') + '</div></div>';
 }
 
 function panelHTML() {
@@ -84,7 +84,7 @@ function render() {
   const bonusErr = C.bonus && num(C.bonusSum) > BONUS_BALANCE;
   const mpt = (k, city, day, key) => '<div class="mpt ' + k + '"><i></i><span><span class="c">' + esc(city) + '</span><span class="w">' + winHTML(day, key) + '</span></span></div>';
   let h = '';
-  h += '<div class="ck-head"><button type="button" class="dback" data-c="back">' + DI.back + 'Оформление заказа ' + o.id + '</button></div>';
+  h += '<div class="ck-head phead"><button type="button" class="dback" data-c="back">' + DI.back + 'Оформление заказа ' + o.id + '</button></div>';
   h += '<div class="ck-grid"><div class="ck-l">';
   // summary — same block as on the order page
   h += '<section class="dcard dsum" aria-label="Заявка ' + o.id + '">' +
@@ -221,3 +221,5 @@ function toast(msg) { const t = $('toast'); t.textContent = msg; t.hidden = fals
 
 chrome();
 render();
+// sticky page head (component) — same behaviour as on the order page
+initPageHead(() => ckEl.querySelector('.phead'), () => true)();
