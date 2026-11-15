@@ -1283,3 +1283,60 @@ button.mini:hover .sqb .s {
   body.hdr-hide .dr { top: 76px; }
   body.hdr-hide .dsec { scroll-margin-top: 76px; }
 }
+
+/* «Условия перевозки»: two plain label/value groups, no icons */
+.cond {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 32px;
+  row-gap: 32px;
+}
+
+.cgrp h2 {
+  margin: 0 0 24px;
+}
+
+.kvs {
+  display: grid;
+  grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
+  gap: 24px 32px;
+}
+
+.kv {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.kv span {
+  font: var(--text-body);
+  color: var(--t2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.kv b {
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 400;
+  color: var(--t1);
+  overflow-wrap: anywhere;
+}
+
+@media (max-width:1279px) {
+  .cond {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width:767px) {
+  .cgrp h2 {
+    margin-bottom: 16px;
+  }
+
+  .kvs {
+    gap: 16px;
+  }
+}

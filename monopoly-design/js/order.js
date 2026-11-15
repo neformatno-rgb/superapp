@@ -71,12 +71,17 @@ function detailHTML(o) {
   h += '<div class="dtabs" role="tablist" aria-label="Разделы заявки">' +
     [['cond', 'Условия перевозки'], ['route', 'Маршрут и груз'], ['extra', 'Дополнительно'], ['docs', 'Документы']].map(([id, t], i) => '<button type="button" class="tab' + (i === 0 ? ' on' : '') + '" data-d="jump" data-to="' + id + '">' + t + '</button>').join('') + '</div>';
   // conditions
-  h += '<section class="dcard dsec" id="d-cond"><h2>Условия перевозки</h2><div class="props">' +
-    propHTML('kuzov', 'Тип кузова', o.body) + propHTML('params', 'Параметры кузова', o.t + ' т | ' + o.m3 + ' м³') +
-    propHTML('load', 'Тип погрузки', loadType(o.body)) + propHTML('temp', 'Температурный режим', tempMode(o.body)) +
-    '</div><h3>Параметры транспорта</h3><div class="props">' +
-    propHTML('kuzov', 'Тип кузова', o.body) + propHTML('params', 'Параметры кузова', 'от ' + o.t + ' т | от ' + o.m3 + ' м³ | ' + o.pl + ' плт') +
-    propHTML('load', 'Тип погрузки', loadType(o.body)) + propHTML('temp', 'Температурный режим', tempMode(o.body)) + '</div></section>';
+  const kv = (k, v) => '<div class="kv"><span>' + k + '</span><b>' + v + '</b></div>';
+  const nCargo = X.pts.filter((p) => p.kind === 'ld').length || 1;
+  const cargoWord = nCargo % 10 === 1 && nCargo % 100 !== 11 ? 'груз' : [2, 3, 4].indexOf(nCargo % 10) > -1 && [12, 13, 14].indexOf(nCargo % 100) === -1 ? 'груза' : 'грузов';
+  h += '<section class="dcard dsec" id="d-cond" aria-label="Условия перевозки"><div class="cond">' +
+    '<div class="cgrp"><h2>Требования к транспорту</h2><div class="kvs">' +
+      kv('Тип кузова', esc(bodyKind(o.body))) + kv('Грузоподъемность', o.t + ' т | ' + o.m3 + ' м³') +
+      kv('Тип погрузки', loadType(o.body)) + kv('Температурный режим', tempMode(o.body)) + '</div></div>' +
+    '<div class="cgrp"><h2>Груз</h2><div class="kvs">' +
+      kv('Количество', nCargo + ' ' + cargoWord) + kv('Упаковка', o.pl + ' Плт.') +
+      kv('Категория груза', esc(o.cargo)) + '</div></div>' +
+  '</div></section>';
   // route
   h += '<section class="dcard dsec' + (V.only ? ' only-cargo' : '') + '" id="d-route"><div class="rhd"><h2>Маршрут</h2>' +
     '<button type="button" class="only" role="switch" aria-checked="' + V.only + '" data-d="only">Показать только грузы<span class="sw' + (V.only ? ' on' : '') + '"></span></button>' +
