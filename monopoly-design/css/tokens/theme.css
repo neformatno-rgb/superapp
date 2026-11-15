@@ -66,7 +66,7 @@
     --on-accent: var(--white);
     /* Accent */
     --accent: var(--blue-400);
-    --accent-text: var(--blue-200);
+    --accent-text: var(--blue-400);
     --accent-soft: rgba(84, 148, 253, 0.36);
     --tint: rgba(84, 148, 253, 0.22);
     --tint-hover: rgba(84, 148, 253, 0.30);
@@ -76,7 +76,7 @@
     /* Route points */
     --point-load: var(--green-500);
     --point-load-bg: rgba(44, 186, 46, 0.12);
-    --point-unload: var(--blue-700);
+    --point-unload: var(--blue-400);
     /* Status */
     --success: var(--green-700);
     --error: var(--red-300);
@@ -114,7 +114,7 @@
   --on-accent: var(--white);
   /* Accent */
   --accent: var(--blue-400);
-  --accent-text: var(--blue-200);
+  --accent-text: var(--blue-400);
   --accent-soft: rgba(84, 148, 253, 0.36);
   --tint: rgba(84, 148, 253, 0.22);
   --tint-hover: rgba(84, 148, 253, 0.30);
@@ -124,7 +124,7 @@
   /* Route points */
   --point-load: var(--green-500);
   --point-load-bg: rgba(44, 186, 46, 0.12);
-  --point-unload: var(--blue-700);
+  --point-unload: var(--blue-400);
   /* Status */
   --success: var(--green-700);
   --error: var(--red-300);
