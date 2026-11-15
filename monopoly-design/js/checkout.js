@@ -210,8 +210,8 @@ ckEl.addEventListener('click', (e) => {
       }
       if (C.fuel && num(C.fuelSum) > fuelMax()) { toast('Сумма «Топлива после погрузки» — не больше 90% стоимости'); ckEl.querySelector('[data-c="fuelSum"]').focus(); break; }
       if (C.bonus && num(C.bonusSum) > BONUS_BALANCE) { toast('Столько бонусов нет на счету'); ckEl.querySelector('[data-c="bonusSum"]').focus(); break; }
-      const tk = store.get('taken', {}); tk[o.id] = true; store.set('taken', tk); C.done = true; render();
-      toast('Заявка ' + o.id + ' оформлена: ' + money2(t.account) + ' на р/с');
+      const tk = store.get('taken', {}); tk[o.id] = true; store.set('taken', tk);
+      location.href = 'success.html?id=' + encodeURIComponent(o.id);
       break;
     }
   }

@@ -1,0 +1,104 @@
+/* Page: «Заявка успешно сформирована» — opened after «Оформить заявку» on checkout */
+
+.ok-main {
+  gap: 12px;
+}
+
+.ok-card {
+  min-height: 324px;
+  padding: 37px 108px 37px 106px;
+  border-radius: 12px;
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+.ok-txt {
+  max-width: 440px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.ok-txt h1 {
+  margin: 0;
+  font: var(--text-h1);
+  color: var(--t1);
+}
+
+.ok-txt p {
+  margin: 16px 0 24px;
+  font: var(--text-body);
+  color: var(--t2);
+}
+
+.ok-btn {
+  height: 40px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--subtle);
+  color: var(--t2);
+  font: var(--text-body-medium);
+  font-size: 15px;
+  transition: color 160ms, background-color 160ms;
+}
+
+.ok-btn:hover {
+  color: var(--t1);
+}
+
+/* illustration on a soft circle */
+.ok-ill {
+  position: relative;
+  flex-shrink: 0;
+  width: 250px;
+  height: 250px;
+}
+
+.ok-ill::before {
+  content: "";
+  position: absolute;
+  inset: 15px 10px 8px 10px;
+  border-radius: 50%;
+  background: var(--subtle);
+}
+
+.ok-ill img {
+  position: relative;
+  display: block;
+  width: 250px;
+  height: 250px;
+}
+
+@media (max-width:1023px) {
+  .ok-card {
+    padding: 40px;
+  }
+}
+
+@media (max-width:767px) {
+  .ok-head {
+    display: none;
+  }
+
+  .ok-card {
+    padding: 24px 16px 32px;
+    flex-direction: column-reverse;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+  }
+
+  .ok-txt {
+    align-items: center;
+  }
+
+  .ok-ill,
+  .ok-ill img {
+    width: 180px;
+    height: 180px;
+  }
+}
