@@ -50,9 +50,16 @@ $('mSort').addEventListener('click', (e) => {
   const r = $('mSort').getBoundingClientRect(); const m = w._menu;
   m.style.width = '220px'; m.style.left = Math.max(8, r.left) + 'px'; m.style.top = (r.bottom + 4) + 'px';
 });
-document.querySelector('.mbk').addEventListener('click', () => { if (mainEl.classList.contains('is-detail')) hideDetail(true); else toast('Возврат на главную — в следующей итерации'); });
+// phone header: back arrow on the order page, burger (side menu with a dim backdrop) on the list
+const mScrim = document.createElement('div'); mScrim.className = 'mnav-scrim'; document.body.appendChild(mScrim);
+const mNav = (on) => { document.body.classList.toggle('mnav', on); document.querySelector('.mbk').setAttribute('aria-expanded', on); };
+mScrim.addEventListener('click', () => mNav(false));
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && document.body.classList.contains('mnav')) mNav(false); });
+document.querySelector('.mbk').addEventListener('click', () => { if (mainEl.classList.contains('is-detail')) hideDetail(true); else mNav(!document.body.classList.contains('mnav')); });
 $('mSub').addEventListener('click', () => toast('Подписка на этот поиск оформлена: новые грузы придут в уведомления'));
 const mTitle = document.querySelector('.mhead h2');
-new MutationObserver(() => { const det = mainEl.classList.contains('is-detail') && V.id; mTitle.textContent = det ? 'Просмотр заявки' : 'Поиск грузов'; mTitle.parentNode.classList.toggle('det', !!det); }).observe(mainEl, { attributes: true, attributeFilter: ['class'] });
+const mHeadSync = () => { const det = mainEl.classList.contains('is-detail') && V.id; document.querySelector('.mbk').setAttribute('aria-label', det ? 'Назад' : 'Меню'); mTitle.textContent = det ? 'Просмотр заявки' : 'Поиск грузов'; mTitle.parentNode.classList.toggle('det', !!det); };
+new MutationObserver(mHeadSync).observe(mainEl, { attributes: true, attributeFilter: ['class'] });
+setTimeout(mHeadSync, 0); // also when the page opens straight on an order (#МО…)
 const _render = render;
 render = function () { _render(); mSync(); };

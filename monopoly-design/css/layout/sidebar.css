@@ -129,3 +129,55 @@
 [data-theme="dark"] .ico-moon {
   display: none !important;
 }
+
+/* phone: the side menu slides in from the left over a dim backdrop (opened by the burger in the phone header) */
+.mnav-scrim {
+  display: none;
+}
+
+@media (max-width:767px) {
+  body.mnav .side {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 55;
+    width: 280px !important;
+    height: auto;
+    padding: calc(16px + env(safe-area-inset-top,0px)) 12px 16px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    border-radius: 0 16px 16px 0;
+    animation: mnav-in 240ms cubic-bezier(.2,.8,.2,1);
+  }
+
+  body.mnav .side .lb,
+  body.mnav .side .end {
+    opacity: 1 !important;
+  }
+
+  body.mnav .mnav-scrim {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 54;
+    background: var(--overlay);
+    animation: mnav-fade 200ms ease;
+  }
+
+  @keyframes mnav-in {
+    from { transform: translateX(-100%); }
+  }
+
+  @keyframes mnav-fade {
+    from { opacity: 0; }
+  }
+}
+
+@media (prefers-reduced-motion:reduce) {
+  body.mnav .side,
+  body.mnav .mnav-scrim {
+    animation: none;
+  }
+}

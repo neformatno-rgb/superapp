@@ -14,6 +14,8 @@
   .mbk, .msub { width: 40px; height: 40px; flex-shrink: 0; border: 0; border-radius: 12px; padding: 0; display: flex; align-items: center; justify-content: center; color: var(--t1); background: var(--subtle); transition: background-color 160ms; }
   .main { padding-top: 12px; }
   .mbk { background: transparent; margin-left: -8px; }
+  /* list: burger opens the side menu; order page: back arrow */
+  .mhead:not(.det) .mbk .mb-back, .mhead.det .mbk .mb-burger { display: none !important; }
   .mbk:hover, .msub:hover { background: var(--subtle); }
   .main { gap: 12px; }
   .main > h1 { display: none; }
@@ -70,7 +72,7 @@
   .chips { padding-top: 6px; margin-top: -6px; } /* room for the counter badge inside the scrolling row */
   .chips > .chip { display: none; } /* Фикс / Аукцион / Встречное live in the filter sheet on phones */
   .mic-cnt[hidden] { display: none; }
-  .bar { border-top: 0; padding: 4px 0 0; min-height: 0; gap: 12px; }
+  .bar { border-top: 0; padding: 12px 0 0; min-height: 0; gap: 12px; } /* 16px from the filter row to «Найдено» */
   .bar .found { font-size: 18px; line-height: 24px; }
   .bar .ddl[data-dd="sort"] { position: absolute; width: 0; height: 0; overflow: hidden; }
 
