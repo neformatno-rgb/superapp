@@ -42,6 +42,22 @@ const V = { id: null, edit: false, seg: 'tariff', pay: true, map: false, only: f
 // «Прочие условия»: a stable per-order subset of each list (mock data)
 const OTHER_REQS = ['Медицинская книжка', 'Санитарная обработка', 'Отслеживание машины', 'Погрузка/разгрузка силами водителя', 'Возврат тары', 'Смартфон'];
 const OTHER_EQUIP = ['Гидроборт', 'Сдвижные стойки', 'Крепежные ремни 6 шт'];
+// «Дополнительная информация»: free-text comment from the cargo owner (mock data)
+const OWNER_NOTES = [
+  'Въезд на склад по пропуску — данные водителя и госномер прислать за сутки до погрузки. Погрузка с рампы, ждём не дольше 2 часов, дальше простой оплачиваем по договору.',
+  'Груз хрупкий: паллеты не штабелировать, обязательно закрепить ремнями. На выгрузке получатель проверяет пломбу и пересчитывает места при водителе.',
+  'Окно выгрузки строго по записи, при опоздании больше чем на час запись переносится на следующий день. Просим заранее предупреждать о задержках диспетчеру.',
+  'Температурный режим держать всю дорогу, распечатку с термописца отдать на выгрузке. Перед погрузкой кузов должен быть охлаждён до +4 °С.',
+  'Документы забрать у кладовщика на втором КПП. Оригиналы ТН и ТТН вернуть почтой или курьером в течение 10 дней — без них оплата не проводится.',
+  'На территории склада скорость не больше 5 км/ч, водитель в жилете и закрытой обуви. Курить можно только в отведённом месте у ворот.',
+  'Возможна догрузка попутно по маршруту до 2 паллет — согласуем отдельно, доплата сверху. Оплата по факту доставки, без отсрочки.',
+  'Получатель — торговая сеть, нужна медкнижка и санобработка кузова с отметкой. Без справки машину на выгрузку не пустят.',
+];
+// the cold-chain note only makes sense for refrigerated / isothermal bodies
+function ownerNote(o) {
+  const pool = OWNER_NOTES.filter((t) => tempMode(o.body) !== 'Не требуется' || !/Температурный режим/.test(t));
+  return pool[hashStr(o.id + 'n') % pool.length];
+}
 function pickSome(list, seed, min) {
   const h = hashStr(seed); const out = list.filter((x, i) => (h >> i) & 1);
   return out.length >= min ? out : list.slice(0, Math.max(min, out.length));
@@ -92,7 +108,9 @@ function detailHTML(o) {
       [['Дополнительно', pickSome(OTHER_REQS, o.id + 'r', 2)], ['Дополнительное оборудование', pickSome(OTHER_EQUIP, o.id + 'e', 1)]].map((d, i) => {
         const open = !!V.odocs[i];
         return '<div class="doc' + (open ? ' open' : '') + '"><button type="button" class="dhd" data-d="odoc" data-i="' + i + '" aria-expanded="' + open + '"><span>' + d[0] + '</span><span class="ttag ld">' + d[1].length + ' шт.</span>' + CHEV24 + '</button><p class="dnote">' + esc(d[1].join(', ')) + '</p></div>';
-      }).join('') + '</div></div>' +
+      }).join('') +
+      '<div class="doc' + (V.odocs[2] ? ' open' : '') + '"><button type="button" class="dhd" data-d="odoc" data-i="2" aria-expanded="' + !!V.odocs[2] + '"><span>Дополнительная информация</span>' + CHEV24 + '</button><p class="dnote">' + esc(ownerNote(o)) + '</p></div>' +
+      '</div></div>' +
   '</div></section>';
   // route
   h += '<section class="dcard dsec' + (V.only ? ' only-cargo' : '') + '" id="d-route"><div class="rhd"><h2>Маршрут</h2>' +
