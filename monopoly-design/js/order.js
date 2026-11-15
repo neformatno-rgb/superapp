@@ -37,7 +37,7 @@ function orderInfo(o) {
            pts, cargoValue: (300 + (h >> 7) % 1700) * 1000, payDays: [5, 7, 10, 14, 20, 30][(h >> 11) % 6] };
 }
 
-const V = { id: null, edit: false, seg: 'tariff', pay: true, map: false, only: false, closed: {}, docs: {}, offer: '' , listY: 0 };
+const V = { id: null, edit: false, seg: 'tariff', pay: true, map: false, only: false, closed: {}, docs: {}, odocs: {}, offer: '' , listY: 0 };
 
 // «Прочие условия»: a stable per-order subset of each list (mock data)
 const OTHER_REQS = ['Медицинская книжка', 'Санитарная обработка', 'Отслеживание машины', 'Погрузка/разгрузка силами водителя', 'Возврат тары', 'Смартфон'];
@@ -88,9 +88,11 @@ function detailHTML(o) {
     '<div class="cgrp"><h2>Груз</h2><div class="kvs">' +
       kv('Количество', nCargo + ' ' + cargoWord) + kv('Упаковка', o.pl + ' Плт.') +
       kv('Категория груза', esc(o.cargo)) + '</div></div>' +
-    '<div class="cgrp wide"><h2>Прочие условия</h2><div class="kvs one">' +
-      kv('Дополнительно', pickSome(OTHER_REQS, o.id + 'r', 2).join(', ')) +
-      kv('Дополнительное оборудование', pickSome(OTHER_EQUIP, o.id + 'e', 1).join(', ')) + '</div></div>' +
+    '<div class="cgrp wide"><h2>Прочие условия</h2><div class="docs">' +
+      [['Дополнительно', pickSome(OTHER_REQS, o.id + 'r', 2)], ['Дополнительное оборудование', pickSome(OTHER_EQUIP, o.id + 'e', 1)]].map((d, i) => {
+        const open = !!V.odocs[i];
+        return '<div class="doc' + (open ? ' open' : '') + '"><button type="button" class="dhd" data-d="odoc" data-i="' + i + '" aria-expanded="' + open + '"><span>' + d[0] + '</span><span class="ttag ld">' + d[1].length + ' шт.</span>' + CHEV24 + '</button><p class="dnote">' + esc(d[1].join(', ')) + '</p></div>';
+      }).join('') + '</div></div>' +
   '</div></section>';
   // route
   h += '<section class="dcard dsec' + (V.only ? ' only-cargo' : '') + '" id="d-route"><div class="rhd"><h2>Маршрут</h2>' +
@@ -163,7 +165,7 @@ function showDetail(id, push) {
   const o = ALL.find((x) => x.id === id);
   if (!o) return hideDetail(false);
   if (V.id === null) V.listY = window.scrollY;
-  if (V.id !== id) Object.assign(V, { edit: false, seg: 'tariff', pay: true, map: false, only: false, closed: {}, docs: {}, offer: '' });
+  if (V.id !== id) Object.assign(V, { edit: false, seg: 'tariff', pay: true, map: false, only: false, closed: {}, docs: {}, odocs: {}, offer: '' });
   V.id = id;
   if (push) { try { history.pushState({ order: id }, '', '#' + encodeURIComponent(id)); } catch (e) {} }
   mainEl.classList.add('is-detail');
@@ -216,6 +218,7 @@ detailEl.addEventListener('click', (e) => {
     case 'pay': V.pay = !V.pay; b.closest('.pay').classList.toggle('closed', !V.pay); b.setAttribute('aria-expanded', V.pay); break;
     case 'vat': S.vat = !S.vat; renderDetail(); break;
     case 'info': showInfo(b); break;
+    case 'odoc': { const i = +b.dataset.i; V.odocs[i] = !V.odocs[i]; b.closest('.doc').classList.toggle('open', V.odocs[i]); b.setAttribute('aria-expanded', V.odocs[i]); break; }
     case 'doc': { const i = +b.dataset.i; V.docs[i] = !V.docs[i]; b.closest('.doc').classList.toggle('open', V.docs[i]); b.setAttribute('aria-expanded', V.docs[i]); break; }
     case 'geo': {
       const v = b.dataset.geo;
