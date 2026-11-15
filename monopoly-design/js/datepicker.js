@@ -14,6 +14,7 @@ const rangeLabel = (r) => r[0] === r[1] ? dayLabel(r[0]) : dayLabel(r[0]) + ' â€
 const dpFld = $('fDayFld'); const dpBtn = dpFld.querySelector('.fv-btn');
 const dp = $('dp'); document.body.appendChild(dp);
 const DP = { y: 2026, m: 10, a: null, b: null, hover: null };   // a/b â€” pending selection inside the popup
+let dpAnchor = dpFld;   // field the popup is attached to (the filter bar or the filter drawer)
 
 function dpRender() {
   const first = new Date(DP.y, DP.m, 1); const lead = (first.getDay() + 6) % 7;
@@ -35,20 +36,20 @@ function dpRender() {
   dp.querySelector('[data-dp=apply]').disabled = DP.a == null;
 }
 function dpPlace() {
-  const r = dpFld.getBoundingClientRect(); const w = dp.offsetWidth; const h = dp.offsetHeight;
+  const r = dpAnchor.getBoundingClientRect(); const w = dp.offsetWidth; const h = dp.offsetHeight;
   dp.style.left = Math.max(8, Math.min(r.left, window.innerWidth - w - 8)) + 'px';
   const below = window.innerHeight - r.bottom;
   dp.style.top = (below < h + 12 && r.top > h + 12 ? r.top - h - 4 : r.bottom + 4) + 'px';
 }
-function dpOpen() {
-  closeDD();
+function dpOpen(anchor) {
+  closeDD(); dpAnchor = anchor || dpFld;
   const r = dayRange(S.day); DP.a = r ? r[0] : null; DP.b = r ? r[1] : null; DP.hover = null;
   const d = dpDate(r ? r[0] : Math.min.apply(null, ALL.map((o) => o.fromDay))); DP.y = d.getFullYear(); DP.m = d.getMonth();
-  dpRender(); dpFld.classList.add('open'); dp.classList.add('open'); dpBtn.setAttribute('aria-expanded', 'true'); dpPlace();
+  dpRender(); dpAnchor.classList.add('open'); dp.classList.add('open'); if (dpAnchor === dpFld) dpBtn.setAttribute('aria-expanded', 'true'); dpPlace();
 }
 function dpClose() {
   if (!dp.classList.contains('open')) return;
-  dpFld.classList.remove('open'); dp.classList.remove('open'); dpBtn.setAttribute('aria-expanded', 'false');
+  dpAnchor.classList.remove('open'); dp.classList.remove('open'); dpBtn.setAttribute('aria-expanded', 'false');
 }
 function dpSync() {
   const r = dayRange(S.day); const fv = dpFld.querySelector('.fv');
@@ -67,14 +68,14 @@ dp.addEventListener('click', (e) => {
   if (d) { const i = +d.dataset.i; if (DP.a == null || DP.b != null) { DP.a = i; DP.b = null; } else { DP.b = i; if (DP.b < DP.a) [DP.a, DP.b] = [DP.b, DP.a]; } DP.hover = null; dpRender(); return; }
   const act = e.target.closest('[data-dp]'); if (!act) return;
   if (act.dataset.dp === 'reset') { DP.a = DP.b = null; dpClose(); set({ day: '' }); }
-  if (act.dataset.dp === 'apply' && DP.a != null) { dpClose(); set({ day: DP.a + '-' + (DP.b ?? DP.a) }); dpBtn.focus(); }
+  if (act.dataset.dp === 'apply' && DP.a != null) { const back = dpAnchor === dpFld ? dpBtn : dpAnchor; dpClose(); set({ day: DP.a + '-' + (DP.b ?? DP.a) }); back.focus(); }
 });
 dp.addEventListener('mouseover', (e) => {
   const d = e.target.closest('.dpd'); if (!d || DP.a == null || DP.b != null) return;
   const i = +d.dataset.i; if (i !== DP.hover) { DP.hover = i; dpRender(); }
 });
 dp.addEventListener('mouseleave', () => { if (DP.hover != null && DP.b == null) { DP.hover = null; dpRender(); } });
-document.addEventListener('click', (e) => { if (!dp.contains(e.target) && !dpFld.contains(e.target)) dpClose(); }, true);
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && dp.classList.contains('open')) { dpClose(); dpBtn.focus(); } });
+document.addEventListener('click', (e) => { if (!dp.contains(e.target) && !dpAnchor.contains(e.target)) dpClose(); }, true);
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && dp.classList.contains('open')) { const back = dpAnchor === dpFld ? dpBtn : dpAnchor; dpClose(); back.focus(); e.stopPropagation(); } }, true);
 window.addEventListener('resize', dpClose);
 window.addEventListener('scroll', () => { if (dp.classList.contains('open')) dpPlace(); }, true);

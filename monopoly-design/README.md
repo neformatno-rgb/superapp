@@ -25,7 +25,7 @@ css/
     typography.css         шрифт и шкала текста из UI-кита
   base.css                 сброс, документ, утилиты
   layout/                  каркас: шапка и контент (shell), боковое меню (sidebar)
-  components/              tabs, search, filters, dropdown, switch, order-card, pager, modal, toast, tooltip, states, input (поле: .inp normal 40px, .inp.s small 32px), page-head (липкая шапка «← Заголовок» для внутренних страниц)
+  components/              tabs, search, filters, dropdown, switch, order-card, pager, modal, toast, tooltip, states, input (поле: .inp normal 40px, .inp.s small 32px), filter-drawer (боковая панель «Фильтры», 420px), page-head (липкая шапка «← Заголовок» для внутренних страниц)
   pages/order.css          страница заявки
   pages/checkout.css       оформление заказа
   layout/mobile.css        раскладка для телефона (≤767px)
@@ -44,6 +44,7 @@ js/                        подключаются по порядку, общ�
   mobile.js                мобильная карточка и сводка фильтров
   checkout.js              страница оформления: оплата, подвижной состав, доп. услуги, итог
   success.js               страница «Заявка успешно сформирована»
+  filter-drawer.js         боковая панель со всеми фильтрами списка (кнопка «Фильтры»)
   main.js                  запуск
 assets/
   icons/                   библиотека иконок UI-кита отдельными SVG
