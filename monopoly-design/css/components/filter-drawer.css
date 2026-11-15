@@ -12,17 +12,19 @@
 
 .fd {
   position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
+  top: 8px;
+  right: 8px;
+  bottom: 8px;
   z-index: 51;
   width: 420px;
-  max-width: 100%;
+  max-width: calc(100% - 16px);
+  border-radius: 16px;
+  overflow: hidden;
   background: var(--surface);
   box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
-  transform: translateX(100%);
+  transform: translateX(calc(100% + 16px));
   transition: transform 240ms cubic-bezier(.2, .8, .2, 1);
 }
 
