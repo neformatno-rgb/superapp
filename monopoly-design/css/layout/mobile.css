@@ -68,6 +68,7 @@
   .mic { position: relative; }
   .mic-cnt { position: absolute; top: -4px; right: -4px; box-shadow: 0 0 0 2px var(--bg); }
   .chips { padding-top: 6px; margin-top: -6px; } /* room for the counter badge inside the scrolling row */
+  .chips > .chip { display: none; } /* Фикс / Аукцион / Встречное live in the filter sheet on phones */
   .mic-cnt[hidden] { display: none; }
   .bar { border-top: 0; padding: 4px 0 0; min-height: 0; gap: 12px; }
   .bar .found { font-size: 18px; line-height: 24px; }
