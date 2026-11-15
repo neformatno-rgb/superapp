@@ -1,0 +1,560 @@
+/* Component: filter drawer — 420px side panel with every filter of the list screen.
+   Opened by the «Фильтры» button in the filter bar. JS: js/filter-drawer.js */
+
+.fd-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: var(--overlay);
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+.fd {
+  position: fixed;
+  top: 8px;
+  right: 8px;
+  bottom: 8px;
+  z-index: 51;
+  width: 420px;
+  max-width: calc(100% - 16px);
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(calc(100% + 16px));
+  transition: transform 240ms cubic-bezier(.2, .8, .2, 1);
+}
+
+.fd-open .fd-scrim {
+  opacity: 1;
+}
+
+.fd-open .fd {
+  transform: none;
+}
+
+@media (prefers-reduced-motion:reduce) {
+  .fd,
+  .fd-scrim {
+    transition: none;
+  }
+}
+
+/* head */
+.fd-head {
+  height: 64px;
+  flex-shrink: 0;
+  padding: 0 16px 0 12px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fd-head h2 {
+  flex: 1;
+  margin: 0;
+  font: var(--text-h2);
+  color: var(--t1);
+}
+
+.fd-x {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--t1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fd-x:hover {
+  background: var(--subtle);
+}
+
+.fd-reset {
+  height: 32px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--tint);
+  color: var(--accent-text);
+  font: var(--text-body-medium);
+}
+
+.fd-reset:disabled {
+  background: var(--subtle);
+  color: var(--grey64);
+  cursor: default;
+}
+
+/* body */
+.fd-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 24px 24px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.fd-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.fd-label {
+  font: var(--text-caption);
+  font-weight: 500;
+  color: var(--t1);
+}
+
+.fd-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fd-row > .inp {
+  flex: 1;
+}
+
+.fd-swap {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--t2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 160ms, color 160ms;
+}
+
+.fd-swap:hover {
+  border-color: var(--grey64);
+  color: var(--t1);
+}
+
+.fd-swap svg {
+  transform: rotate(90deg);
+}
+
+/* clear «×» inside a filled field */
+.fd .inp {
+  position: relative;
+}
+
+.fd-ic {
+  display: flex;
+  flex-shrink: 0;
+  color: var(--t2);
+  font-style: normal;
+}
+
+.fd .inp.has .fd-ic:not(.keep) {
+  display: none;
+}
+
+.fd-sel.open .fd-ic:not(.keep) svg {
+  transform: rotate(180deg);
+}
+
+.fd .inp > .fd-clr {
+  flex: none;
+  display: none;
+  width: 24px;
+  height: 24px;
+  margin-right: -4px;
+  border-radius: 6px;
+  color: var(--t2);
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.fd .inp.has .fd-clr {
+  display: flex;
+}
+
+.fd-clr:hover {
+  background: var(--subtle);
+  color: var(--t1);
+}
+
+.fd-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.fd-chips .chip {
+  height: 40px;
+  padding: 0 12px;
+  font: var(--text-body);
+}
+
+/* multi-select tags inside a drawer field */
+.fd .inp > .fd-tags {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow: hidden;
+  margin-left: -4px;
+}
+
+.fd-tags .mtag {
+  flex-shrink: 0;
+  height: 24px;
+  font: var(--text-caption);
+  line-height: 24px;
+}
+
+.fd-tags .mtx {
+  cursor: pointer;
+}
+
+/* «от … до …» pair, two inputs sharing one border */
+.fd-pair {
+  display: flex;
+}
+
+.fd-pair .inp {
+  flex: 1;
+  min-width: 0;
+}
+
+.fd-pair .inp:first-child {
+  border-radius: 8px 0 0 8px;
+}
+
+.fd-pair .inp:last-child {
+  margin-left: -1px;
+  border-radius: 0 8px 8px 0;
+}
+
+.fd-pair .inp:hover,
+.fd-pair .inp:focus {
+  position: relative;
+  z-index: 1;
+}
+
+/* foot */
+.fd-foot {
+  flex-shrink: 0;
+  padding: 16px 24px 24px;
+  border-top: 1px solid var(--line);
+}
+
+.fd-go {
+  width: 100%;
+  height: 48px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font: var(--text-body-medium);
+  font-size: 16px;
+  transition: filter 160ms;
+}
+
+.fd-go:hover {
+  filter: brightness(1.08);
+}
+
+/* the drawer's own dropdown lists reuse the .menu look */
+.fd-menu {
+  z-index: 61;
+}
+
+body.fd-lock {
+  overflow: hidden;
+}
+
+/* phone: the same panel as a bottom sheet, 24px from the top edge */
+@media (max-width:767px) {
+  .fd {
+    top: 24px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: auto;
+    max-width: none;
+    border-radius: 16px 16px 0 0;
+    transform: translateY(100%);
+  }
+
+  .fd::before {
+    content: "";
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    width: 36px;
+    height: 4px;
+    margin-left: -18px;
+    border-radius: 2px;
+    background: var(--border);
+  }
+
+  .fd-head {
+    height: 60px;
+    padding-top: 8px;
+  }
+
+  .fd-body {
+    padding: 20px 16px 24px;
+  }
+
+  .fd-foot {
+    padding: 12px 16px calc(16px + env(safe-area-inset-bottom));
+  }
+
+  /* compact sheet (by the phone mockup): content-high, filled fields, no labels */
+  .fd {
+    top: auto;
+    max-height: calc(100% - 24px);
+  }
+
+  .fd-head {
+    height: 52px;
+    padding: 12px 8px 0 8px;
+    border-bottom: 0;
+  }
+
+  .fd-head h2 {
+    font-size: 16px;
+  }
+
+  /* no «×» on the phone: the sheet is closed by swiping it down or tapping outside */
+  .fd-x {
+    display: none;
+  }
+
+  .fd-head {
+    padding-left: 16px;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+  }
+
+  /* swiped up: full height (24px from the top) */
+  .fd-full .fd {
+    top: 24px;
+    max-height: none;
+  }
+
+  .fd {
+    transition: transform 240ms cubic-bezier(.2, .8, .2, 1), top 240ms cubic-bezier(.2, .8, .2, 1);
+  }
+
+  .fd-body {
+    padding: 4px 16px 16px;
+    gap: 12px;
+  }
+
+  .fd-foot {
+    border-top: 0;
+    padding-top: 4px;
+  }
+
+  .fd-go {
+    border-radius: 12px;
+  }
+
+  .fdm-route {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 4px 12px 4px 0;
+    border-radius: 12px;
+    background: var(--subtle);
+  }
+
+  .fdm-lines {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .fdm-div {
+    height: 1px;
+    margin-left: 12px;
+    background: var(--line);
+  }
+
+  .fd .fd-sel.fdm-line,
+  .fd .fd-sel.fdm-date,
+  .fd .fd-sel.fdm-fld {
+    height: 44px;
+    padding: 0 12px;
+    border: 0;
+    border-radius: 12px;
+    background: var(--subtle);
+    font: var(--text-body-medium);
+    font-size: 16px;
+    color: var(--t1);
+  }
+
+  .fd .fd-sel.fdm-line {
+    width: 100%;
+    background: transparent;
+  }
+
+  .fd .fd-sel .ph {
+    font-weight: 400;
+    color: var(--t2);
+  }
+
+  .fdm-route .mtag,
+  .fdm-fld .mtag {
+    background: var(--surface);
+  }
+
+  .fdm-swap {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border: 0;
+    border-radius: 8px;
+    background: var(--tint);
+    color: var(--accent-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .fdm-swap svg {
+    transform: rotate(90deg);
+  }
+
+  .fdm-dates {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .fd .fd-sel.fdm-date {
+    gap: 10px;
+  }
+
+  .fd .fd-sel.fdm-date > span:first-child {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .fdm-cal,
+  .fdm-x {
+    display: flex;
+    flex-shrink: 0;
+    color: var(--t2);
+    font-style: normal;
+  }
+
+  .fd .inp > .fdm-x {
+    flex: none;
+  }
+
+  .fdm-x {
+    width: 24px;
+    height: 24px;
+    margin-right: -4px;
+    border-radius: 6px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .fdm-types {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .fdm-chip {
+    height: 40px;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    background: var(--subtle);
+    color: var(--t1);
+    font: var(--text-body-medium);
+    font-size: 15px;
+    transition: background-color 160ms, border-color 160ms, color 160ms;
+  }
+
+  .fdm-chip[aria-pressed="true"] {
+    border-color: var(--accent);
+    background: var(--tint);
+    color: var(--accent-text);
+  }
+
+  .fdm-range {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .fdm-rl {
+    font: var(--text-caption);
+    color: var(--t2);
+  }
+
+  .fdm-range .inp {
+    height: 44px;
+    border-color: transparent;
+    background: var(--subtle);
+    font-size: 16px;
+  }
+
+  .fdm-range .inp:first-child {
+    border-radius: 12px 0 0 12px;
+  }
+
+  .fdm-range .inp:last-child {
+    margin-left: 1px;
+    border-radius: 0 12px 12px 0;
+  }
+
+  .fdm-range .inp:focus {
+    border-color: var(--accent);
+  }
+
+  /* keep the drawer's chips as in the desktop panel (the phone chip row restyles .chip) */
+  .fd-chips .chip {
+    border-color: var(--border);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--t2);
+    padding: 0 12px;
+  }
+
+  .fd-chips .chip[aria-pressed="true"] {
+    border-color: var(--accent);
+    background: var(--tint);
+    color: var(--accent-text);
+  }
+}
+
+/* «Фильтры» in the filter bar is a button now */
+button.fbtn {
+  border: 0;
+  cursor: pointer;
+  transition: background-color 160ms, color 160ms;
+}
+
+button.fbtn:hover {
+  background: var(--tint);
+  color: var(--accent-text);
+}

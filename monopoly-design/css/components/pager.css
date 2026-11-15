@@ -1,0 +1,59 @@
+/* Component: pager */
+
+.pager {
+  min-height: 48px;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.pinfo {
+  font-size: 14px;
+  color: var(--t2);
+  font-variant-numeric: tabular-nums;
+  margin-right: auto;
+}
+
+.pg {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--t2);
+  font-size: 14px;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+.pg:hover:not(:disabled) {
+  color: var(--t1);
+}
+
+.pg.on {
+  background: var(--tint);
+  color: var(--accent-text);
+  font-weight: 500;
+}
+
+.pg:disabled {
+  opacity: .4;
+  cursor: default;
+}
+
+.pg.gap {
+  cursor: default;
+}
+
+@media (max-width:767px) {
+  .pinfo {
+    display: none;
+  }
+}
