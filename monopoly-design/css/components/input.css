@@ -86,3 +86,28 @@ input.inp {
   gap: 6px;
   color: var(--t2);
 }
+
+/* pair «от … до …»: two inputs sharing one border (range filters) */
+.inp-pair {
+  display: flex;
+}
+
+.inp-pair .inp {
+  flex: 1;
+  min-width: 0;
+}
+
+.inp-pair .inp:first-child {
+  border-radius: 8px 0 0 8px;
+}
+
+.inp-pair .inp:last-child {
+  margin-left: -1px;
+  border-radius: 0 8px 8px 0;
+}
+
+.inp-pair .inp:hover,
+.inp-pair .inp:focus {
+  position: relative;
+  z-index: 1;
+}

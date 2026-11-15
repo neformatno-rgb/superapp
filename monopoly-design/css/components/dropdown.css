@@ -391,3 +391,18 @@
 .mtx:hover {
   color: var(--t1);
 }
+
+/* range dropdowns of the filter bar (Грузоподъемность, Объем, Вес груза): «от … до …» instead of a list */
+.menu.rmenu {
+  padding: 12px;
+  max-height: none;
+  overflow: visible;
+}
+
+.rmenu .rlbl {
+  display: block;
+  margin-bottom: 8px;
+  font: var(--text-caption);
+  font-weight: 500;
+  color: var(--t1);
+}

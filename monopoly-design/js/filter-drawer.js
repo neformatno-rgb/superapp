@@ -62,7 +62,7 @@
   function rangePair(k) {
     const R = RANGE[k]; let a = '', b = '';
     if (S[k]) { const r = S[k].split('-').map(Number); if (r[0] > 0) a = num(r[0]); if (r[1] < 999) b = num(r[1]); }
-    return '<div class="fd-pair" role="group" aria-label="' + R.label + ', ' + R.unit + '">' +
+    return '<div class="fd-pair inp-pair" role="group" aria-label="' + R.label + ', ' + R.unit + '">' +
       '<input class="inp" type="text" inputmode="decimal" data-k="' + k + '" data-r="a" aria-label="' + R.label + ' от, ' + R.unit + '" placeholder="от ' + num(R.min) + '" value="' + a + '">' +
       '<input class="inp" type="text" inputmode="decimal" data-k="' + k + '" data-r="b" aria-label="' + R.label + ' до, ' + R.unit + '" placeholder="до ' + num(R.max) + '" value="' + b + '"></div>';
   }

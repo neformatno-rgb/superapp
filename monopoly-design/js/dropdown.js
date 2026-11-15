@@ -22,6 +22,7 @@ function syncDD() {
     w.classList.toggle('has', !!sel.value);
     (w._menu || w).querySelectorAll('.mi').forEach((b) => b.setAttribute('aria-selected', b.dataset.v === sel.value));
   });
+  if (typeof rangeSync === 'function') rangeSync();
 }
 function closeDD(except) {
   if (typeof msClose === 'function' && except !== 'ms') msClose();
@@ -53,10 +54,10 @@ dds.forEach((w) => {
 });
 function placeMenu(w) {
   const r = w.getBoundingClientRect(); const m = w._menu;
-  const w2 = Math.max(r.width, w.classList.contains('dd') || w.classList.contains('ddl') ? 200 : 0);
+  const w2 = Math.max(r.width, w.classList.contains('dd') || w.classList.contains('ddl') ? (m.classList.contains('rmenu') ? 264 : 200) : 0);
   const lx = w.dataset.align === 'right' ? r.right - w2 : r.left;
   m.style.width = w2 + 'px'; m.style.left = Math.max(8, Math.min(lx, window.innerWidth - w2 - 8)) + 'px';
-  const below = window.innerHeight - r.bottom; const h = Math.min(m.scrollHeight, 224);
+  const below = window.innerHeight - r.bottom; const h = m.classList.contains('rmenu') ? m.offsetHeight : Math.min(m.scrollHeight, 224);
   m.style.top = (below < h + 12 && r.top > h + 12 ? r.top - h - 4 : r.bottom + 4) + 'px';
 }
 document.addEventListener('click', () => closeDD());
@@ -64,6 +65,44 @@ window.addEventListener('resize', () => closeDD());
 window.addEventListener('scroll', () => dds.forEach((w) => { if (w.classList.contains('open')) placeMenu(w); }), true);
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDD(); });
 buildMenus();
+
+/* Range dropdowns: «Грузоподъемность», «Объем», «Вес груза» open a small «от … до …» panel (same as in the filter drawer).
+   Value is stored as "a-b" in S (a=0: no lower bound, b=999: no upper bound), see rangeText(). */
+const RANGE_DD = {
+  fCap: { k: 'cap', label: 'Грузоподъемность', unit: 'т', val: (o) => o.t },
+  fVol: { k: 'vol', label: 'Объем', unit: 'м³', val: (o) => o.m3 },
+  fWt: { k: 'wt', label: 'Вес груза', unit: 'т', val: (o) => o.kg / 1000 },
+};
+const rnum = (x) => String(Math.round(x * 10) / 10).replace('.', ',');
+function rangeSync() {
+  Object.keys(RANGE_DD).forEach((id) => {
+    const R = RANGE_DD[id]; const m = R.menu; if (!m) return;
+    let a = '', b = '';
+    if (S[R.k]) { const r = S[R.k].split('-').map(Number); if (r[0] > 0) a = rnum(r[0]); if (r[1] < 999) b = rnum(r[1]); }
+    const fa = m.querySelector('[data-r="a"]'), fb = m.querySelector('[data-r="b"]');
+    if (document.activeElement !== fa) fa.value = a;
+    if (document.activeElement !== fb) fb.value = b;
+  });
+}
+Object.keys(RANGE_DD).forEach((id) => {
+  const R = RANGE_DD[id]; const w = $(id).closest('[data-dd]'); const m = w._menu; R.menu = m;
+  const v = ALL.map(R.val); const lo = Math.min.apply(null, v), hi = Math.max.apply(null, v);
+  m.classList.add('rmenu'); m.setAttribute('role', 'dialog');
+  m.innerHTML = '<span class="rlbl">' + R.label + ', ' + R.unit + '</span><div class="inp-pair" role="group" aria-label="' + R.label + ', ' + R.unit + '">' +
+    '<input class="inp" type="text" inputmode="decimal" data-r="a" aria-label="' + R.label + ' от, ' + R.unit + '" placeholder="от ' + rnum(lo) + '">' +
+    '<input class="inp" type="text" inputmode="decimal" data-r="b" aria-label="' + R.label + ' до, ' + R.unit + '" placeholder="до ' + rnum(hi) + '"></div>';
+  m.addEventListener('click', (e) => e.stopPropagation());
+  m.addEventListener('input', (e) => {
+    const f = e.target.closest('[data-r]'); if (!f) return;
+    f.value = f.value.replace(/[^\d.,]/g, '');
+    const num = (r) => { const x = parseFloat(m.querySelector('[data-r="' + r + '"]').value.replace(',', '.')); return isNaN(x) ? null : x; };
+    const a = num('a'), b = num('b');
+    set({ [R.k]: a === null && b === null ? '' : (a ?? 0) + '-' + (b ?? 999) });
+  });
+  m.addEventListener('keydown', (e) => { if (e.key === 'Enter') { closeDD(); w.querySelector('.fv-btn').focus(); } });
+  // opening the panel puts the caret into «от»
+  w.querySelector('.fv-btn').addEventListener('click', () => { if (w.classList.contains('open')) { rangeSync(); placeMenu(w); requestAnimationFrame(() => m.querySelector('[data-r="a"]').focus()); } });
+});
 
 /* Multi-selects «Откуда», «Куда», «Тип кузова»: state is a comma list; picked values show as tags in the field. */
 const BODY_KINDS = ['Тент', 'Рефрижератор', 'Изотерм'];
