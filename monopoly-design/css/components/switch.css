@@ -29,3 +29,20 @@
 .sw.on::after {
   left: 16px;
 }
+
+/* Size L — 44×22 track, 18px knob (checkout extras) */
+.sw.lg {
+  width: 44px;
+  height: 22px;
+  border-radius: 11px;
+}
+
+.sw.lg::after {
+  width: 18px;
+  height: 18px;
+  border-radius: 9px;
+}
+
+.sw.lg.on::after {
+  left: 24px;
+}

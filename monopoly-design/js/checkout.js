@@ -59,7 +59,7 @@ function selectHTML(key) {
 function extraHTML(k, title, desc, on, body) {
   return '<div class="ck-x' + (on ? ' on' : '') + '"><img src="' + CK_ILL[k] + '" alt=""><div class="ck-xb">' +
     '<div class="ck-xh"><b>' + title + '<button type="button" class="info" data-c="info" data-k="' + k + '" aria-label="Подробнее: ' + title + '">' + INFO + '</button></b>' +
-    '<button type="button" class="ck-sw" data-c="sw" data-k="' + k + '" role="switch" aria-checked="' + on + '" aria-label="' + title + '"><span class="sw' + (on ? ' on' : '') + '"></span></button></div>' +
+    '<button type="button" class="ck-sw" data-c="sw" data-k="' + k + '" role="switch" aria-checked="' + on + '" aria-label="' + title + '"><span class="sw lg' + (on ? ' on' : '') + '"></span></button></div>' +
     '<p class="ck-xd">' + desc + '</p>' + (on ? body : '') + '</div></div>';
 }
 
