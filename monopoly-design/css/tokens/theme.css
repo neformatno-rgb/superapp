@@ -65,11 +65,11 @@
     --grey64: var(--graphite-400);
     --on-accent: var(--white);
     /* Accent */
-    --accent: var(--blue-300);
+    --accent: var(--blue-400);
     --accent-text: var(--blue-200);
-    --accent-soft: rgba(102, 164, 255, 0.36);
-    --tint: rgba(111, 170, 255, 0.22);
-    --tint-hover: rgba(111, 170, 255, 0.30);
+    --accent-soft: rgba(84, 148, 253, 0.36);
+    --tint: rgba(84, 148, 253, 0.22);
+    --tint-hover: rgba(84, 148, 253, 0.30);
     /* Tags */
     --purple: var(--purple-300);
     --purple-bg: rgba(160, 110, 255, 0.18);
@@ -113,11 +113,11 @@
   --grey64: var(--graphite-400);
   --on-accent: var(--white);
   /* Accent */
-  --accent: var(--blue-300);
+  --accent: var(--blue-400);
   --accent-text: var(--blue-200);
-  --accent-soft: rgba(102, 164, 255, 0.36);
-  --tint: rgba(111, 170, 255, 0.22);
-  --tint-hover: rgba(111, 170, 255, 0.30);
+  --accent-soft: rgba(84, 148, 253, 0.36);
+  --tint: rgba(84, 148, 253, 0.22);
+  --tint-hover: rgba(84, 148, 253, 0.30);
   /* Tags */
   --purple: var(--purple-300);
   --purple-bg: rgba(160, 110, 255, 0.18);
