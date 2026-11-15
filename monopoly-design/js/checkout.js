@@ -114,7 +114,7 @@ function render() {
     '<span class="mini" title="Рейтинг компании">' + sqb(SQ_B, 'sqmB') + I.star + o.rating + '</span></div><span class="vsep" aria-hidden="true"></span>' +
     '<div class="minis"><span class="mini" title="Просмотры заявки">' + sqb(SQ_B, 'sqmB') + EYE16 + X.views + '</span><span class="mini" title="Рейтинг заявки">' + sqb(SQ_B, 'sqmB') + I.star + X.oRating + '</span></div></div></section>';
   // anchor tabs — only once there is more than one section to jump between
-  const secs = [['ck-pay', 'Договор и оплата']].concat(C.pay ? [['ck-fleet', 'Подвижной состав']] : [], C.pay && fleetDone() ? [['ck-extra', 'Дополнительно']] : []);
+  const secs = [['ck-pay', 'Договор и оплата']].concat(C.pay ? [['ck-fleet', 'Подвижной состав']] : [], C.pay ? [['ck-extra', 'Дополнительно']] : []);
   if (secs.length > 1) h += '<div class="dtabs" role="tablist" aria-label="Разделы оформления">' +
     secs.map((x, i) => '<button type="button" class="tab' + (i === 0 ? ' on' : '') + '" data-c="tab" data-k="' + x[0] + '">' + x[1] + '</button>').join('') + '</div>';
   // step 1: contract → step 2: payment method
@@ -123,8 +123,8 @@ function render() {
     '<div class="ck-pays" role="radiogroup" aria-label="Способ оплаты">' + pay + '</div></div>') + '</section>';
   // step 3: rolling stock
   if (C.pay) h += '<section class="dcard dsec' + reveal('fleet') + '" id="ck-fleet"><h2>Укажите подвижной состав</h2><div class="ck-fleet">' + selectHTML('truck') + selectHTML('trailer') + selectHTML('driver') + '</div></section>';
-  // step 4: extras
-  if (C.pay && fleetDone()) h += '<section class="dcard dsec' + reveal('extra') + '" id="ck-extra"><h2>Дополнительно в заявке</h2><div class="ck-xs">' +
+  // extras — appear together with the rolling stock
+  if (C.pay) h += '<section class="dcard dsec' + reveal('fleet') + '" id="ck-extra"><h2>Дополнительно в заявке</h2><div class="ck-xs">' +
     extraHTML('fuel', 'Топливо после погрузки', 'До 90% от стоимости заявки — сразу на Моносчёт', C.fuel,
       '<p class="ck-terms">Услуга «Топливо после погрузки» будет оказана в рамках договора Д-10881.2021 от 14.09.2021 (с покупателем)</p>' +
       '<label class="ck-field"><span class="ck-label">Сумма для «Топлива после погрузки», ₽</span><input class="inp ck-inp' + (fuelErr ? ' err' : '') + '" data-c="fuelSum" inputmode="numeric" value="' + (C.fuelSum ? nf(num(C.fuelSum)) : '') + '"' + (C.fuel ? '' : ' disabled') + '>' +
