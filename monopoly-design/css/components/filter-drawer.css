@@ -429,9 +429,30 @@ body.fd-lock {
     gap: 10px;
   }
 
-  .fd .fd-sel.fdm-date > svg {
+  .fd .fd-sel.fdm-date > span:first-child {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .fdm-cal,
+  .fdm-x {
+    display: flex;
     flex-shrink: 0;
-    color: var(--t1);
+    color: var(--t2);
+    font-style: normal;
+  }
+
+  .fd .inp > .fdm-x {
+    flex: none;
+  }
+
+  .fdm-x {
+    width: 24px;
+    height: 24px;
+    margin-right: -4px;
+    border-radius: 6px;
+    align-items: center;
+    justify-content: center;
   }
 
   .fdm-types {

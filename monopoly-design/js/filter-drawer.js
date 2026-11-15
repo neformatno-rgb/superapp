@@ -114,8 +114,10 @@
     const from = sel('from'), to = sel('to');
     const line = (k, v, ph) => '<button type="button" class="inp fd-sel fdm-line' + (v.length ? ' has' : '') + (menuKey === k ? ' open' : '') + '" data-f="open" data-k="' + k + '" aria-haspopup="listbox" aria-expanded="' + (menuKey === k) + '" aria-label="' + ph + '">' +
       (v.length ? '<span class="fd-tags" data-k="' + k + '">' + v.map((x) => tag(k, x)).join('') + '</span>' : '<span class="ph">' + ph + '</span>') + '</button>';
-    const date = (i, ph) => '<button type="button" class="inp fd-sel fdm-date' + (r ? ' has' : '') + '" data-f="open" data-k="day" aria-haspopup="dialog" aria-label="' + ph + '">' + IC.cal +
-      (r ? '<span>' + dayLabel(r[i]) + '</span>' : '<span class="ph">' + ph + '</span>') + '</button>';
+    const date = (i, ph) => '<button type="button" class="inp fd-sel fdm-date' + (r ? ' has' : '') + '" data-f="open" data-k="day" aria-haspopup="dialog" aria-label="' + ph + '">' +
+      (r ? '<span>' + dayLabel(r[i]) + '</span>' : '<span class="ph">' + ph + '</span>') +
+      // calendar on the right; once dates are picked it turns into «×» that clears them
+      (r ? '<span class="fdm-x" data-f="clear" data-k="day" role="button" aria-label="Сбросить даты">' + IC.close + '</span>' : '<i class="fdm-cal">' + IC.cal + '</i>') + '</button>';
     body.innerHTML =
       '<div class="fdm-route"><div class="fdm-lines">' + line('from', from, 'Откуда') + '<i class="fdm-div"></i>' + line('to', to, 'Куда') + '</div>' +
         '<button type="button" class="fdm-swap" data-f="swap" aria-label="Поменять «Откуда» и «Куда» местами">' + IC.swap + '</button></div>' +
