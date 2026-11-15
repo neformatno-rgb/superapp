@@ -103,7 +103,7 @@ function detailHTML(o) {
       kv('Тип погрузки', loadType(o.body)) + kv('Температурный режим', tempMode(o.body)) + '</div></div>' +
     '<div class="cgrp"><h2>Груз</h2><div class="kvs">' +
       kv('Количество', nCargo + ' ' + cargoWord) + kv('Упаковка', o.pl + ' Плт.') +
-      kv('Категория груза', esc(o.cargo)) + '</div></div>' +
+      kv('Категория груза', esc(o.cargo)) + kv('Стоимость груза', money((50 + hashStr(o.id + 'v') % 450) * 10000)) + '</div></div>' +
     '<div class="cgrp wide"><h2>Прочие условия</h2><div class="docs">' +
       [['Дополнительно', pickSome(OTHER_REQS, o.id + 'r', 2)], ['Дополнительное оборудование', pickSome(OTHER_EQUIP, o.id + 'e', 1)]].map((d, i) => {
         const open = !!V.odocs[i];
