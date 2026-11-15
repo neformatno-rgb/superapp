@@ -8,7 +8,6 @@ const aucEnd = {};
 const T0 = Date.now();
 function aucLeft(o) { if (!aucEnd[o.id]) aucEnd[o.id] = T0 + (600 + hashStr(o.id + 'a') % 3000) * 1000; return Math.max(0, Math.round((aucEnd[o.id] - Date.now()) / 1000)); }
 const hms = (t) => [Math.floor(t / 3600), Math.floor(t / 60) % 60, t % 60].map((n) => String(n).padStart(2, '0')).join(':');
-const stopsWord = (n) => n === 1 ? 'точка' : n < 5 ? 'точки' : 'точек';
 function mCardHTML(o, price, saved) {
   const X = orderInfo(o);
   const tag = (t) => '<span class="tag ' + (t === 'Фикс' ? 't-fix' : t === 'Аукцион' ? 't-auc' : 't-cnt') + '"' + (t === 'Аукцион' ? ' data-auc="' + o.id + '"' : '') + '>' + t + (t === 'Аукцион' ? ' (' + hms(aucLeft(o)) + ')' : '') + '</span>';

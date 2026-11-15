@@ -6,37 +6,6 @@ const ILL = ['assets/img/extras/fuel.png', 'assets/img/extras/insurance.png', 'a
 const OFFER_TTL = 30 * 60 * 1000;
 const timerText = (ms) => { if (ms <= 0) return 'Время ожидания истекло'; const t = Math.ceil(ms / 1000); return 'Ожидание ответа ' + String(Math.floor(t / 60)).padStart(2, '0') + ':' + String(t % 60).padStart(2, '0'); };
 setInterval(() => { document.querySelectorAll('.wtimer').forEach((el) => { const id = V.id; const at = S.offerAt[id]; if (!at) return; el.textContent = timerText(OFFER_TTL - (Date.now() - at)); }); }, 1000);
-const MAP_SRC = 'assets/img/route-map.jpg';
-const hpick = (a, h) => a[h % a.length];
-const initials = (n) => { const w = n.split(/\s+/); if (w.length > 1) return (w[0][0] + w[1][0]).toUpperCase(); const caps = n.match(/[А-ЯA-Z]/g) || [n[0]]; return (caps[0] + (caps[1] || n[1] || '')).toUpperCase(); };
-const plainWin = (day, key) => winHTML(day, key).replace(/<\/?b>/g, '');
-const phone = (h) => '+7 (9' + String(10 + h % 89).padStart(2, '0') + ') ' + String(100 + (h >> 4) % 900) + '-' + String(10 + (h >> 9) % 90) + '-' + String(10 + (h >> 13) % 90);
-const loadType = (b) => /боков/.test(b) ? 'Боковая' : /Газель/.test(b) ? 'Задняя, боковая' : 'Задняя';
-const tempMode = (b) => b === 'Рефрижератор' ? '+2 … +4 °C' : b === 'Изотерм' ? '+5 … +15 °C' : 'Не требуется';
-
-function orderInfo(o) {
-  const h = hashStr(o.id);
-  const company = hpick(COMPANIES, h);
-  const pts = [{ kind: 'ld', city: o.from, reg: o.fromReg, day: o.fromDay, key: o.id + 'f' }];
-  for (let i = 0; i < o.stops; i++) {
-    const c = cities[(h >> (3 + i * 4)) % cities.length];
-    const city = (c[0] === o.from || c[0] === o.to) ? cities[(h + 5 + i) % cities.length] : c;
-    pts.push({ kind: 'ul', city: city[0], reg: city[1], day: Math.round(o.fromDay + (o.toDay - o.fromDay) * (i + 1) / (o.stops + 1)), key: o.id + 's' + i, part: true });
-  }
-  pts.push({ kind: 'ul', city: o.to, reg: o.toReg, day: o.toDay, key: o.id + 't' });
-  pts.forEach((p, i) => {
-    const k = hashStr(p.key);
-    const g = GEO[p.city] || [55 + (k % 500) / 100, 37 + (k % 900) / 100];
-    p.addr = p.city + ' (' + p.reg + '), ' + hpick(STREETS, k) + ', д. ' + (1 + k % 87);
-    p.geo = (g[0] + ((k >> 5) % 200 - 100) / 2000).toFixed(4) + ', ' + (g[1] + ((k >> 9) % 200 - 100) / 2000).toFixed(5);
-    p.site = hpick(SITES, k >> 3) + ' | ' + phone(k);
-    p.note = hpick(NOTES, k >> 6);
-    p.rating = (4 + (k % 10) / 10).toFixed(1).replace('.', ',');
-  });
-  return { company, ini: initials(company), views: 40 + h % 360, oRating: (4 + ((h >> 5) % 10) / 10).toFixed(1).replace('.', ','),
-           pts, cargoValue: (300 + (h >> 7) % 1700) * 1000, payDays: [5, 7, 10, 14, 20, 30][(h >> 11) % 6] };
-}
-
 const V = { id: null, edit: false, seg: 'tariff', pay: true, map: false, only: false, closed: {}, docs: {}, odocs: {}, offer: '' , listY: 0 };
 
 // «Прочие условия»: a stable per-order subset of each list (mock data)
@@ -109,7 +78,7 @@ function detailHTML(o) {
       kv('Тип погрузки', loadType(o.body)) + kv('Температурный режим', tempMode(o.body)) + '</div></div>' +
     '<div class="cgrp"><h2>Груз</h2><div class="kvs">' +
       kv('Количество', nCargo + ' ' + cargoWord) + kv('Упаковка', o.pl + ' Плт.') +
-      kv('Категория груза', esc(o.cargo)) + kv('Стоимость груза', money((50 + hashStr(o.id + 'v') % 450) * 10000)) + '</div></div>' +
+      kv('Категория груза', esc(o.cargo)) + kv('Стоимость груза', money(X.cargoValue)) + '</div></div>' +
     '<div class="cgrp wide"><div class="rhd"><h2>Прочие условия</h2>' + oallBtn() + '</div><div class="docs">' +
       [['Дополнительно', pickSome(OTHER_REQS, o.id + 'r', 2)], ['Дополнительное оборудование', pickSome(OTHER_EQUIP, o.id + 'e', 1)]].map((d, i) => {
         const open = !!V.odocs[i];
@@ -251,7 +220,7 @@ detailEl.addEventListener('click', (e) => {
       try { navigator.clipboard.writeText(v).then(done, done); } catch (err) { done(); }
       break;
     }
-    case 'take': S.taken[o.id] = true; renderDetail(); toast('Заявка ' + o.id + ' забронирована за вами'); break;
+    case 'take': location.href = 'checkout.html?id=' + encodeURIComponent(o.id); break;
     case 'close': V.seg = 'tariff'; V.edit = false; V.offer = ''; renderDetail(); break;
     case 'edit': V.edit = true; renderDetail(); { const f = $('dOffer'); if (f) { f.focus(); f.select(); } } break;
     case 'send': {

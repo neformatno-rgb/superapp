@@ -156,7 +156,7 @@ $('list').addEventListener('click', (e) => {
     if (S.saved[id]) { delete S.saved[id]; toast('Убрано из избранного'); } else { S.saved[id] = true; toast('Добавлено в избранное'); }
     store.set('saved', S.saved); render();
   } else if (b.dataset.act === 'cta') {
-    if (o.tags.length === 1 && o.tags[0] === 'Фикс') { S.taken[id] = true; render(); toast('Заявка ' + id + ' забронирована за вами'); }
+    if (o.tags.length === 1 && o.tags[0] === 'Фикс') location.href = 'checkout.html?id=' + encodeURIComponent(id);
     else openOffer(o);
   }
 });

@@ -25,3 +25,4 @@ function winHTML(day, key) {
   if (end < 24) return '<b>' + dayLabel(day) + ',</b> ' + hh(start) + ' — ' + hh(end);
   return '<b>' + dayLabel(day) + ',</b> ' + hh(start) + ' — ' + dayLabel(day + 1) + ', ' + hh(end - 24);
 }
+const stopsWord = (n) => n === 1 ? 'точка' : n < 5 ? 'точки' : 'точек';

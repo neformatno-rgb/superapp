@@ -1,0 +1,496 @@
+/* Page: checkout («Оформление заказа»), opened from «Забрать груз» */
+
+.ck-main {
+  gap: 12px;
+}
+
+.ck-head {
+  display: flex;
+  align-items: center;
+  min-height: 40px;
+}
+
+.ck-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 400px;
+  column-gap: 12px;
+  align-items: start;
+}
+
+.ck-l {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ck-r {
+  position: sticky;
+  top: 88px;
+  min-width: 0;
+}
+
+/* section bits */
+.ck-h2b {
+  margin-top: 32px !important;
+}
+
+.ck-note {
+  margin: -4px 0 16px;
+  font: var(--text-body);
+  color: var(--t1);
+}
+
+/* select-looking field (rolling stock + disabled contract) */
+.ck-sel {
+  width: 100%;
+  min-width: 0;
+  height: 48px;
+  padding: 0 12px 0 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--t1);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: var(--text-body);
+  font-size: 15px;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 160ms;
+}
+
+.ck-sel span {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ck-sel svg {
+  color: var(--t2);
+  transition: transform 160ms;
+}
+
+.ck-sel:hover {
+  border-color: var(--grey64);
+}
+
+.ck-sel.open {
+  border-color: var(--accent);
+}
+
+.ck-sel.open svg {
+  transform: rotate(180deg);
+}
+
+.ck-sel.dis {
+  border-color: var(--line);
+  background: var(--subtle);
+  color: var(--grey64);
+  cursor: default;
+}
+
+.ck-sel.dis svg {
+  color: var(--grey64);
+}
+
+/* payment method cards */
+.ck-pays {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.ck-pay {
+  position: relative;
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--t1);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 160ms, box-shadow 160ms;
+}
+
+.ck-pay:hover {
+  border-color: var(--border);
+}
+
+.ck-pay[aria-checked="true"] {
+  border-color: var(--accent);
+}
+
+.ck-pi {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 16px;
+  border-radius: 8px;
+  background: var(--tint);
+  color: var(--accent-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ck-radio {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  width: 20px;
+  height: 20px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  color: var(--on-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ck-radio svg {
+  display: none;
+}
+
+.ck-pay[aria-checked="true"] .ck-radio {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.ck-pay[aria-checked="true"] .ck-radio svg {
+  display: block;
+}
+
+.ck-pt {
+  font: var(--text-body);
+}
+
+.ck-pay b {
+  font: var(--text-h2);
+  font-variant-numeric: tabular-nums;
+}
+
+.ck-ps {
+  font: var(--text-body);
+  color: var(--t2);
+}
+
+/* rolling stock */
+.ck-fleet {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.ck-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.ck-label {
+  font: var(--text-caption);
+  font-weight: 500;
+  color: var(--t1);
+}
+
+.ck-row {
+  display: flex;
+  gap: 16px;
+}
+
+.ck-out {
+  height: 48px;
+  flex-shrink: 0;
+  padding: 0 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--t2);
+  font-size: 15px;
+  font-weight: 500;
+  transition: border-color 160ms, color 160ms;
+}
+
+.ck-out:hover {
+  border-color: var(--grey64);
+  color: var(--t1);
+}
+
+/* extra services */
+.ck-xs {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ck-x {
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  column-gap: 16px;
+  align-items: start;
+}
+
+.ck-x img {
+  width: 72px;
+  height: 72px;
+  border-radius: 16px;
+  display: block;
+}
+
+.ck-xb {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ck-xh {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 24px;
+}
+
+.ck-xh b {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: var(--text-h2);
+}
+
+.ck-sw {
+  border: 0;
+  padding: 4px 0;
+  background: transparent;
+  display: flex;
+  cursor: pointer;
+}
+
+.ck-xd,
+.ck-txt {
+  margin: -8px 0 0;
+  font: var(--text-body);
+  color: var(--t2);
+}
+
+.ck-txt {
+  margin: 0;
+  color: var(--t1);
+}
+
+.ck-txt a {
+  color: var(--accent-text);
+}
+
+.ck-terms {
+  margin: 0;
+  font: var(--text-caption);
+  font-weight: 500;
+  color: var(--t1);
+}
+
+.ck-inp {
+  width: 100%;
+  height: 48px;
+  padding: 0 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--t1);
+  font: var(--text-body);
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+  outline: none;
+  transition: border-color 160ms;
+}
+
+.ck-inp:focus {
+  border-color: var(--accent);
+}
+
+.ck-inp:disabled {
+  border-color: var(--line);
+  background: var(--subtle);
+  color: var(--grey64);
+}
+
+.ck-inp.err {
+  border-color: var(--error);
+}
+
+.ck-hint {
+  font: var(--text-caption);
+  color: var(--t2);
+}
+
+.ck-hint.err {
+  color: var(--error);
+}
+
+.ck-dots {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 8px;
+}
+
+.ck-dots b:last-child {
+  margin-left: auto;
+}
+
+.ck-dots b {
+  font: var(--text-accent);
+  color: var(--t1);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.ck-dots i {
+  flex: 1;
+  min-width: 16px;
+  border-bottom: 1px dotted var(--border);
+  transform: translateY(-4px);
+}
+
+/* right panel */
+.ck-panel {
+  overflow: hidden;
+}
+
+.ck-pin {
+  padding: 24px 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ck-cost {
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: var(--subtle-2);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ck-cost small {
+  font: var(--text-caption);
+  color: var(--t2);
+}
+
+.ck-cost b {
+  font: var(--text-h1);
+  font-variant-numeric: tabular-nums;
+}
+
+.ck-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ck-rows div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font: var(--text-body);
+  color: var(--t2);
+}
+
+.ck-rows b {
+  font-weight: 400;
+  color: var(--t1);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.ck-go {
+  height: 48px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 16px;
+  font-weight: 500;
+  transition: filter 160ms;
+}
+
+.ck-go:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.ck-go.done {
+  background: var(--subtle);
+  color: var(--t2);
+  cursor: default;
+}
+
+.ck-panel .pnote {
+  margin: 0;
+}
+
+.ck-panel .pnote button svg {
+  width: 20px;
+  height: 20px;
+}
+
+@media (max-width:1279px) {
+  .ck-grid {
+    grid-template-columns: minmax(0, 1fr) 340px;
+  }
+
+  .ck-pays {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width:1023px) {
+  .ck-grid {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 12px;
+  }
+
+  .ck-r {
+    position: static;
+  }
+}
+
+@media (max-width:767px) {
+  .ck-head {
+    display: none;
+  }
+
+  .ck-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .ck-x {
+    grid-template-columns: 48px minmax(0, 1fr);
+    column-gap: 12px;
+  }
+
+  .ck-x img {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+  }
+
+  .ck-pin {
+    padding: 16px;
+  }
+}
