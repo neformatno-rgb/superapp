@@ -178,12 +178,34 @@
   }
   function close() {
     if (root.hidden) return;
-    closeMenu(); dpClose(); root.classList.remove('fd-open'); document.body.classList.remove('fd-lock'); trigger.setAttribute('aria-expanded', 'false'); $('mFlt').setAttribute('aria-pressed', 'false');
+    closeMenu(); dpClose(); root.classList.remove('fd-open', 'fd-full'); document.body.classList.remove('fd-lock'); trigger.setAttribute('aria-expanded', 'false'); $('mFlt').setAttribute('aria-pressed', 'false');
     setTimeout(() => { if (!root.classList.contains('fd-open')) root.hidden = true; }, 260);
     if (lastFocus) lastFocus.focus({ preventScroll: true });
   }
   trigger.addEventListener('click', open);
   window.fdOpen = open; // the phone filter button opens the same panel (as a bottom sheet)
+
+  // phone bottom sheet: drag the top part up to expand it to full height, down to collapse / close
+  const sheet = root.querySelector('.fd'); const grip = root.querySelector('.fd-head');
+  const isPhone = () => window.matchMedia('(max-width:767px)').matches;
+  let drag = null;
+  grip.addEventListener('pointerdown', (e) => {
+    if (!isPhone() || e.target.closest('button')) return;
+    drag = { y: e.clientY, t: performance.now(), dy: 0 }; sheet.style.transition = 'none'; grip.setPointerCapture(e.pointerId);
+  });
+  grip.addEventListener('pointermove', (e) => {
+    if (!drag) return; drag.dy = e.clientY - drag.y;
+    const d = drag.dy > 0 ? drag.dy : drag.dy / 3; // pulling up is resisted, the sheet only grows on release
+    sheet.style.transform = 'translateY(' + d + 'px)';
+  });
+  const endDrag = () => {
+    if (!drag) return; const { dy, t } = drag; drag = null;
+    sheet.style.transition = ''; sheet.style.transform = '';
+    const fast = Math.abs(dy) / Math.max(1, performance.now() - t) > 0.6;
+    if (dy < -40 || (fast && dy < 0)) root.classList.add('fd-full');
+    else if (dy > 60 || (fast && dy > 0)) { if (root.classList.contains('fd-full') && dy < 200) root.classList.remove('fd-full'); else close(); }
+  };
+  grip.addEventListener('pointerup', endDrag); grip.addEventListener('pointercancel', endDrag);
 
   root.addEventListener('click', (e) => {
     const b = e.target.closest('[data-f]'); if (!b) { closeMenu(); return; }

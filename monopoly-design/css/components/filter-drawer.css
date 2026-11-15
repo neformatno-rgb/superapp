@@ -338,6 +338,28 @@ body.fd-lock {
     font-size: 16px;
   }
 
+  /* no «×» on the phone: the sheet is closed by swiping it down or tapping outside */
+  .fd-x {
+    display: none;
+  }
+
+  .fd-head {
+    padding-left: 16px;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+  }
+
+  /* swiped up: full height (24px from the top) */
+  .fd-full .fd {
+    top: 24px;
+    max-height: none;
+  }
+
+  .fd {
+    transition: transform 240ms cubic-bezier(.2, .8, .2, 1), top 240ms cubic-bezier(.2, .8, .2, 1);
+  }
+
   .fd-body {
     padding: 4px 16px 16px;
     gap: 12px;
