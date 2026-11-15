@@ -79,29 +79,29 @@ function rangeSync() {
     const R = RANGE_DD[id]; const m = R.menu; if (!m) return;
     let a = '', b = '';
     if (S[R.k]) { const r = S[R.k].split('-').map(Number); if (r[0] > 0) a = rnum(r[0]); if (r[1] < 999) b = rnum(r[1]); }
-    const fa = m.querySelector('[data-r="a"]'), fb = m.querySelector('[data-r="b"]');
-    if (document.activeElement !== fa) fa.value = a;
-    if (document.activeElement !== fb) fb.value = b;
+    if (m.classList.contains('open')) return; // don't overwrite what is being typed
+    m.querySelector('[data-r="a"]').value = a; m.querySelector('[data-r="b"]').value = b;
   });
 }
 Object.keys(RANGE_DD).forEach((id) => {
   const R = RANGE_DD[id]; const w = $(id).closest('[data-dd]'); const m = w._menu; R.menu = m;
   const v = ALL.map(R.val); const lo = Math.min.apply(null, v), hi = Math.max.apply(null, v);
   m.classList.add('rmenu'); m.setAttribute('role', 'dialog');
-  m.innerHTML = '<span class="rlbl">' + R.label + ', ' + R.unit + '</span><div class="inp-pair" role="group" aria-label="' + R.label + ', ' + R.unit + '">' +
+  m.innerHTML = '<div class="inp-pair" role="group" aria-label="' + R.label + ', ' + R.unit + '">' +
     '<input class="inp" type="text" inputmode="decimal" data-r="a" aria-label="' + R.label + ' от, ' + R.unit + '" placeholder="от ' + rnum(lo) + '">' +
-    '<input class="inp" type="text" inputmode="decimal" data-r="b" aria-label="' + R.label + ' до, ' + R.unit + '" placeholder="до ' + rnum(hi) + '"></div>';
+    '<input class="inp" type="text" inputmode="decimal" data-r="b" aria-label="' + R.label + ' до, ' + R.unit + '" placeholder="до ' + rnum(hi) + '"></div><button type="button" class="rapply" data-r="go">Применить</button>';
   m.addEventListener('click', (e) => e.stopPropagation());
-  m.addEventListener('input', (e) => {
-    const f = e.target.closest('[data-r]'); if (!f) return;
-    f.value = f.value.replace(/[^\d.,]/g, '');
+  // typed values are applied by «Применить» (or Enter); closing the panel otherwise discards them
+  m.addEventListener('input', (e) => { const f = e.target.closest('input[data-r]'); if (f) f.value = f.value.replace(/[^\d.,]/g, ''); });
+  const apply = () => {
     const num = (r) => { const x = parseFloat(m.querySelector('[data-r="' + r + '"]').value.replace(',', '.')); return isNaN(x) ? null : x; };
     const a = num('a'), b = num('b');
-    set({ [R.k]: a === null && b === null ? '' : (a ?? 0) + '-' + (b ?? 999) });
-  });
-  m.addEventListener('keydown', (e) => { if (e.key === 'Enter') { closeDD(); w.querySelector('.fv-btn').focus(); } });
+    closeDD(); set({ [R.k]: a === null && b === null ? '' : (a ?? 0) + '-' + (b ?? 999) }); w.querySelector('.fv-btn').focus();
+  };
+  m.querySelector('.rapply').addEventListener('click', apply);
+  m.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); apply(); } });
   // opening the panel puts the caret into «от»
-  w.querySelector('.fv-btn').addEventListener('click', () => { if (w.classList.contains('open')) { rangeSync(); placeMenu(w); requestAnimationFrame(() => m.querySelector('[data-r="a"]').focus()); } });
+  w.querySelector('.fv-btn').addEventListener('click', () => { if (w.classList.contains('open')) { m.classList.remove('open'); rangeSync(); m.classList.add('open'); placeMenu(w); requestAnimationFrame(() => m.querySelector('[data-r="a"]').focus()); } });
 });
 
 /* Multi-selects «Откуда», «Куда», «Тип кузова»: state is a comma list; picked values show as tags in the field. */
