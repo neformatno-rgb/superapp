@@ -59,7 +59,7 @@ function detailHTML(o) {
     '<div class="mroute">' + mpt('ld', o.from, o.fromDay, o.id + 'f') + (o.stops ? '<div class="mstops"><i></i><span>+' + o.stops + ' ' + stopsWord(o.stops) + ' в рейсе</span></div>' : '') + mpt('ul', o.to, o.toDay, o.id + 't') + '</div></div>' +
     '<div class="rbox">' +
     '<div><div class="c" title="' + esc(o.from) + '">' + esc(o.from) + '</div><div class="w">' + winHTML(o.fromDay, o.id + 'f') + '</div></div>' +
-    '<div class="mid2"><div class="arr2">' + DI.arrS + (o.stops ? '<span class="plus2" title="Промежуточные точки">+' + o.stops + '</span>' : '') + DI.arrS + '</div><span class="km2">' + nf(o.dist) + ' км</span></div>' +
+    '<div class="mid2"><div class="arr2">' + DI.arrS + (o.stops ? '<span class="plus2" title="Промежуточные точки">+' + o.stops + '</span>' : '<span class="plus2" title="Без промежуточных точек" aria-label="Без промежуточных точек">—</span>') + DI.arrS + '</div><span class="km2">' + nf(o.dist) + ' км</span></div>' +
     '<div class="end"><div class="c" title="' + esc(o.to) + '">' + esc(o.to) + '</div><div class="w">' + winHTML(o.toDay, o.id + 't') + '</div></div></div>' +
     '<div class="co"><span class="ava" aria-hidden="true">' + X.ini + '</span><span class="coname"><b>' + esc(X.company) + '</b><button type="button" data-d="profile">Профиль компании</button></span>' +
     '<div class="minis"><button type="button" class="mini" data-d="chat" aria-label="Чат с ' + esc(X.company) + '">' + sqb(SQ_B, 'sqmB') + '<span class="chat">' + DI.chat + '</span>Чат</button>' +

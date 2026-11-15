@@ -38,7 +38,7 @@ function cardHTML(o) {
       tagsHTML +
     '</div><div class="hr"></div><div class="ogrid">' +
       '<div class="place"><span class="city">' + esc(o.from) + '</span><span class="reg" title="' + esc(o.fromReg) + '">' + esc(o.fromReg) + '</span><span class="when">' + winHTML(o.fromDay, o.id + 'f') + '</span></div>' +
-      '<div class="mid"><div class="arr">' + I.arr + (o.stops ? '<span class="plus" title="Промежуточные точки">+' + o.stops + '</span>' : '') + I.arr + '</div><span class="km">' + nf(o.dist) + ' км</span></div>' +
+      '<div class="mid"><div class="arr">' + I.arr + (o.stops ? '<span class="plus" title="Промежуточные точки">+' + o.stops + '</span>' : '<span class="plus" title="Без промежуточных точек" aria-label="Без промежуточных точек">—</span>') + I.arr + '</div><span class="km">' + nf(o.dist) + ' км</span></div>' +
       '<div class="place"><span class="city">' + esc(o.to) + '</span><span class="reg" title="' + esc(o.toReg) + '">' + esc(o.toReg) + '</span><span class="when">' + winHTML(o.toDay, o.id + 't') + '</span></div>' +
       '<div class="spec"><span class="bt">' + esc(o.body) + '</span><span class="reg">' + o.t + ' т | ' + o.m3 + ' м³ | ' + o.pl + ' плт</span><span class="when"><b>' + esc(o.cargo) + '</b> | ' + nf(o.kg) + ' кг</span></div>' +
     '</div></div>' +
