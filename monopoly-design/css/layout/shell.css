@@ -173,6 +173,19 @@ h1 {
   background: var(--subtle);
 }
 
+/* menu toggle left of the breadcrumbs: no fill, widens the rail with labels */
+.hbtn.nav-tg {
+  background: transparent;
+  color: var(--t2);
+  margin-left: -8px;
+}
+
+.hbtn.nav-tg:hover,
+.hbtn.nav-tg[aria-expanded="true"] {
+  background: var(--subtle);
+  color: var(--t1);
+}
+
 @media (min-width:768px) {
   /* no top bar on desktop: logo lives in the rail, buttons next to the breadcrumbs */
   .top {

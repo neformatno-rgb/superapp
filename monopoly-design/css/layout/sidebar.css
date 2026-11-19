@@ -15,10 +15,21 @@
   transition: width 260ms cubic-bezier(.2,.8,.2,1);
 }
 
-/* the rail always stays compact (icons + tooltips); labels show only in the phone menu */
+/* compact rail (icons + tooltips); the toggle next to the breadcrumbs widens it with labels */
 .side .lb,
 .side .end {
   opacity: 0;
+}
+
+@media (min-width:768px) {
+  .side.open {
+    width: 248px;
+  }
+
+  .side.open .lb,
+  .side.open .end {
+    opacity: 1;
+  }
 }
 
 .rail-logo {
