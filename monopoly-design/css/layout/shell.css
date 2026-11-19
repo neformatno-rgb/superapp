@@ -1,4 +1,4 @@
-/* Layout: app shell — top bar, content column, pinned corner */
+/* Layout: app shell — rail on the left, rounded content stage (breadcrumbs + main); phone: top bar */
 
 .app {
   min-height: 100%;
@@ -66,35 +66,21 @@ body::before {
   min-height: 0;
 }
 
+.stage {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+}
+
 .main {
   flex: 1;
   min-width: 0;
-  background: var(--bg);
-  border-top-left-radius: 20px;
   padding: 24px max(24px,env(safe-area-inset-right,0px)) 40px 24px;
   display: flex;
   flex-direction: column;
   gap: 16px;
-}
-
-.corner {
-  position: sticky;
-  top: 64px;
-  align-self: flex-start;
-  width: 0;
-  height: 0;
-  z-index: 14;
-  pointer-events: none;
-}
-
-.corner::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 20px;
-  height: 20px;
-  background: radial-gradient(circle at 100% 100%,transparent 19.5px,var(--surface) 20px);
 }
 
 .main>* {
@@ -117,12 +103,99 @@ h1 {
     display: none;
   }
 
-  .corner {
-    display: none;
-  }
-
   .main {
     border-radius: 0;
     padding: 16px max(16px,env(safe-area-inset-right,0px)) 24px max(16px,env(safe-area-inset-left,0px));
+  }
+}
+
+/* breadcrumbs + header buttons at the top of the stage */
+.crumbs {
+  width: 100%;
+  max-width: 1214px;
+  margin: 0 auto;
+  padding: 24px 24px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.crumbs-sp {
+  flex: 1;
+}
+
+.bc {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  font: var(--text-body);
+  font-size: 16px;
+  color: var(--t2);
+  white-space: nowrap;
+}
+
+.bc a {
+  color: var(--accent-text);
+  text-decoration: none;
+}
+
+.bc a:hover {
+  text-decoration: underline;
+}
+
+.bc b {
+  font-weight: 500;
+  color: var(--t1);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.crumbs .hbtns {
+  gap: 8px;
+}
+
+.hbtn {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--t1);
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 160ms;
+}
+
+.hbtn:hover {
+  background: var(--subtle);
+}
+
+@media (min-width:768px) {
+  /* no top bar on desktop: logo lives in the rail, buttons next to the breadcrumbs */
+  .top {
+    display: none;
+  }
+
+  body::before {
+    display: none;
+  }
+
+  .stage {
+    margin: 8px max(8px,env(safe-area-inset-right,0px)) 8px 0;
+    min-height: calc(100vh - 16px);
+    border-radius: 24px;
+  }
+
+  .main {
+    padding-top: 24px;
+  }
+}
+
+@media (max-width:767px) {
+  .crumbs {
+    display: none;
   }
 }

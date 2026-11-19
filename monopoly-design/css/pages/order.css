@@ -36,7 +36,7 @@
 
 .dr {
   position: sticky;
-  top: 88px;
+  top: 76px;
   min-width: 0;
 }
 
@@ -248,7 +248,7 @@ button.mini:hover .sqb .s {
 
 .dsec {
   padding: 24px;
-  scroll-margin-top: 88px;
+  scroll-margin-top: 76px;
 }
 
 .dsec h2 {
