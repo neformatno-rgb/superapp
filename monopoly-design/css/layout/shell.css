@@ -114,7 +114,7 @@ h1 {
   width: 100%;
   max-width: 1214px;
   margin: 0 auto;
-  padding: 24px 24px 0;
+  padding: 12px 24px 0;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -130,7 +130,7 @@ h1 {
   gap: 6px;
   min-width: 0;
   font: var(--text-body);
-  font-size: 16px;
+  font-size: 14px;
   color: var(--t2);
   white-space: nowrap;
 }
@@ -156,8 +156,8 @@ h1 {
 }
 
 .hbtn {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border: 0;
   border-radius: 12px;
   background: var(--surface);
@@ -198,13 +198,18 @@ h1 {
   }
 
   .stage {
-    margin: 8px max(8px,env(safe-area-inset-right,0px)) 8px 0;
-    min-height: calc(100vh - 16px);
-    border-radius: 24px;
+    margin: 12px max(12px,env(safe-area-inset-right,0px)) 12px 0;
+    min-height: calc(100vh - 24px);
+    border-radius: 18px;
   }
 
   .main {
     padding-top: 24px;
+  }
+
+  /* 24px between the tabs row and the filter card */
+  .main > .tabs {
+    margin-bottom: 8px;
   }
 }
 
