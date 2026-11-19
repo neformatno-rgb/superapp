@@ -10,7 +10,7 @@
   padding: 16px 12px 16px max(12px,env(safe-area-inset-left,0px));
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   overflow: hidden;
   transition: width 260ms cubic-bezier(.2,.8,.2,1);
 }
@@ -23,29 +23,46 @@
 
 @media (min-width:768px) {
   .side.open {
-    width: 248px;
+    width: 232px;
   }
 
   .side.open .lb,
-  .side.open .end {
+  .side.open .end,
+  .side.open .rail-word {
     opacity: 1;
   }
 }
 
 .rail-logo {
-  width: 48px;
   height: 48px;
   flex-shrink: 0;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
+  padding-left: 4px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 10px;
   border-radius: 12px;
+  color: var(--t1);
+  text-decoration: none;
+}
+
+.rail-logo svg {
+  flex-shrink: 0;
+}
+
+/* «Монополия» next to the logo: visible only in the expanded menu */
+.rail-word {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 180ms;
 }
 
 .nv {
   width: 100%;
-  height: 48px;
+  height: 40px;
   padding: 0 12px;
   border: 0;
   border-radius: 12px;
@@ -165,7 +182,8 @@
   }
 
   body.mnav .side .lb,
-  body.mnav .side .end {
+  body.mnav .side .end,
+  body.mnav .side .rail-word {
     opacity: 1 !important;
   }
 

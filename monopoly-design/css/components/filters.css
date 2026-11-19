@@ -218,3 +218,32 @@
     padding: 8px 12px;
   }
 }
+
+/* expanded side menu: «Фильтры» collapses to an icon-only button to give the filter row room */
+@media (min-width:768px) {
+  .fbtn {
+    position: relative;
+    transition: width 260ms cubic-bezier(.2,.8,.2,1);
+  }
+
+  .fbtn .fb-lb {
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .side.open ~ .stage .fbtn {
+    width: 32px;
+    padding: 0;
+    gap: 0;
+  }
+
+  .side.open ~ .stage .fbtn .fb-lb {
+    width: 0;
+  }
+
+  .side.open ~ .stage .fbtn .cnt {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+  }
+}
