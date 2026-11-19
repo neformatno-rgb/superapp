@@ -198,7 +198,7 @@ h1 {
   }
 
   .stage {
-    margin: 12px max(12px,env(safe-area-inset-right,0px)) 12px 0;
+    margin: 12px max(4px,env(safe-area-inset-right,0px)) 12px 0; /* 4px + the 8px page scrollbar = 12px to the window edge */
     min-height: calc(100vh - 24px);
     border-radius: 18px;
   }
