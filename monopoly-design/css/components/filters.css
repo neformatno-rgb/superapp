@@ -208,4 +208,13 @@
   .fcard.stuck .bar {
     display: none;
   }
+
+  /* 12px inner padding on the filter card */
+  .fcard .filters {
+    padding: 12px;
+  }
+
+  .fcard .bar {
+    padding: 8px 12px;
+  }
 }
