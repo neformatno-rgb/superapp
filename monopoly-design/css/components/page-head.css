@@ -91,9 +91,35 @@
     clip-path: inset(0 -24px);
   }
 
-  /* no top bar any more: the head simply sticks to the top of the window; .dbar (old header patch) is unused */
+  body.hdr-hide .phead {
+    z-index: 17;
+    background: transparent;
+    box-shadow: none;
+  }
+
   .dbar {
-    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 64px;
+    z-index: 16;
+    background: var(--surface);
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  body.hdr-hide .dbar {
+    opacity: 1;
+  }
+
+  /* things that stick under the head move up with it */
+  body.hdr-hide .dr,
+  body.hdr-hide .ck-r {
+    top: 76px;
+  }
+
+  body.hdr-hide .dsec {
+    scroll-margin-top: 76px;
   }
 }
 
